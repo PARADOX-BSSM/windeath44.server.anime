@@ -1,4 +1,4 @@
-package com.example.anime.domain.global.exception;
+package com.example.anime.global.exception;
 
 import com.example.anime.domain.anime.service.exception.NotFoundAnimation;
 import lombok.extern.slf4j.Slf4j;

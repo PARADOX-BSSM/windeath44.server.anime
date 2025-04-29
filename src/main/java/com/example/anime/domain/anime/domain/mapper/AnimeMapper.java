@@ -12,6 +12,9 @@ import java.util.List;
 
 @Mapper(componentModel="spring", builder = @Builder(disableBuilder = false))
 public interface AnimeMapper {
+
+  @Mapping(target = "animeId", ignore = true)
+  @Mapping(target = "bow_count", ignore = true)
   Anime toEntity(String name, String description, AnimeAirDates airDates, List<String> tags);
 
   @Mapping(source = "airDates.start_year", target = "start_year")

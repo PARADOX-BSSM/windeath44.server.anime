@@ -27,6 +27,11 @@ public class Anime {
   private List<String> tags;
   private Long bow_count;
 
+  @PrePersist
+  public void init() {
+    this.bow_count = 0L;
+  }
+
   public void update(String name, String description, LocalDate startYear, LocalDate endYear, List<String> tags) {
     this.name = name;
     this.description = description;

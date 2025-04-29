@@ -27,7 +27,6 @@ public class AnimeAirDates {
     Long dday = ChronoUnit.DAYS.between(this.start_year, this.end_year);
     return dday;
   }
-
   public void update(LocalDate startYear, LocalDate endYear) {
     this.start_year = startYear;
     this.end_year = endYear;

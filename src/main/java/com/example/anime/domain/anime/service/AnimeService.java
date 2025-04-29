@@ -40,7 +40,11 @@ public class AnimeService {
     animeRepository.delete(anime);
   }
 
-  private Anime findAnime(Long animeId) {
+  public Anime getAnime(Long animeId) {
+    return findAnime(animeId);
+  }
+
+    private Anime findAnime(Long animeId) {
     Anime anime = animeRepository.findByIdWithTags(animeId)
             .orElseThrow(() -> new NotFoundAnimation("Not found Animation with Id"));
     return anime;
