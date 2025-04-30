@@ -1,6 +1,7 @@
 package com.example.anime.domain.anime.presentation;
 
 import com.example.anime.domain.anime.presentation.dto.request.AnimeRequest;
+import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.AnimeService;
 import jakarta.validation.Valid;
@@ -24,8 +25,8 @@ public class AnimeController {
   }
 
   @GetMapping
-  public ResponseEntity<List<AnimeResponse>> findAll() {
-    List<AnimeResponse> animeList = animeService.findAll();
+  public ResponseEntity<List<AnimeAllResponse>> findAll() {
+    List<AnimeAllResponse> animeList = animeService.findAll();
     return ResponseEntity.ok(animeList);
   }
 

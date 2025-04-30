@@ -10,9 +10,7 @@ import com.example.grpc.CreateCharacterResponse;
 import com.example.grpc.CreateCharacterServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.checkerframework.checker.units.qual.C;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class CreateCharacterService extends CreateCharacterServiceGrpc.CreateCha
 
   private Long saveCharacter(Long animeId, String name, String content, String deathReason, Long lifeTime) {
     Anime anime = animeService.getAnime(animeId);
-    Character character = characterMapper.toEntity(anime, name, content, deathReason, lifeTime);
+    Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime);
     characterRepository.save(character);
     return character.getCharacterId();
   }

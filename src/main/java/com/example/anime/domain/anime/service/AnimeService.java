@@ -4,10 +4,14 @@ import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.anime.domain.AnimeAirDates;
 import com.example.anime.domain.anime.domain.mapper.AnimeMapper;
 import com.example.anime.domain.anime.domain.repository.AnimeRepository;
+import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.exception.NotFoundAnimation;
+import com.example.anime.domain.character.domain.Character;
+import com.example.anime.domain.character.domain.repository.CharacterRepository;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +20,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
+  private final CharacterRepository characterRepository;
 
   @Transactional
   public void create(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
@@ -26,13 +32,12 @@ public class AnimeService {
     animeRepository.save(anime);
   }
 
-
   private Anime createAnime(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
     AnimeAirDates animeAirDates = AnimeAirDates.builder()
             .start_year(start_year)
             .end_year(end_year)
             .build();
-    return animeMapper.toEntity(name, description, animeAirDates, tags);
+    return animeMapper.toAnime(name, description, animeAirDates, tags);
   }
 
   public void delete(Long animeId) {
@@ -50,18 +55,18 @@ public class AnimeService {
     return anime;
   }
 
-  public List<AnimeResponse> findAll() {
-    List<AnimeResponse> animeList = animeRepository.findAllWithTags()
+  public List<AnimeAllResponse> findAll() {
+    List<AnimeAllResponse> animeList = animeRepository.findAllWithTags()
             .stream()
-            .map(animeMapper::toDto)
+            .map(animeMapper::toAnimeAllResponse)
             .toList();
-
     return animeList;
   }
 
   public AnimeResponse findById(Long animeId) {
     Anime anime = findAnime(animeId);
-    AnimeResponse animeResponse = animeMapper.toDto(anime);
+    List<Character> characterList = characterRepository.findAllByAnime(anime);
+    AnimeResponse animeResponse = animeMapper.toAnimeResponse(anime, characterList);
     return animeResponse;
   }
 
