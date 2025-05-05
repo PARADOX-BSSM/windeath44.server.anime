@@ -14,4 +14,5 @@ public interface AnimeRepository extends JpaRepository<Anime, Long> {
 
   @Query("select a from Anime a join fetch a.tags")
   List<Anime> findAllWithTags();
+
 }

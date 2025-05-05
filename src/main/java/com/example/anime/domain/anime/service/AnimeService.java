@@ -9,6 +9,7 @@ import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.exception.NotFoundAnimation;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.repository.CharacterRepository;
+import com.example.anime.domain.character.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.List;
 public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
-  private final CharacterRepository characterRepository;
+  private final CharacterService characterService;
 
   @Transactional
   public void create(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
@@ -65,7 +66,7 @@ public class AnimeService {
 
   public AnimeResponse findById(Long animeId) {
     Anime anime = findAnime(animeId);
-    List<Character> characterList = characterRepository.findAllByAnime(anime);
+    List<Character> characterList = characterService.findAllByAnime(anime);
     AnimeResponse animeResponse = animeMapper.toAnimeResponse(anime, characterList);
     return animeResponse;
   }
@@ -74,6 +75,5 @@ public class AnimeService {
   public void update(Long animeId, String name, String description ,LocalDate start_year, LocalDate end_year, List<String> tags) {
     Anime anime = findAnime(animeId);
     anime.update(name, description, start_year, end_year, tags);
-    animeRepository.save(anime);
   }
 }

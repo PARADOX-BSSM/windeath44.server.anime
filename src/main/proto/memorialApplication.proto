@@ -5,18 +5,18 @@ option java_package = "com.example.grpc";
 option java_outer_classname = "Proto";
 
 
-service CreateCharacterService {
-  rpc createCharacter(CreateCharacterRequest) returns(CreateCharacterResponse);
+service GetCharacterService {
+  rpc getCharacter(GetCharacterRequest) returns (GetCharacterResponse);
 }
 
-message CreateCharacterRequest {
-  int64 animeId = 1;
-  string name = 2;
-  string content = 3;
-  string death_reason = 4;
-  int64 lifeTime = 5;
-}
-
-message CreateCharacterResponse {
+message GetCharacterRequest {
   int64 characterId = 1;
+}
+
+message GetCharacterResponse {
+  int64 animeId = 1;
+  string animeName = 2;
+  string name = 3;
+  string content = 4;
+  string state = 5;
 }

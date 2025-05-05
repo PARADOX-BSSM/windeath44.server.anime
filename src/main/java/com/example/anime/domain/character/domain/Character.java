@@ -26,5 +26,11 @@ public class Character {
   private String content;
   private Long lifeTime;
   private String death_reason;
+  @Enumerated(EnumType.STRING)
+  private CharacterState state;
 
+  @PrePersist
+  public void init() {
+    this.state = CharacterState.NOT_MEMORIALIZING;
+  }
 }
