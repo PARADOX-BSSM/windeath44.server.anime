@@ -6,7 +6,7 @@ import com.example.anime.domain.anime.domain.mapper.AnimeMapper;
 import com.example.anime.domain.anime.domain.repository.AnimeRepository;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
-import com.example.anime.domain.anime.service.exception.NotFoundAnimation;
+import com.example.anime.domain.anime.service.exception.NotFoundAnimeException;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.repository.CharacterRepository;
 import com.example.anime.domain.character.service.CharacterService;
@@ -52,7 +52,7 @@ public class AnimeService {
 
     private Anime findAnime(Long animeId) {
     Anime anime = animeRepository.findByIdWithTags(animeId)
-            .orElseThrow(() -> new NotFoundAnimation("Not found Animation with Id"));
+            .orElseThrow(NotFoundAnimeException::getInstance);
     return anime;
   }
 

@@ -7,8 +7,6 @@ import com.example.anime.domain.character.domain.Character;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
 
-import javax.naming.Name;
-
 @Component
 public class CharacterMapper {
 
