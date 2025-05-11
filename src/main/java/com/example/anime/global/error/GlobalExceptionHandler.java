@@ -1,6 +1,5 @@
 package com.example.anime.global.error;
 
-import com.example.anime.domain.anime.service.exception.NotFoundAnimation;
 import com.example.anime.global.error.exception.ErrorCode;
 import com.example.anime.global.error.exception.GlobalException;
 import lombok.extern.slf4j.Slf4j;

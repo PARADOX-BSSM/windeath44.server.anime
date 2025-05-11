@@ -6,7 +6,7 @@ import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
 import com.example.anime.domain.character.domain.repository.CharacterRepository;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.domain.character.service.exception.NotFoundCharacter;
+import com.example.anime.domain.character.service.exception.NotFoundCharacterException;
 import com.example.grpc.GetCharacterRequest;
 import com.example.grpc.GetCharacterResponse;
 import com.example.grpc.GetCharacterServiceGrpc;
@@ -33,7 +33,7 @@ public class GetCharacterService extends GetCharacterServiceGrpc.GetCharacterSer
       responseObserver.onNext(getCharacterResponse);
       responseObserver.onCompleted();
 
-    } catch (NotFoundCharacter e) {
+    } catch (NotFoundCharacterException e) {
       responseObserver.onError(Status.NOT_FOUND
               .withDescription(e.getMessage())
               .asRuntimeException());
