@@ -54,7 +54,6 @@ public class AnimeController {
   }
 
   @DeleteMapping("/{anime-id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
   public ResponseEntity<ResponseDto<Void>> delete(@PathVariable("anime-id") Long animeId) {
     animeService.delete(animeId);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("delete anime", null);
