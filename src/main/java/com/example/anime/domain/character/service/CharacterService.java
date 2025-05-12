@@ -3,7 +3,7 @@ package com.example.anime.domain.character.service;
 import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.domain.character.domain.Character;
-import com.example.anime.domain.character.presentation.dto.response.response.CharacterResponse;
+import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
 import com.example.anime.domain.character.domain.repository.CharacterRepository;
 import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
@@ -19,7 +19,6 @@ import java.util.List;
 public class CharacterService {
   private final CharacterRepository characterRepository;
   private final CharacterMapper characterMapper;
-  private final AnimeService animeService;
 
   public Character findById(Long characterId) {
     Character character = findCharacterById(characterId);
@@ -51,14 +50,7 @@ public class CharacterService {
     return characterResponse;
   }
 
-  public void create(@Valid CharacterRequest characterRequest) {
-    Long animeId = characterRequest.animeId();
-    String name = characterRequest.name();
-    String content = characterRequest.content();
-    String deathReason = characterRequest.death_reason();
-    Long lifeTime = characterRequest.lifeTime();
-
-    Anime anime = animeService.getAnime(animeId);
+  public void create(Anime anime, String name, String content, String deathReason, Long lifeTime) {
     Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime);
     characterRepository.save(character);
   }

@@ -1,6 +1,7 @@
 package com.example.anime.domain.character.presentation;
 
-import com.example.anime.domain.character.presentation.dto.response.response.CharacterResponse;
+import com.example.anime.domain.character.facade.CharacterFacade;
+import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.mapper.ResponseMapper;
@@ -19,11 +20,12 @@ import java.util.List;
 public class CharacterController {
   private final CharacterService characterService;
   private final ResponseMapper responseMapper;
+  private final CharacterFacade characterFacade;
 
 
   @PostMapping
   public ResponseEntity<ResponseDto<Void>> create(@RequestBody @Valid CharacterRequest characterRequest) {
-    characterService.create(characterRequest);
+    characterFacade.create(characterRequest);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
     return ResponseEntity.ok(responseDto);
   }
