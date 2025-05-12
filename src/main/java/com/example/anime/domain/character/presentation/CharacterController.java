@@ -1,6 +1,6 @@
 package com.example.anime.domain.character.presentation;
 
-import com.example.anime.domain.character.domain.dto.response.CharacterResponse;
+import com.example.anime.domain.character.presentation.dto.response.response.CharacterResponse;
 import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.mapper.ResponseMapper;

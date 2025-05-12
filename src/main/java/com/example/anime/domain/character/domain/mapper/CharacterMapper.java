@@ -2,7 +2,7 @@ package com.example.anime.domain.character.domain.mapper;
 
 import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.character.domain.CharacterState;
-import com.example.anime.domain.character.domain.dto.response.CharacterResponse;
+import com.example.anime.domain.character.presentation.dto.response.response.CharacterResponse;
 import com.example.anime.domain.character.domain.Character;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;

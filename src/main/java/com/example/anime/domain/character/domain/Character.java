@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "anime_character")
 @Getter
 public class Character {
   @Id
@@ -26,6 +25,7 @@ public class Character {
   private String content;
   private Long lifeTime;
   private String death_reason;
+  private String image_url;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
 
