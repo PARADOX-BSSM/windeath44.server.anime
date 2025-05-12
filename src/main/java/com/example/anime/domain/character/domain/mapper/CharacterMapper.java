@@ -15,7 +15,7 @@ public class CharacterMapper {
             .anime(anime)
             .name(name)
             .content(content)
-            .death_reason(deathReason)
+            .deathReason(deathReason)
             .lifeTime(lifeTime)
             .state(CharacterState.NOT_MEMORIALIZING)
             .build();
@@ -26,7 +26,7 @@ public class CharacterMapper {
     String name = character.getName();
     String content = character.getContent();
     Long lifeTime = character.getLifeTime();
-    String death_reason = character.getDeath_reason();
+    String death_reason = character.getDeathReason();
     return new CharacterResponse(characterId, name, content, lifeTime, death_reason);
   }
 

@@ -5,7 +5,8 @@ public record CharacterResponse (
         String name,
         String content,
         Long lifeTime,
-        String death_reason
+        String deathReason,
+        String imageUrl
 ) {
 
 }

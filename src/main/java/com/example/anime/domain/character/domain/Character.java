@@ -24,8 +24,8 @@ public class Character {
   private String name;
   private String content;
   private Long lifeTime;
-  private String death_reason;
-  private String image_url;
+  private String deathReason;
+  private String imageUrl;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
 
