@@ -2,7 +2,7 @@ package com.example.anime.domain.character.domain.mapper;
 
 import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.character.domain.CharacterState;
-import com.example.anime.domain.character.domain.dto.response.CharacterResponse;
+import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import com.example.anime.domain.character.domain.Character;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class CharacterMapper {
             .anime(anime)
             .name(name)
             .content(content)
-            .death_reason(deathReason)
+            .deathReason(deathReason)
             .lifeTime(lifeTime)
             .state(CharacterState.NOT_MEMORIALIZING)
             .build();
@@ -26,7 +26,7 @@ public class CharacterMapper {
     String name = character.getName();
     String content = character.getContent();
     Long lifeTime = character.getLifeTime();
-    String death_reason = character.getDeath_reason();
+    String death_reason = character.getDeathReason();
     return new CharacterResponse(characterId, name, content, lifeTime, death_reason);
   }
 
