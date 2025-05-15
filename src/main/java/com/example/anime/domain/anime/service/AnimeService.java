@@ -4,11 +4,10 @@ import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.anime.domain.AnimeAirDates;
 import com.example.anime.domain.anime.domain.mapper.AnimeMapper;
 import com.example.anime.domain.anime.domain.repository.AnimeRepository;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
+import com.example.anime.domain.anime.presentation.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.exception.NotFoundAnimeException;
 import com.example.anime.domain.character.domain.Character;
-import com.example.anime.domain.character.domain.repository.CharacterRepository;
 import com.example.anime.domain.character.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 
@@ -56,8 +55,8 @@ public class AnimeService {
     return anime;
   }
 
-  public List<AnimeAllResponse> findAll() {
-    List<AnimeAllResponse> animeList = animeRepository.findAllWithTags()
+  public List<AnimeListResponse> findAll() {
+    List<AnimeListResponse> animeList = animeRepository.findAllWithTags()
             .stream()
             .map(animeMapper::toAnimeAllResponse)
             .toList();
@@ -77,8 +76,8 @@ public class AnimeService {
     anime.update(name, description, start_year, end_year, tags);
   }
 
-  public List<AnimeAllResponse> findAllByCursorId(Long cursorId, Long size) {
-    List<AnimeAllResponse> animeList = animeRepository.findAllByCursorId(cursorId, size)
+  public List<AnimeListResponse> findAllByCursorId(Long cursorId, Long size) {
+    List<AnimeListResponse> animeList = animeRepository.findAllByCursorId(cursorId, size)
             .stream()
             .map(animeMapper::toAnimeAllResponse)
             .toList();

@@ -2,7 +2,7 @@ package com.example.anime.domain.anime.domain.mapper;
 
 import com.example.anime.domain.anime.domain.Anime;
 import com.example.anime.domain.anime.domain.AnimeAirDates;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
+import com.example.anime.domain.anime.presentation.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
@@ -26,7 +26,7 @@ public interface AnimeMapper {
 
   @Mapping(source = "airDates.start_year", target = "start_year")
   @Mapping(source = "airDates.end_year", target = "end_year")
-  AnimeAllResponse toAnimeAllResponse(Anime anime);
+  AnimeListResponse toAnimeAllResponse(Anime anime);
 
   default Long getAirDates(AnimeAirDates airDates) {
     return airDates.getAirDay();

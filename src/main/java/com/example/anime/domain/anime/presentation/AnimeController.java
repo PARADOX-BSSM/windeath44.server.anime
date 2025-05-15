@@ -1,7 +1,7 @@
 package com.example.anime.domain.anime.presentation;
 
 import com.example.anime.domain.anime.presentation.dto.request.AnimeRequest;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
+import com.example.anime.domain.anime.presentation.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.mapper.ResponseMapper;
@@ -31,16 +31,16 @@ public class AnimeController {
   }
 
   @GetMapping("/details/{cursor-id}/{size}")
-  public ResponseEntity<ResponseDto<List<AnimeAllResponse>>> findAllByCursorId(@PathVariable("cursor-id") Long cursorId, @PathVariable("size") Long size) {
-    List<AnimeAllResponse> animeList = animeService.findAllByCursorId(cursorId, size);
-    ResponseDto<List<AnimeAllResponse>> responseDto = responseMapper.toResponseDto("find animes with cursorId", animeList);
+  public ResponseEntity<ResponseDto<List<AnimeListResponse>>> findAllByCursorId(@PathVariable("cursor-id") Long cursorId, @PathVariable("size") Long size) {
+    List<AnimeListResponse> animeList = animeService.findAllByCursorId(cursorId, size);
+    ResponseDto<List<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes with cursorId", animeList);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping
-  public ResponseEntity<ResponseDto<List<AnimeAllResponse>>> findAll() {
-    List<AnimeAllResponse> animeList = animeService.findAll();
-    ResponseDto<List<AnimeAllResponse>> responseDto = responseMapper.toResponseDto("find animes", animeList);
+  public ResponseEntity<ResponseDto<List<AnimeListResponse>>> findAll() {
+    List<AnimeListResponse> animeList = animeService.findAll();
+    ResponseDto<List<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes", animeList);
     return ResponseEntity.ok(responseDto);
   }
 

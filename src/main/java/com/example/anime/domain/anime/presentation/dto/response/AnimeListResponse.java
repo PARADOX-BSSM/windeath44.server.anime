@@ -3,7 +3,7 @@ package com.example.anime.domain.anime.presentation.dto.response;
 import java.time.LocalDate;
 import java.util.List;
 
-public record AnimeAllResponse (
+public record AnimeListResponse(
         Long animeId,
         String name,
         String description,
