@@ -27,7 +27,9 @@ public class CharacterMapper {
     String content = character.getContent();
     Long lifeTime = character.getLifeTime();
     String death_reason = character.getDeathReason();
-    return new CharacterResponse(characterId, name, content, lifeTime, death_reason);
+    String imageUrl = character.getImageUrl();
+
+    return new CharacterResponse(characterId, name, content, lifeTime, death_reason, imageUrl);
   }
 
   public GetCharacterResponse toGetCharacterResponse(Character character) {

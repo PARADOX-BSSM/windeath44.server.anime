@@ -76,4 +76,13 @@ public class AnimeService {
     Anime anime = findAnime(animeId);
     anime.update(name, description, start_year, end_year, tags);
   }
+
+  public List<AnimeAllResponse> findAllByCursorId(Long cursorId, Long size) {
+    List<AnimeAllResponse> animeList = animeRepository.findAllByCursorId(cursorId, size)
+            .stream()
+            .map(animeMapper::toAnimeAllResponse)
+            .toList();
+    return animeList;
+  }
+
 }

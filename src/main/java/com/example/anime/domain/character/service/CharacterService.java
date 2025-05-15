@@ -1,7 +1,6 @@
 package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.domain.Anime;
-import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
