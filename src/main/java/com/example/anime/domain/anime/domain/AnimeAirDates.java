@@ -15,19 +15,19 @@ import java.time.temporal.ChronoUnit;
 @Embeddable
 @Getter
 public class AnimeAirDates {
-  private LocalDate start_year;
-  private LocalDate end_year;
+  private LocalDate startYear;
+  private LocalDate endYear;
 
   // 방영일 구하기
   public Long getAirDay() {
-    if(this.end_year == null) {
+    if(this.endYear == null) {
       return null;
     }
-    Long dday = ChronoUnit.DAYS.between(this.start_year, this.end_year);
+    Long dday = ChronoUnit.DAYS.between(this.startYear, this.endYear);
     return dday;
   }
   public void update(LocalDate startYear, LocalDate endYear) {
-    this.start_year = startYear;
-    this.end_year = endYear;
+    this.startYear = startYear;
+    this.endYear = endYear;
   }
 }

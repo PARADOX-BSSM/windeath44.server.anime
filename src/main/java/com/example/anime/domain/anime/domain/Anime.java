@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import com.example.anime.domain.character.domain.Character;
 
 
 @Entity
@@ -25,11 +26,22 @@ public class Anime {
   private AnimeAirDates airDates;
   @ElementCollection
   private List<String> tags;
-  private Long bow_count;
+  private Long bowCount;
+  private String imageUrl;
+
+  @OneToMany(mappedBy = "anime", orphanRemoval = true)
+  private List<Character> characterList;
 
   @PrePersist
   public void init() {
-    this.bow_count = 0L;
+    this.bowCount = 0L;
+  }
+
+  public void renewalBowCount() {
+    Long bowCount = characterList.stream()
+            .mapToLong(c -> c.getBowCount())
+            .sum();
+    this.bowCount = bowCount;
   }
 
   public void update(String name, String description, LocalDate startYear, LocalDate endYear, List<String> tags) {

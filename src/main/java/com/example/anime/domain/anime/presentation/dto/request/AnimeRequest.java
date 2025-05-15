@@ -3,7 +3,6 @@ package com.example.anime.domain.anime.presentation.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +16,8 @@ public record AnimeRequest(
         @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
         LocalDate end_year,
         @NotNull(message="tag is null")
-        List<String> tags
+        List<String> tags,
+        @NotNull(message="imageUrl is null")
+        String imageUrl
 ) {
 }

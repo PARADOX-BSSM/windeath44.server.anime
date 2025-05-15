@@ -17,7 +17,6 @@ public class CharacterMapper {
             .content(content)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
-            .state(CharacterState.NOT_MEMORIALIZING)
             .build();
   }
 
@@ -28,8 +27,9 @@ public class CharacterMapper {
     Long lifeTime = character.getLifeTime();
     String death_reason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
+    Long bow_count = character.getBowCount();
 
-    return new CharacterResponse(characterId, name, content, lifeTime, death_reason, imageUrl);
+    return new CharacterResponse(characterId, name, content, lifeTime, death_reason, imageUrl, bow_count);
   }
 
   public GetCharacterResponse toGetCharacterResponse(Character character) {

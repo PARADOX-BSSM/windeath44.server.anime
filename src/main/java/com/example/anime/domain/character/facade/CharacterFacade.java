@@ -25,4 +25,5 @@ public class CharacterFacade {
     Anime anime = animeService.getAnime(animeId);
     characterService.create(anime, name, content, deathReason, lifeTime);
   }
+
 }

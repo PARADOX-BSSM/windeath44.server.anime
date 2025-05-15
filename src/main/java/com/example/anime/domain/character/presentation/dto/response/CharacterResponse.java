@@ -6,7 +6,8 @@ public record CharacterResponse (
         String content,
         Long lifeTime,
         String deathReason,
-        String imageUrl
+        String imageUrl,
+        Long bow_count
 ) {
 
 }

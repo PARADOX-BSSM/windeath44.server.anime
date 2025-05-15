@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
+@Table(name="`character`")
 public class Character {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,11 @@ public class Character {
   private String imageUrl;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
+  private Long bowCount;
 
   @PrePersist
   public void init() {
+    this.bowCount = 0L;
     this.state = CharacterState.NOT_MEMORIALIZING;
   }
 }

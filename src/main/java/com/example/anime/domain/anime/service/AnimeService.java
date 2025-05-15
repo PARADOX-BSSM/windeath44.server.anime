@@ -34,37 +34,50 @@ public class AnimeService {
 
   private Anime createAnime(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
     AnimeAirDates animeAirDates = AnimeAirDates.builder()
-            .start_year(start_year)
-            .end_year(end_year)
+            .startYear(start_year)
+            .endYear(end_year)
             .build();
     return animeMapper.toAnime(name, description, animeAirDates, tags);
   }
 
+  @Transactional
   public void delete(Long animeId) {
-    Anime anime = findAnime(animeId);
+    Anime anime = findAndRenewAnimeById(animeId);
     animeRepository.delete(anime);
   }
 
   public Anime getAnime(Long animeId) {
-    return findAnime(animeId);
+    return findAndRenewAnimeById(animeId);
   }
 
+  @Transactional
+  public Anime findAndRenewAnimeById(Long animeId) {
+      Anime anime = findAnime(animeId);
+      anime.renewalBowCount();
+      return anime;
+    }
+
     private Anime findAnime(Long animeId) {
-    Anime anime = animeRepository.findByIdWithTags(animeId)
+    Anime anime = animeRepository.findByIdWithTagsAAndCharacterList(animeId)
             .orElseThrow(NotFoundAnimeException::getInstance);
     return anime;
   }
 
+  @Transactional
   public List<AnimeListResponse> findAll() {
-    List<AnimeListResponse> animeList = animeRepository.findAllWithTags()
+    List<AnimeListResponse> animeList = animeRepository.findAllWithTagsAndCharacterList()
             .stream()
-            .map(animeMapper::toAnimeAllResponse)
+            .map( anime -> {
+                anime.renewalBowCount();
+                AnimeListResponse animeListResponse = animeMapper.toAnimeAllResponse(anime);
+                return animeListResponse;
+            } )
             .toList();
     return animeList;
   }
 
   public AnimeResponse findById(Long animeId) {
-    Anime anime = findAnime(animeId);
+    Anime anime = findAndRenewAnimeById(animeId);
     List<Character> characterList = characterService.findAllByAnime(anime);
     AnimeResponse animeResponse = animeMapper.toAnimeResponse(anime, characterList);
     return animeResponse;

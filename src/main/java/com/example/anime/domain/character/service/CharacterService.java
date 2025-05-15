@@ -5,9 +5,7 @@ import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
 import com.example.anime.domain.character.domain.repository.CharacterRepository;
-import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.exception.NotFoundCharacterException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

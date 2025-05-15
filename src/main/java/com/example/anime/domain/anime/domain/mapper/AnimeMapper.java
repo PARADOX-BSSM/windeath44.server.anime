@@ -6,30 +6,58 @@ import com.example.anime.domain.anime.presentation.dto.response.AnimeListRespons
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
+public class AnimeMapper {
 
-@Mapper(componentModel="spring", builder = @Builder(disableBuilder = false), uses=CharacterMapper.class)
-public interface AnimeMapper {
+  private final CharacterMapper characterMapper;
 
-  @Mapping(target = "animeId", ignore = true)
-  @Mapping(target = "bow_count", ignore = true)
-  Anime toAnime(String name, String description, AnimeAirDates airDates, List<String> tags);
-
-  @Mapping(source = "anime.airDates.start_year", target = "start_year")
-  @Mapping(source = "anime.airDates.end_year", target = "end_year")
-  AnimeResponse toAnimeResponse(Anime anime, List<Character> characters);
-
-  @Mapping(source = "airDates.start_year", target = "start_year")
-  @Mapping(source = "airDates.end_year", target = "end_year")
-  AnimeListResponse toAnimeAllResponse(Anime anime);
-
-  default Long getAirDates(AnimeAirDates airDates) {
-    return airDates.getAirDay();
+  public Anime toAnime(String name, String description, AnimeAirDates airDates, List<String> tags) {
+    return Anime.builder()
+            .name(name)
+            .description(description)
+            .airDates(airDates)
+            .tags(tags)
+            .build();
   }
 
+  public AnimeResponse toAnimeResponse(Anime anime, List<Character> characters) {
+    String name = anime.getName();
+    String description = anime.getDescription();
+    LocalDate startYear = anime.getAirDates().getStartYear();
+    LocalDate endYear = anime.getAirDates().getEndYear();
+    Long airDates = anime.getAirDates().getAirDay();
+
+    List<String> tags = anime.getTags();
+    Long bowCount = anime.getBowCount();
+
+    List<CharacterResponse> characterListResponses = characters.stream()
+            .map(characterMapper::toCharacterResponse)
+            .toList();
+    String imageUrl = anime.getImageUrl();
+
+
+    return new AnimeResponse(name, description, startYear, endYear, airDates,  tags, bowCount, characterListResponses, imageUrl);
+  }
+
+  public AnimeListResponse toAnimeAllResponse(Anime anime) {
+    Long animeId = anime.getAnimeId();
+    String name = anime.getName();
+    String description = anime.getDescription();
+    List<String> tags = anime.getTags();
+    LocalDate startYear = anime.getAirDates().getStartYear();
+    LocalDate endYear = anime.getAirDates().getEndYear();
+    Long airDates = anime.getAirDates().getAirDay();
+    Long bowCount = anime.getBowCount();
+    String imageUrl = anime.getImageUrl();
+
+    return new AnimeListResponse(animeId, name, description, startYear, endYear, airDates, tags, bowCount, imageUrl);
+  }
 }
