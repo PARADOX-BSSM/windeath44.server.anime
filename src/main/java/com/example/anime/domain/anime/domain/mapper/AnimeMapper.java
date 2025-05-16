@@ -8,6 +8,7 @@ import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.domain.mapper.CharacterMapper;
 import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -47,7 +48,7 @@ public class AnimeMapper {
     return new AnimeResponse(name, description, startYear, endYear, airDates,  tags, bowCount, characterListResponses, imageUrl);
   }
 
-  public AnimeListResponse toAnimeAllResponse(Anime anime) {
+  public AnimeListResponse toAnimeListResponse(Anime anime) {
     Long animeId = anime.getAnimeId();
     String name = anime.getName();
     String description = anime.getDescription();
@@ -59,5 +60,12 @@ public class AnimeMapper {
     String imageUrl = anime.getImageUrl();
 
     return new AnimeListResponse(animeId, name, description, startYear, endYear, airDates, tags, bowCount, imageUrl);
+  }
+
+  public List<AnimeListResponse> toAnimePageableListResponse(Slice<Anime> animeSlice) {
+    return animeSlice.getContent()
+            .stream()
+            .map(this::toAnimeListResponse)
+            .toList();
   }
 }

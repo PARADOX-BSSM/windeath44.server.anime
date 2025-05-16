@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 import com.example.anime.domain.character.domain.Character;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 @Entity
@@ -25,11 +27,14 @@ public class Anime {
   @Embedded
   private AnimeAirDates airDates;
   @ElementCollection
+  @Fetch(FetchMode.SUBSELECT)
   private List<String> tags;
+
   private Long bowCount;
   private String imageUrl;
 
   @OneToMany(mappedBy = "anime", orphanRemoval = true)
+  @Fetch(FetchMode.SUBSELECT)
   private List<Character> characterList;
 
   @PrePersist

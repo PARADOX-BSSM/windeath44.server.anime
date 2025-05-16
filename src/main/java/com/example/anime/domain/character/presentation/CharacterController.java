@@ -42,7 +42,7 @@ public class CharacterController {
   @GetMapping("/{character-id}")
   public ResponseEntity<ResponseDto<CharacterResponse>> findById(@PathVariable("character-id") Long characterId) {
     CharacterResponse characterResponse = characterService.find(characterId);
-    ResponseDto<CharacterResponse> responseDto = responseMapper.toResponseDto("find characters", characterResponse);
+    ResponseDto<CharacterResponse> responseDto = responseMapper.toResponseDto("find character", characterResponse);
     return ResponseEntity.ok(responseDto);
   }
 

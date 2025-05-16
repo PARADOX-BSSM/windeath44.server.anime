@@ -5,6 +5,7 @@ import com.example.anime.domain.anime.presentation.dto.response.AnimeListRespons
 import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.mapper.ResponseMapper;
+import com.example.anime.global.mapper.dto.CursorPage;
 import com.example.anime.global.mapper.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,10 @@ public class AnimeController {
             .body(responseDto);
   }
 
-  @GetMapping("/details/{cursor-id}/{size}")
-  public ResponseEntity<ResponseDto<List<AnimeListResponse>>> findAllByCursorId(@PathVariable("cursor-id") Long cursorId, @PathVariable("size") Long size) {
-    List<AnimeListResponse> animeList = animeService.findAllByCursorId(cursorId, size);
-    ResponseDto<List<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes with cursorId", animeList);
+  @GetMapping("/details")
+  public ResponseEntity<ResponseDto<CursorPage<AnimeListResponse>>> findAllByCursorId(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
+    CursorPage<AnimeListResponse> animeList = animeService.findAllByCursorId(cursorId, size);
+    ResponseDto<CursorPage<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes with cursorId", animeList);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -68,6 +69,4 @@ public class AnimeController {
             .status(HttpStatus.ACCEPTED)
             .body(responseDto);
   }
-
-
 }

@@ -9,9 +9,14 @@ import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.service.exception.NotFoundAnimeException;
 import com.example.anime.domain.character.domain.Character;
 import com.example.anime.domain.character.service.CharacterService;
+import com.example.anime.global.mapper.ResponseMapper;
+import com.example.anime.global.mapper.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +74,7 @@ public class AnimeService {
             .stream()
             .map( anime -> {
                 anime.renewalBowCount();
-                AnimeListResponse animeListResponse = animeMapper.toAnimeAllResponse(anime);
+                AnimeListResponse animeListResponse = animeMapper.toAnimeListResponse(anime);
                 return animeListResponse;
             } )
             .toList();
@@ -89,12 +94,16 @@ public class AnimeService {
     anime.update(name, description, start_year, end_year, tags);
   }
 
-  public List<AnimeListResponse> findAllByCursorId(Long cursorId, Long size) {
-    List<AnimeListResponse> animeList = animeRepository.findAllByCursorId(cursorId, size)
-            .stream()
-            .map(animeMapper::toAnimeAllResponse)
-            .toList();
-    return animeList;
+  public CursorPage<AnimeListResponse> findAllByCursorId(Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size + 1);
+
+    // null일 경우 첫 페이지 조회하는거임
+    Slice<Anime> animeSlice = cursorId == null
+            ? animeRepository.findAllPageable(pageable)
+            : animeRepository.findAllByCursorId(cursorId, pageable);
+
+    List<AnimeListResponse> animeList = animeMapper.toAnimePageableListResponse(animeSlice);
+    return new CursorPage<>(animeList, animeSlice.hasNext());
   }
 
 }

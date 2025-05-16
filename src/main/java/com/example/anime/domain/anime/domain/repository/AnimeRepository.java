@@ -1,6 +1,8 @@
 package com.example.anime.domain.anime.domain.repository;
 
 import com.example.anime.domain.anime.domain.Anime;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,11 +14,12 @@ public interface AnimeRepository extends JpaRepository<Anime, Long> {
   @Query("select a from Anime a join fetch a.tags join fetch a.characterList where a.animeId = :id")
   Optional<Anime> findByIdWithTagsAAndCharacterList(@Param("id") Long animeId);
 
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList where a.animeId = :id")
+  @Query("select a from Anime a join fetch a.tags join fetch a.characterList")
   List<Anime> findAllWithTagsAndCharacterList();
 
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList where a.animeId > :cursorId order by a.animeId asc limit :size")
-  List<Anime> findAllByCursorId(@Param("cursorId") Long cursorId, @Param("size") Long size);
+  @Query("select a from Anime a where a.animeId < :cursorId order by a.animeId desc")
+  Slice<Anime> findAllByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
 
-
+  @Query("select a from Anime a order by a.animeId desc")
+  Slice<Anime> findAllPageable(Pageable pageable);
 }
