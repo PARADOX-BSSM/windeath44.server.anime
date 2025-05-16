@@ -18,8 +18,8 @@ public interface AnimeRepository extends JpaRepository<Anime, Long> {
   List<Anime> findAllWithTagsAndCharacterList();
 
   @Query("select a from Anime a where a.animeId < :cursorId order by a.animeId desc")
-  Slice<Anime> findAllByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
+  Slice<Anime> findPageByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
 
   @Query("select a from Anime a order by a.animeId desc")
-  Slice<Anime> findAllPageable(Pageable pageable);
+  Slice<Anime> findPage(Pageable pageable);
 }

@@ -99,8 +99,8 @@ public class AnimeService {
 
     // null일 경우 첫 페이지 조회하는거임
     Slice<Anime> animeSlice = cursorId == null
-            ? animeRepository.findAllPageable(pageable)
-            : animeRepository.findAllByCursorId(cursorId, pageable);
+            ? animeRepository.findPage(pageable)
+            : animeRepository.findPageByCursorId(cursorId, pageable);
 
     List<AnimeListResponse> animeList = animeMapper.toAnimePageableListResponse(animeSlice);
     return new CursorPage<>(animeList, animeSlice.hasNext());
