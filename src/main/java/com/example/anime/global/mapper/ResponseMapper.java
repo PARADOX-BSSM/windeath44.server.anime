@@ -1,6 +1,7 @@
 package com.example.anime.global.mapper;
 
 import com.example.anime.global.mapper.dto.ResponseDto;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,18 +1,21 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.domain.Anime;
-import com.example.anime.domain.anime.domain.AnimeAirDates;
-import com.example.anime.domain.anime.domain.mapper.AnimeMapper;
-import com.example.anime.domain.anime.domain.repository.AnimeRepository;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeAllResponse;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
-import com.example.anime.domain.anime.service.exception.NotFoundAnimeException;
-import com.example.anime.domain.character.domain.Character;
-import com.example.anime.domain.character.domain.repository.CharacterRepository;
+import com.example.anime.domain.anime.entity.Anime;
+import com.example.anime.domain.anime.entity.AnimeAirDates;
+import com.example.anime.domain.anime.mapper.AnimeMapper;
+import com.example.anime.domain.anime.repository.AnimeRepository;
+import com.example.anime.domain.anime.dto.response.AnimeListResponse;
+import com.example.anime.domain.anime.dto.response.AnimeResponse;
+import com.example.anime.domain.anime.exception.NotFoundAnimeException;
+import com.example.anime.domain.character.entity.Character;
 import com.example.anime.domain.character.service.CharacterService;
+import com.example.anime.global.mapper.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,37 +38,50 @@ public class AnimeService {
 
   private Anime createAnime(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
     AnimeAirDates animeAirDates = AnimeAirDates.builder()
-            .start_year(start_year)
-            .end_year(end_year)
+            .startYear(start_year)
+            .endYear(end_year)
             .build();
     return animeMapper.toAnime(name, description, animeAirDates, tags);
   }
 
+  @Transactional
   public void delete(Long animeId) {
-    Anime anime = findAnime(animeId);
+    Anime anime = findAndRenewAnimeById(animeId);
     animeRepository.delete(anime);
   }
 
   public Anime getAnime(Long animeId) {
-    return findAnime(animeId);
+    return findAndRenewAnimeById(animeId);
   }
 
+  @Transactional
+  public Anime findAndRenewAnimeById(Long animeId) {
+      Anime anime = findAnime(animeId);
+      anime.renewalBowCount();
+      return anime;
+    }
+
     private Anime findAnime(Long animeId) {
-    Anime anime = animeRepository.findByIdWithTags(animeId)
+    Anime anime = animeRepository.findByIdWithTagsAAndCharacterList(animeId)
             .orElseThrow(NotFoundAnimeException::getInstance);
     return anime;
   }
 
-  public List<AnimeAllResponse> findAll() {
-    List<AnimeAllResponse> animeList = animeRepository.findAllWithTags()
+  @Transactional
+  public List<AnimeListResponse> findAll() {
+    List<AnimeListResponse> animeList = animeRepository.findAllWithTagsAndCharacterList()
             .stream()
-            .map(animeMapper::toAnimeAllResponse)
+            .map( anime -> {
+                anime.renewalBowCount();
+                AnimeListResponse animeListResponse = animeMapper.toAnimeListResponse(anime);
+                return animeListResponse;
+            } )
             .toList();
     return animeList;
   }
 
   public AnimeResponse findById(Long animeId) {
-    Anime anime = findAnime(animeId);
+    Anime anime = findAndRenewAnimeById(animeId);
     List<Character> characterList = characterService.findAllByAnime(anime);
     AnimeResponse animeResponse = animeMapper.toAnimeResponse(anime, characterList);
     return animeResponse;
@@ -76,4 +92,17 @@ public class AnimeService {
     Anime anime = findAnime(animeId);
     anime.update(name, description, start_year, end_year, tags);
   }
+
+  public CursorPage<AnimeListResponse> findAllByCursorId(Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size + 1);
+
+    // null일 경우 첫 페이지 조회하는거임
+    Slice<Anime> animeSlice = cursorId == null
+            ? animeRepository.findPage(pageable)
+            : animeRepository.findPageByCursorId(cursorId, pageable);
+
+    List<AnimeListResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
+    return new CursorPage<>(animeList, animeSlice.hasNext());
+  }
+
 }
