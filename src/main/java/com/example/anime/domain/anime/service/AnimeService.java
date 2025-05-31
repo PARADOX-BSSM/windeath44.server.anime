@@ -1,15 +1,14 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.domain.Anime;
-import com.example.anime.domain.anime.domain.AnimeAirDates;
-import com.example.anime.domain.anime.domain.mapper.AnimeMapper;
-import com.example.anime.domain.anime.domain.repository.AnimeRepository;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeListResponse;
-import com.example.anime.domain.anime.presentation.dto.response.AnimeResponse;
-import com.example.anime.domain.anime.service.exception.NotFoundAnimeException;
-import com.example.anime.domain.character.domain.Character;
+import com.example.anime.domain.anime.entity.Anime;
+import com.example.anime.domain.anime.entity.AnimeAirDates;
+import com.example.anime.domain.anime.mapper.AnimeMapper;
+import com.example.anime.domain.anime.repository.AnimeRepository;
+import com.example.anime.domain.anime.dto.response.AnimeListResponse;
+import com.example.anime.domain.anime.dto.response.AnimeResponse;
+import com.example.anime.domain.anime.exception.NotFoundAnimeException;
+import com.example.anime.domain.character.entity.Character;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.mapper.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 
@@ -102,7 +101,7 @@ public class AnimeService {
             ? animeRepository.findPage(pageable)
             : animeRepository.findPageByCursorId(cursorId, pageable);
 
-    List<AnimeListResponse> animeList = animeMapper.toAnimePageableListResponse(animeSlice);
+    List<AnimeListResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
     return new CursorPage<>(animeList, animeSlice.hasNext());
   }
 

@@ -1,8 +1,8 @@
 package com.example.anime.domain.character.facade;
 
-import com.example.anime.domain.anime.domain.Anime;
+import com.example.anime.domain.anime.entity.Anime;
 import com.example.anime.domain.anime.service.AnimeService;
-import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
+import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
