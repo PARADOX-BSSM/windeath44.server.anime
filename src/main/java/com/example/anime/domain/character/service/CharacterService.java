@@ -1,7 +1,7 @@
 package com.example.anime.domain.character.service;
 
-import com.example.anime.domain.anime.entity.Anime;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.repository.CharacterRepository;
@@ -47,8 +47,8 @@ public class CharacterService {
     return characterResponse;
   }
 
-  public void create(Anime anime, String name, String content, String deathReason, Long lifeTime) {
-    Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime);
+  public void create(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
+    Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime, imageUrl);
     characterRepository.save(character);
   }
 }

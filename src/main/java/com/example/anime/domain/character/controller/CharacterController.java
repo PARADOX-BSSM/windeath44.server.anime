@@ -1,9 +1,9 @@
 package com.example.anime.domain.character.controller;
 
-import com.example.anime.domain.character.facade.CharacterFacade;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
+import com.example.anime.domain.character.service.Usecase.CreateCharacterUseCase;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.mapper.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -20,12 +20,12 @@ import java.util.List;
 public class CharacterController {
   private final CharacterService characterService;
   private final ResponseMapper responseMapper;
-  private final CharacterFacade characterFacade;
+  private final CreateCharacterUseCase createCharacterUseCase;
 
 
   @PostMapping
   public ResponseEntity<ResponseDto<Void>> create(@RequestBody @Valid CharacterRequest characterRequest) {
-    characterFacade.create(characterRequest);
+    createCharacterUseCase.execute(characterRequest);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
     return ResponseEntity.ok(responseDto);
   }

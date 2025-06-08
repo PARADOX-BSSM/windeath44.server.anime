@@ -21,3 +21,8 @@ grpc:
     address: ${GRPC_SERVER_ADDRESS}
     port: ${GRPC_SERVER_PORT}
 
+storage:
+  bucket-name : ${STORAGE_BUCKET_NAME}
+  namespace-name : ${STORAGE_NAMESPACE}
+  configuration-file-path : ~/.oci/config
+  profile : DEFAULT

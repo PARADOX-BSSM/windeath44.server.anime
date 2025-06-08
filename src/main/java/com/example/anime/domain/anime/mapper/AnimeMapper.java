@@ -1,10 +1,10 @@
 package com.example.anime.domain.anime.mapper;
 
-import com.example.anime.domain.anime.entity.Anime;
-import com.example.anime.domain.anime.entity.AnimeAirDates;
+import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.anime.model.AnimeAirDates;
 import com.example.anime.domain.anime.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import lombok.RequiredArgsConstructor;
