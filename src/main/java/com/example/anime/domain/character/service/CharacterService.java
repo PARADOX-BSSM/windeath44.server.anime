@@ -1,14 +1,11 @@
 package com.example.anime.domain.character.service;
 
-import com.example.anime.domain.anime.domain.Anime;
-import com.example.anime.domain.anime.service.AnimeService;
-import com.example.anime.domain.character.domain.Character;
-import com.example.anime.domain.character.presentation.dto.response.CharacterResponse;
-import com.example.anime.domain.character.domain.mapper.CharacterMapper;
-import com.example.anime.domain.character.domain.repository.CharacterRepository;
-import com.example.anime.domain.character.presentation.dto.request.CharacterRequest;
-import com.example.anime.domain.character.service.exception.NotFoundCharacterException;
-import jakarta.validation.Valid;
+import com.example.anime.domain.anime.entity.Anime;
+import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.dto.response.CharacterResponse;
+import com.example.anime.domain.character.mapper.CharacterMapper;
+import com.example.anime.domain.character.repository.CharacterRepository;
+import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
