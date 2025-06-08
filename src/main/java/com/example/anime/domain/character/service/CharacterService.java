@@ -8,6 +8,7 @@ import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,5 +51,11 @@ public class CharacterService {
   public void create(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
     Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime, imageUrl);
     characterRepository.save(character);
+  }
+  @Transactional
+  public void memorializing(Long characterId) {
+    Character character = characterRepository.findById(characterId)
+            .orElseThrow(NotFoundCharacterException::getInstance);
+    character.memorializing();
   }
 }

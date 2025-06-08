@@ -36,4 +36,8 @@ public class Character {
     this.bowCount = 0L;
     this.state = CharacterState.NOT_MEMORIALIZING;
   }
+
+  public void memorializing() {
+    this.state = CharacterState.MEMORIALIZING;
+  }
 }
