@@ -9,7 +9,7 @@ import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.global.mapper.dto.CursorPage;
+import com.example.anime.global.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;

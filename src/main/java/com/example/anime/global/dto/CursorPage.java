@@ -1,4 +1,4 @@
-package com.example.anime.global.mapper.dto;
+package com.example.anime.global.dto;
 
 import java.util.List;
 

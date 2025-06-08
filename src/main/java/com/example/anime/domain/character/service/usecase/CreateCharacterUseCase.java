@@ -1,4 +1,4 @@
-package com.example.anime.domain.character.service.Usecase;
+package com.example.anime.domain.character.service.usecase;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.service.AnimeService;
