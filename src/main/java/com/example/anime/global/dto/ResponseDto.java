@@ -1,4 +1,4 @@
-package com.example.anime.global.mapper.dto;
+package com.example.anime.global.dto;
 
 public record ResponseDto<T> (
         String message,

@@ -1,15 +1,15 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.entity.Anime;
-import com.example.anime.domain.anime.entity.AnimeAirDates;
+import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.anime.model.AnimeAirDates;
 import com.example.anime.domain.anime.mapper.AnimeMapper;
 import com.example.anime.domain.anime.repository.AnimeRepository;
 import com.example.anime.domain.anime.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.global.mapper.dto.CursorPage;
+import com.example.anime.global.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;

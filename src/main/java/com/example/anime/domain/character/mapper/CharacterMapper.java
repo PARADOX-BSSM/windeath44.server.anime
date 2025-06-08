@@ -1,21 +1,22 @@
 package com.example.anime.domain.character.mapper;
 
-import com.example.anime.domain.anime.entity.Anime;
+import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.model.Character;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CharacterMapper {
 
-  public Character toCharacter(Anime anime, String name, String content, String deathReason, Long lifeTime) {
+  public Character toCharacter(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
     return Character.builder()
             .anime(anime)
             .name(name)
             .content(content)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
+            .imageUrl(imageUrl)
             .build();
   }
 

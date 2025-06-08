@@ -12,7 +12,6 @@ spring:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
-
 server:
   port:
     ${SERVER_PORT}
@@ -20,4 +19,23 @@ grpc:
   server:
     address: ${GRPC_SERVER_ADDRESS}
     port: ${GRPC_SERVER_PORT}
+
+storage:
+  bucket-name : ${STORAGE_BUCKET_NAME}
+  namespace-name : ${STORAGE_NAMESPACE}
+  configuration-file-path : ~/.oci/config
+  profile : DEFAULT
+
+kafka:
+  bootstrap-servers: ${KAFKA_SERVER}
+  schema-registry-url: http://localhost:8081
+  consumer:
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    specific-avro-reader: true
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
 

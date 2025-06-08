@@ -1,6 +1,6 @@
 package com.example.anime.domain.gRPC.service;
 
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;

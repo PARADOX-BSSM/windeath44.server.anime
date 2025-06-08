@@ -1,7 +1,7 @@
 package com.example.anime.domain.character.repository;
 
-import com.example.anime.domain.anime.entity.Anime;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.character.model.Character;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

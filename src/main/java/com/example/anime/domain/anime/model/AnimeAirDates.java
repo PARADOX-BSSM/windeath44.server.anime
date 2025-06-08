@@ -1,4 +1,4 @@
-package com.example.anime.domain.anime.entity;
+package com.example.anime.domain.anime.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

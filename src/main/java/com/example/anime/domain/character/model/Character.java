@@ -1,7 +1,7 @@
-package com.example.anime.domain.character.entity;
+package com.example.anime.domain.character.model;
 
 
-import com.example.anime.domain.anime.entity.Anime;
+import com.example.anime.domain.anime.model.Anime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,5 +35,9 @@ public class Character {
   public void init() {
     this.bowCount = 0L;
     this.state = CharacterState.NOT_MEMORIALIZING;
+  }
+
+  public void memorializing() {
+    this.state = CharacterState.MEMORIALIZING;
   }
 }

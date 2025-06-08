@@ -1,4 +1,4 @@
-package com.example.anime.domain.anime.entity;
+package com.example.anime.domain.anime.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-import com.example.anime.domain.character.entity.Character;
+import com.example.anime.domain.character.model.Character;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
