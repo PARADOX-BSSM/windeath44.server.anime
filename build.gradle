@@ -28,6 +28,22 @@ repositories {
     }
 }
 
+avro {
+    stringType = "String"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += 'build/generated-main-avro-java'
+        }
+    }
+}
+
+
+compileJava.dependsOn(generateAvroJava)
+sourceSets.main.java.srcDir file("build/generated-main-avro-java")
+
 dependencies {
     implementation platform('io.grpc:grpc-bom:1.58.0')
     implementation 'io.grpc:grpc-netty-shaded'

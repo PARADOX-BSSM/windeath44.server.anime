@@ -1,10 +1,10 @@
 package com.example.anime.domain.character.messaging;
 
 import com.example.anime.domain.character.service.CharacterService;
+import com.example.avro.MemorialAvroSchema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import com.example.
 
 @Component
 @RequiredArgsConstructor
