@@ -7,6 +7,9 @@ import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +37,12 @@ public class CharacterService {
      return characterList;
   }
 
-  public List<CharacterResponse> findAll() {
-    List<CharacterResponse> characterList = characterRepository.findAll()
+  public List<CharacterResponse> findAll(Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageable(pageable) :  characterRepository.findAllByCursorId(cursorId, pageable);
+
+    List<CharacterResponse> characterList = characterSlice.getContent()
             .stream()
             .map(characterMapper::toCharacterResponse)
             .toList();
@@ -48,6 +55,7 @@ public class CharacterService {
     return characterResponse;
   }
 
+  @Transactional
   public void create(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
     Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime, imageUrl);
     characterRepository.save(character);
@@ -57,5 +65,15 @@ public class CharacterService {
     Character character = characterRepository.findById(characterId)
             .orElseThrow(NotFoundCharacterException::getInstance);
     character.memorializing();
+  }
+
+  public List<Long> findIdsByAnime(Long animeId) {
+    List<Long> characterIds = characterRepository.findIdsByAnimeId(animeId);
+    return characterIds;
+  }
+
+  public List<Long> findIdsByDeathReason(String deathReason) {
+   List<Long> characterIds = characterRepository.findIdsByDeathReason(deathReason);
+   return characterIds;
   }
 }

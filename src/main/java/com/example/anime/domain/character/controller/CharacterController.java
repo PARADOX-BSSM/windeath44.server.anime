@@ -8,7 +8,6 @@ import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,18 +30,30 @@ public class CharacterController {
   }
 
   @GetMapping
-  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findAll() {
-    List<CharacterResponse> characterResponses = characterService.findAll();
+  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    List<CharacterResponse> characterResponses = characterService.findAll(cursorId, size);
     ResponseDto<List<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
-    return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(responseDto);
+    return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/{character-id}")
   public ResponseEntity<ResponseDto<CharacterResponse>> findById(@PathVariable("character-id") Long characterId) {
     CharacterResponse characterResponse = characterService.find(characterId);
     ResponseDto<CharacterResponse> responseDto = responseMapper.toResponseDto("find character", characterResponse);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @GetMapping("/search/by-anime")
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId) {
+    List<Long> characterIds = characterService.findIdsByAnime(animeId);
+    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by anime id", characterIds);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @GetMapping("/search/by-death-reason")
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("deathReason") String deathReason) {
+    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
+    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
