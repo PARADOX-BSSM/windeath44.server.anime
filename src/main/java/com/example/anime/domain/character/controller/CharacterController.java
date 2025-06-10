@@ -4,6 +4,7 @@ import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
+import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -30,9 +31,9 @@ public class CharacterController {
   }
 
   @GetMapping
-  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-    List<CharacterResponse> characterResponses = characterService.findAll(cursorId, size);
-    ResponseDto<List<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+  public ResponseEntity<ResponseDto<CursorPage<List<CharacterResponse>>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<List<CharacterResponse>> characterResponses = characterService.findAll(cursorId, size);
+    ResponseDto<CursorPage<List<CharacterResponse>>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -43,14 +44,14 @@ public class CharacterController {
     return ResponseEntity.ok(responseDto);
   }
 
-  @GetMapping("/search/by-anime")
+  @GetMapping("/search/anime")
   public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId) {
     List<Long> characterIds = characterService.findIdsByAnime(animeId);
     ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by anime id", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
-  @GetMapping("/search/by-death-reason")
+  @GetMapping("/search/death-reason")
   public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("deathReason") String deathReason) {
     List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
     ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);

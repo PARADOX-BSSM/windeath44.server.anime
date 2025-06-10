@@ -6,6 +6,7 @@ import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
+import com.example.anime.global.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,7 @@ public class CharacterService {
      return characterList;
   }
 
-  public List<CharacterResponse> findAll(Long cursorId, int size) {
+  public CursorPage<CharacterResponse> findAll(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
 
     Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageable(pageable) :  characterRepository.findAllByCursorId(cursorId, pageable);
@@ -46,7 +47,8 @@ public class CharacterService {
             .stream()
             .map(characterMapper::toCharacterResponse)
             .toList();
-    return characterList;
+
+    return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 
   public CharacterResponse find(Long characterId) {
