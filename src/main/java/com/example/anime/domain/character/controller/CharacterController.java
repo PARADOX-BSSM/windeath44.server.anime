@@ -4,11 +4,11 @@ import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
+import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,18 +31,30 @@ public class CharacterController {
   }
 
   @GetMapping
-  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findAll() {
-    List<CharacterResponse> characterResponses = characterService.findAll();
-    ResponseDto<List<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
-    return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(responseDto);
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponses = characterService.findAll(cursorId, size);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+    return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/{character-id}")
   public ResponseEntity<ResponseDto<CharacterResponse>> findById(@PathVariable("character-id") Long characterId) {
     CharacterResponse characterResponse = characterService.find(characterId);
     ResponseDto<CharacterResponse> responseDto = responseMapper.toResponseDto("find character", characterResponse);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @GetMapping("/search/anime")
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId) {
+    List<Long> characterIds = characterService.findIdsByAnime(animeId);
+    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by anime id", characterIds);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @GetMapping("/search/death-reason")
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason) {
+    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
+    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 

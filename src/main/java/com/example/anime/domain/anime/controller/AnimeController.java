@@ -31,17 +31,10 @@ public class AnimeController {
             .body(responseDto);
   }
 
-  @GetMapping("/details")
+  @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<AnimeListResponse>>> findAllByCursorId(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
     CursorPage<AnimeListResponse> animeList = animeService.findAllByCursorId(cursorId, size);
     ResponseDto<CursorPage<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes with cursorId", animeList);
-    return ResponseEntity.ok(responseDto);
-  }
-
-  @GetMapping
-  public ResponseEntity<ResponseDto<List<AnimeListResponse>>> findAll() {
-    List<AnimeListResponse> animeList = animeService.findAll();
-    ResponseDto<List<AnimeListResponse>> responseDto = responseMapper.toResponseDto("find animes", animeList);
     return ResponseEntity.ok(responseDto);
   }
 
