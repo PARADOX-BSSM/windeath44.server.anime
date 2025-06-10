@@ -31,9 +31,9 @@ public class CharacterController {
   }
 
   @GetMapping
-  public ResponseEntity<ResponseDto<CursorPage<List<CharacterResponse>>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-    CursorPage<List<CharacterResponse>> characterResponses = characterService.findAll(cursorId, size);
-    ResponseDto<CursorPage<List<CharacterResponse>>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponses = characterService.findAll(cursorId, size);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -52,7 +52,7 @@ public class CharacterController {
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("deathReason") String deathReason) {
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason) {
     List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
     ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);
     return ResponseEntity.ok(responseDto);
