@@ -16,9 +16,6 @@ FROM --platform=linux/arm64 openjdk:17-jdk
 
 WORKDIR /app
 
-# .env 파일을 컨테이너로 복사
-COPY .env .env
-
 # 빌드한 JAR 파일 복사
 COPY --from=build /app/build/libs/*.jar app.jar
 
