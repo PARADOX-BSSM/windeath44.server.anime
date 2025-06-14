@@ -21,7 +21,7 @@ public class MemorializingCharacterUseCase {
     CharacterAvroSchema characterAvroSchema = characterService.transformSchema(memorialAvroSchema);
 
     try {
-      Long characterId = memorialAvroSchema.getCharacterId();
+      Long characterId = characterAvroSchema.getCharacterId();
       characterService.memorializing(characterId);
       kafkaProducer.send("character-memorialized-response", characterAvroSchema);
     } catch (Exception e) {
