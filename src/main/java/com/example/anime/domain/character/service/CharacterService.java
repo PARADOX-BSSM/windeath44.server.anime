@@ -7,6 +7,8 @@ import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
+import com.example.avro.CharacterAvroSchema;
+import com.example.avro.MemorialAvroSchema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,5 +79,12 @@ public class CharacterService {
   public List<Long> findIdsByDeathReason(String deathReason) {
    List<Long> characterIds = characterRepository.findIdsByDeathReason(deathReason);
    return characterIds;
+  }
+
+  public CharacterAvroSchema transformSchema(MemorialAvroSchema memorialAvroSchema) {
+    Character character = findCharacterById(memorialAvroSchema.getCharacterId());
+
+    CharacterAvroSchema characterAvroSchema = characterMapper.toCharacterAvroSchema(character, memorialAvroSchema);
+    return characterAvroSchema;
   }
 }
