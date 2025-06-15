@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Long> {
@@ -35,4 +36,7 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
 
   @Query("select c.characterId from Character c where c.deathReason = :deathReason")
   List<Long> findIdsByDeathReason(String deathReason);
+
+  @Query("select c from Character c where c.characterId in :characterIds")
+  List<Character> findAllByIds(List<Long> characterIds);
 }
