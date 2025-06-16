@@ -3,6 +3,8 @@ package com.example.anime.domain.character.mapper;
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.Character;
+import com.example.avro.CharacterAvroSchema;
+import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
 
@@ -50,5 +52,24 @@ public class CharacterMapper {
             .build();
     return response;
 
+  }
+
+  public CharacterAvroSchema toCharacterAvroSchema(Character character, MemorialAvroSchema memorialAvroSchema) {
+    Long characterId = character.getCharacterId();
+    String name = character.getName();
+    String content = character.getContent();
+    String deathReason = character.getDeathReason();
+    String state = character.getState().toString();
+    String applicantId = memorialAvroSchema.getWriterId();
+
+    CharacterAvroSchema characterAvroSchema = CharacterAvroSchema.newBuilder()
+            .setCharacterId(characterId)
+            .setName(name)
+            .setContent(content)
+            .setDeathReason(deathReason)
+            .setState(state)
+            .setApplicantId(applicantId)
+            .build();
+    return characterAvroSchema;
   }
 }
