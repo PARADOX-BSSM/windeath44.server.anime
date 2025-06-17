@@ -22,7 +22,8 @@ public class OracleObjectStorage implements FileStorage {
     String configurationFilePath = storageProperties.getConfigurationFilePath();
     String profile = storageProperties.getProfile();
 
-      ConfigFileAuthenticationDetailsProvider provider =
+
+    ConfigFileAuthenticationDetailsProvider provider =
               new ConfigFileAuthenticationDetailsProvider(configurationFilePath, profile);
 
     try (

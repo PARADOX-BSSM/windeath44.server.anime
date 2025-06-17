@@ -1,6 +1,5 @@
 package com.example.anime.domain.character.controller;
 
-import com.example.anime.domain.character.dto.request.CharacterIdsRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
@@ -60,8 +59,8 @@ public class CharacterController {
   }
 
   @GetMapping("/search/characterIds")
-  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findCharacterResponsesByCharacterIds(@RequestBody CharacterIdsRequest characterIdsRequest) {
-    List<CharacterResponse> characterResponseList = characterService.findByCharacterIds(characterIdsRequest);
+  public ResponseEntity<ResponseDto<List<CharacterResponse>>> findCharacterResponsesByCharacterIds(@RequestParam List<Long> characterIds) {
+    List<CharacterResponse> characterResponseList = characterService.findByCharacterIds(characterIds);
     ResponseDto<List<CharacterResponse>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterResponseList);
     return ResponseEntity.ok(responseDto);
   }
