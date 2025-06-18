@@ -9,6 +9,8 @@ import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.model.CharacterState;
 import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.global.dto.CursorPage;
+import com.example.avro.CharacterAvroSchema;
+import com.example.avro.MemorialAvroSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,8 @@ class CharacterServiceTest {
     private Anime testAnime;
     private Character testCharacter;
     private CharacterResponse testCharacterResponse;
+    private MemorialAvroSchema testMemorialAvroSchema;
+    private CharacterAvroSchema testCharacterAvroSchema;
 
     @BeforeEach
     void setUp() {
@@ -80,6 +84,22 @@ class CharacterServiceTest {
                 "http://test.com/image.jpg",
                 0L
         );
+
+        // Setup test memorial avro schema
+        testMemorialAvroSchema = new MemorialAvroSchema();
+        testMemorialAvroSchema.setMemorialId("memorial-123");
+        testMemorialAvroSchema.setWriterId("writer-123");
+        testMemorialAvroSchema.setContent("Test Memorial Content");
+        testMemorialAvroSchema.setCharacterId(1L);
+
+        // Setup test character avro schema
+        testCharacterAvroSchema = new CharacterAvroSchema();
+        testCharacterAvroSchema.setCharacterId(1L);
+        testCharacterAvroSchema.setName("Test Character");
+        testCharacterAvroSchema.setContent("Test Content");
+        testCharacterAvroSchema.setDeathReason("Test Death Reason");
+        testCharacterAvroSchema.setState("NOT_MEMORIALIZING");
+        testCharacterAvroSchema.setApplicantId("writer-123");
     }
 
     @Test
@@ -271,5 +291,27 @@ class CharacterServiceTest {
         assertEquals(3, result.size());
         assertEquals(characterIds, result);
         verify(characterRepository, times(1)).findIdsByDeathReason("Test Death Reason");
+    }
+
+    @Test
+    @DisplayName("transformSchema should transform MemorialAvroSchema to CharacterAvroSchema")
+    void transformSchema_ShouldTransformMemorialAvroSchemaToCharacterAvroSchema() {
+        // Arrange
+        when(characterRepository.findById(1L)).thenReturn(Optional.of(testCharacter));
+        when(characterMapper.toCharacterAvroSchema(testCharacter, testMemorialAvroSchema)).thenReturn(testCharacterAvroSchema);
+
+        // Act
+        CharacterAvroSchema result = characterService.transformSchema(testMemorialAvroSchema);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(testCharacterAvroSchema.getCharacterId(), result.getCharacterId());
+        assertEquals(testCharacterAvroSchema.getName(), result.getName());
+        assertEquals(testCharacterAvroSchema.getContent(), result.getContent());
+        assertEquals(testCharacterAvroSchema.getDeathReason(), result.getDeathReason());
+        assertEquals(testCharacterAvroSchema.getState(), result.getState());
+        assertEquals(testCharacterAvroSchema.getApplicantId(), result.getApplicantId());
+        verify(characterRepository, times(1)).findById(1L);
+        verify(characterMapper, times(1)).toCharacterAvroSchema(testCharacter, testMemorialAvroSchema);
     }
 }
