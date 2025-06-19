@@ -1,9 +1,11 @@
 package com.example.anime.domain.character.controller;
 
+import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
+import com.example.anime.domain.character.service.usecase.UpdateCharacterUseCase;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value="/characters")
@@ -21,6 +24,7 @@ public class CharacterController {
   private final CharacterService characterService;
   private final ResponseMapper responseMapper;
   private final CreateCharacterUseCase createCharacterUseCase;
+  private final UpdateCharacterUseCase updateCharacterUseCase;
 
 
   @PostMapping
@@ -65,5 +69,18 @@ public class CharacterController {
     return ResponseEntity.ok(responseDto);
   }
 
+  @DeleteMapping("/{character-id}")
+  public ResponseEntity<ResponseDto<Void>> delete(@PathVariable("character-id") Long characterId) {
+    characterService.deleteById(characterId);
+    ResponseDto<Void> responseDto = responseMapper.toResponseDto("delete character by id", null);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @PatchMapping("/{character-id}")
+  public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @Valid CharacterUpdateRequest characterUpdateRequest) {
+    updateCharacterUseCase.execute(characterUpdateRequest, characterId);
+    ResponseDto<Void> responseDto = responseMapper.toResponseDto("update character by id", null);
+    return ResponseEntity.ok(responseDto);
+  }
 
 }

@@ -29,7 +29,7 @@ public class CharacterService {
     return character;
   }
 
-  private Character findCharacterById(Long characterId) {
+  public Character findCharacterById(Long characterId) {
     Character character = characterRepository.findById(characterId)
             .orElseThrow(NotFoundCharacterException::getInstance);
     return character;
@@ -94,5 +94,17 @@ public class CharacterService {
             .map(characterMapper::toCharacterResponse)
             .toList();
     return characterList;
+  }
+
+  @Transactional
+  public void deleteById(Long characterId) {
+    Character character = findCharacterById(characterId);
+    characterRepository.delete(character);
+  }
+
+  @Transactional
+  public void update(Long charterId, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
+    Character character = findById(charterId);
+    character.update(name, content, deathReason, lifeTime, imageUrl);
   }
 }
