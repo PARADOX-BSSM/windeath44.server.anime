@@ -7,5 +7,5 @@ import java.io.IOException;
 public interface FileStorage {
   String upload(MultipartFile file) throws IOException;
 
-  String modify(MultipartFile image);
+  String modify(String imageName, MultipartFile file);
 }

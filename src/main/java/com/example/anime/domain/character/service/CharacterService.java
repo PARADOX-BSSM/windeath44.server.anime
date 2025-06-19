@@ -103,8 +103,7 @@ public class CharacterService {
   }
 
   @Transactional
-  public void update(Long charterId, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
-    Character character = findById(charterId);
+  public void update(Character character, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
     character.update(name, content, deathReason, lifeTime, imageUrl);
   }
 }
