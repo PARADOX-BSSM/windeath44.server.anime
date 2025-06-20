@@ -44,7 +44,7 @@ public class OracleObjectStorage implements FileStorage {
   }
 
   @Override
-  public String modify(String imageName, MultipartFile file) {
+  public String modify(String imageName, MultipartFile file) throws IOException {
     String configurationFilePath = storageProperties.getConfigurationFilePath();
     String profile = storageProperties.getProfile();
 

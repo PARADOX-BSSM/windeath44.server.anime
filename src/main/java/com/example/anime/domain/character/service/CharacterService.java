@@ -106,4 +106,17 @@ public class CharacterService {
   public void update(Character character, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
     character.update(name, content, deathReason, lifeTime, imageUrl);
   }
+
+  @Transactional(readOnly = true)
+  public CursorPage<CharacterResponse> findAllByName(String name, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+    Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageableByName(name, pageable) :  characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
+
+    List<CharacterResponse> characterList = characterSlice.getContent()
+            .stream()
+            .map(characterMapper::toCharacterResponse)
+            .toList();
+
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
 }
