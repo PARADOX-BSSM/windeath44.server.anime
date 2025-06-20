@@ -2,6 +2,7 @@ package com.example.anime.domain.character.model;
 
 
 import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +42,12 @@ public class Character {
     this.state = CharacterState.MEMORIALIZING;
   }
 
-  public void update(String name, String content, String deathReason, Long lifeTime, String imageUrl) {
+  public void update(CharacterUpdateRequest characterUpdateRequest, String imageUrl) {
+    String name = characterUpdateRequest.name();
+    String content = characterUpdateRequest.content();
+    String deathReason = characterUpdateRequest.deathReason();
+    Long lifeTime = characterUpdateRequest.lifeTime();
+
     this.name = name;
     this.content = content;
     this.deathReason = deathReason;

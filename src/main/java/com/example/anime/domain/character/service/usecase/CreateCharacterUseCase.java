@@ -21,21 +21,19 @@ public class CreateCharacterUseCase {
 
   public void execute(CharacterRequest characterRequest) {
     Long animeId = characterRequest.animeId();
-    String name = characterRequest.name();
-    String content = characterRequest.content();
-    String deathReason = characterRequest.deathReason();
-    Long lifeTime = characterRequest.lifeTime();
-    MultipartFile image = characterRequest.image();
-    String imageUrl = "";
 
+    Anime anime = animeService.getAnime(animeId);
+    Long characterId = characterService.create(characterRequest, anime);
+
+    MultipartFile image = characterRequest.image();
+
+    String imageUrl = "";
     try {
-      imageUrl = fileStorage.upload(image);
+      imageUrl = fileStorage.upload(characterId.toString(), image);
     } catch(IOException e) {
       throw UploadFileFailException.getInstance();
     }
 
-    Anime anime = animeService.getAnime(animeId);
-    characterService.create(anime, name, content, deathReason, lifeTime, imageUrl);
   }
 
 }

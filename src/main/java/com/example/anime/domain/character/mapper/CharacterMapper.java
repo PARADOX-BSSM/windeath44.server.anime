@@ -1,24 +1,30 @@
 package com.example.anime.domain.character.mapper;
 
 import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.Character;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class CharacterMapper {
 
-  public Character toCharacter(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
+  public Character toCharacter(CharacterRequest characterRequest, Anime anime) {
+    String name = characterRequest.name();
+    String content = characterRequest.content();
+    String deathReason = characterRequest.deathReason();
+    Long lifeTime = characterRequest.lifeTime();
+
     return Character.builder()
             .anime(anime)
             .name(name)
             .content(content)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
-            .imageUrl(imageUrl)
             .build();
   }
 

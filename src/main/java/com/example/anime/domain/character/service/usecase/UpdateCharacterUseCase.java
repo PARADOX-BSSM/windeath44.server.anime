@@ -24,20 +24,16 @@ public class UpdateCharacterUseCase {
 
 
   public void execute(CharacterUpdateRequest characterUpdateRequest, Long charterId) {
-    String name = characterUpdateRequest.name();
-    String content = characterUpdateRequest.content();
-    String deathReason = characterUpdateRequest.deathReason();
-    Long lifeTime = characterUpdateRequest.lifeTime();
     MultipartFile image = characterUpdateRequest.image();
+
     String imageUrl = "";
-    Character character = characterService.findById(charterId);
-    String preImageUrl = character.getImageUrl();
+
     try {
-      imageUrl = fileStorage.modify(preImageUrl, image);
+      imageUrl = fileStorage.upload(charterId.toString(), image);
     } catch(IOException e) {
       throw UploadFileFailException.getInstance();
     }
 
-    characterService.update(character, name, content, deathReason, lifeTime, imageUrl);
+    characterService.update(characterUpdateRequest, charterId, imageUrl);
   }
 }
