@@ -3,7 +3,9 @@ package com.example.anime.domain.character.controller;
 import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.exception.UploadFileFailException;
 import com.example.anime.domain.character.service.CharacterService;
+import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
 import com.example.anime.domain.character.service.usecase.UpdateCharacterUseCase;
 import com.example.anime.global.dto.CursorPage;
@@ -13,7 +15,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -25,12 +29,20 @@ public class CharacterController {
   private final ResponseMapper responseMapper;
   private final CreateCharacterUseCase createCharacterUseCase;
   private final UpdateCharacterUseCase updateCharacterUseCase;
+  private final CharacterImageUploadUseCase characterImageUploadUseCase;
 
 
   @PostMapping
   public ResponseEntity<ResponseDto<Void>> create(@RequestBody @Valid CharacterRequest characterRequest) {
     createCharacterUseCase.execute(characterRequest);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @PostMapping("/upload/image/{character-id}")
+  public ResponseEntity<ResponseDto<String>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
+    String imageUrl = characterImageUploadUseCase.upload(characterId, image);
+    ResponseDto<String> responseDto = responseMapper.toResponseDto("create character", imageUrl);
     return ResponseEntity.ok(responseDto);
   }
 

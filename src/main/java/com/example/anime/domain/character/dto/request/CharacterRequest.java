@@ -10,7 +10,7 @@ public record CharacterRequest (
         String content,
         Long lifeTime,
         String deathReason,
-        MultipartFile image
+        String imageUrl
 ) {
 
 }

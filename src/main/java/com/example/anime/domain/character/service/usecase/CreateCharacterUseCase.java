@@ -17,23 +17,13 @@ import java.io.IOException;
 public class CreateCharacterUseCase {
   private final AnimeService animeService;
   private final CharacterService characterService;
-  private final FileStorage fileStorage;
 
-  public void execute(CharacterRequest characterRequest) {
+  public Long execute(CharacterRequest characterRequest) {
     Long animeId = characterRequest.animeId();
 
     Anime anime = animeService.getAnime(animeId);
     Long characterId = characterService.create(characterRequest, anime);
-
-    MultipartFile image = characterRequest.image();
-
-    String imageUrl = "";
-    try {
-      imageUrl = fileStorage.upload(characterId.toString(), image);
-    } catch(IOException e) {
-      throw UploadFileFailException.getInstance();
-    }
-
+    return characterId;
   }
 
 }
