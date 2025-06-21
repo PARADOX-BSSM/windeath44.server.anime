@@ -1,6 +1,7 @@
 package com.example.anime.domain.character.service.usecase;
 
 import com.example.anime.domain.character.exception.UploadFileFailException;
+import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.storage.FileStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,14 +13,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CharacterImageUploadUseCase {
   private final FileStorage fileStorage;
+  private final CharacterService characterService;
 
-  public String upload(Long characterId, MultipartFile image) {
+  public void upload(Long characterId, MultipartFile image) {
     String imageUrl = "";
     try {
       imageUrl = fileStorage.upload(characterId.toString(), image);
     } catch(IOException e) {
       throw UploadFileFailException.getInstance();
     }
-    return imageUrl;
+    characterService.updateImage(characterId, imageUrl);
   }
 }

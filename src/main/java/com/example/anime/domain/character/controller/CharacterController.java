@@ -31,16 +31,16 @@ public class CharacterController {
 
 
   @PostMapping
-  public ResponseEntity<ResponseDto<Void>> create(@RequestBody @Valid CharacterRequest characterRequest) {
-    createCharacterUseCase.execute(characterRequest);
-    ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
+  public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid CharacterRequest characterRequest) {
+    Long characterId = createCharacterUseCase.execute(characterRequest);
+    ResponseDto<Long> responseDto = responseMapper.toResponseDto("create character", characterId);
     return ResponseEntity.ok(responseDto);
   }
 
-  @PostMapping("/upload/image/{character-id}")
-  public ResponseEntity<ResponseDto<String>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
-    String imageUrl = characterImageUploadUseCase.upload(characterId, image);
-    ResponseDto<String> responseDto = responseMapper.toResponseDto("create character", imageUrl);
+  @PatchMapping("/upload/image/{character-id}")
+  public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
+    characterImageUploadUseCase.upload(characterId, image);
+    ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
     return ResponseEntity.ok(responseDto);
   }
 

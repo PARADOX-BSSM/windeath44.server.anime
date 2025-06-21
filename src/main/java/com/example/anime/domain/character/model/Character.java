@@ -54,4 +54,8 @@ public class Character {
     this.lifeTime = lifeTime;
     this.imageUrl = imageUrl;
   }
+
+  public void updateImage(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 }
