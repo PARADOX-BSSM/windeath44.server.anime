@@ -18,6 +18,7 @@ public class CharacterMapper {
     String content = characterRequest.content();
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
+    String imageUrl = characterRequest.imageUrl();
 
     return Character.builder()
             .anime(anime)
@@ -25,6 +26,7 @@ public class CharacterMapper {
             .content(content)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
+            .imageUrl(imageUrl)
             .build();
   }
 
