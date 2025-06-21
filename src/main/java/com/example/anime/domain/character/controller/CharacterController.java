@@ -40,7 +40,7 @@ public class CharacterController {
   @PatchMapping("/upload/image/{character-id}")
   public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
     characterImageUploadUseCase.upload(characterId, image);
-    ResponseDto<Void> responseDto = responseMapper.toResponseDto("create character", null);
+    ResponseDto<Void> responseDto = responseMapper.toResponseDto("upload image", null);
     return ResponseEntity.ok(responseDto);
   }
 
