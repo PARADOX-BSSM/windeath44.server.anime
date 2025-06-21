@@ -40,4 +40,12 @@ public class Character {
   public void memorializing() {
     this.state = CharacterState.MEMORIALIZING;
   }
+
+  public void update(String name, String content, String deathReason, Long lifeTime, String imageUrl) {
+    this.name = name;
+    this.content = content;
+    this.deathReason = deathReason;
+    this.lifeTime = lifeTime;
+    this.imageUrl = imageUrl;
+  }
 }

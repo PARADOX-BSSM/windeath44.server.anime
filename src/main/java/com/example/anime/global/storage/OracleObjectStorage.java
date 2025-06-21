@@ -43,6 +43,31 @@ public class OracleObjectStorage implements FileStorage {
     }
   }
 
+  @Override
+  public String modify(String imageName, MultipartFile file) {
+    String configurationFilePath = storageProperties.getConfigurationFilePath();
+    String profile = storageProperties.getProfile();
+
+    ConfigFileAuthenticationDetailsProvider provider =
+            new ConfigFileAuthenticationDetailsProvider(configurationFilePath, profile);
+    try (
+            ObjectStorageClient client = new ObjectStorageClient(provider);
+            InputStream inputStream = file.getInputStream();
+    ) {
+      String bucketName = storageProperties.getBucketName();
+      String namespaceName = storageProperties.getNamespaceName();
+      String objectName = imageName;
+
+      PutObjectRequest request = buildObjectRequest(file, bucketName, namespaceName, objectName, inputStream);
+
+      client.putObject(request);
+
+      https:
+//objectstorage.ap-seoul-1.oraclecloud.com/n/<namespace>/b/<bucket>/o/<objectName>
+      return "https://objectstorage.ap-seoul-1.oraclecloud.com/n/" + namespaceName + "/b/" + bucketName + "/o/" + objectName;
+    }
+  }
+
   private PutObjectRequest buildObjectRequest(MultipartFile file, String bucketName, String namespaceName, String objectName, InputStream inputStream) {
     PutObjectRequest request = PutObjectRequest.builder()
             .bucketName(bucketName)
