@@ -69,6 +69,13 @@ public class CharacterController {
     return ResponseEntity.ok(responseDto);
   }
 
+  @GetMapping("/search/name")
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findCharacterResponsesByCharacterName(@RequestParam("name") String name, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponses = characterService.findAllByName(name, cursorId, size);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+    return ResponseEntity.ok(responseDto);
+  }
+
   @DeleteMapping("/{character-id}")
   public ResponseEntity<ResponseDto<Void>> delete(@PathVariable("character-id") Long characterId) {
     characterService.deleteById(characterId);

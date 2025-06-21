@@ -1,6 +1,8 @@
 package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
@@ -60,9 +62,10 @@ public class CharacterService {
   }
 
   @Transactional
-  public void create(Anime anime, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
-    Character character = characterMapper.toCharacter(anime, name, content, deathReason, lifeTime, imageUrl);
-    characterRepository.save(character);
+  public Long create(CharacterRequest characterRequest, Anime anime) {
+    Character character = characterMapper.toCharacter(characterRequest, anime);
+    Character savedCharacter = characterRepository.save(character);
+    return savedCharacter.getCharacterId();
   }
   @Transactional
   public void memorializing(Long characterId) {
@@ -103,7 +106,22 @@ public class CharacterService {
   }
 
   @Transactional
-  public void update(Character character, String name, String content, String deathReason, Long lifeTime, String imageUrl) {
-    character.update(name, content, deathReason, lifeTime, imageUrl);
+  public void update(CharacterUpdateRequest characterUpdateRequest, Long characterId, String imageUrl) {
+    Character character = findCharacterById(characterId);
+    character.update(characterUpdateRequest, imageUrl);
   }
+
+  @Transactional(readOnly = true)
+  public CursorPage<CharacterResponse> findAllByName(String name, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+    Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageableByName(name, pageable) :  characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
+
+    List<CharacterResponse> characterList = characterSlice.getContent()
+            .stream()
+            .map(characterMapper::toCharacterResponse)
+            .toList();
+
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
+
 }
