@@ -124,4 +124,9 @@ public class CharacterService {
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 
+  @Transactional
+  public void updateImage(Long characterId, String imageUrl) {
+    Character character = findCharacterById(characterId);
+    character.updateImage(imageUrl);
+  }
 }
