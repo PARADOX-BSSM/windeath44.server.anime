@@ -1,7 +1,6 @@
 package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.character.dto.request.CharacterIdsRequest;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
@@ -89,8 +88,7 @@ public class CharacterService {
     return characterAvroSchema;
   }
 
-  public List<CharacterResponse> findByCharacterIds(CharacterIdsRequest characterIdsRequest) {
-    List<Long> characterIds = characterIdsRequest.characterIds();
+  public List<CharacterResponse> findByCharacterIds(List<Long> characterIds) {
     List<CharacterResponse> characterList = characterRepository.findAllByIds(characterIds)
             .stream()
             .map(characterMapper::toCharacterResponse)
