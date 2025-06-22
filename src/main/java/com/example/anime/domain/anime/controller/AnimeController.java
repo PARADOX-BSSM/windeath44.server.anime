@@ -26,7 +26,7 @@ public class AnimeController {
   @PostMapping
   public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid AnimeRequest request) {
     Long animeId = animeService.create(request.name(), request.description(), request.start_year(), request.end_year(), request.tags());
-    ResponseDto<Long> responseDto = responseMapper.toResponseDto("create anime", animeId;
+    ResponseDto<Long> responseDto = responseMapper.toResponseDto("create anime", animeId);
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(responseDto);
