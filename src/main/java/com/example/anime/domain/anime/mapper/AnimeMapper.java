@@ -65,7 +65,11 @@ public class AnimeMapper {
   public List<AnimeListResponse> toAnimePageListResponse(Slice<Anime> animeSlice) {
     return animeSlice.getContent()
             .stream()
-            .map(this::toAnimeListResponse)
+            .map( anime -> {
+              anime.renewalBowCount();
+              AnimeListResponse animeListResponse = this.toAnimeListResponse(anime);
+              return animeListResponse;
+            } )
             .toList();
   }
 }

@@ -2,6 +2,7 @@ package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.model.AnimeAirDates;
+import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.domain.character.mapper.CharacterMapper;
@@ -43,6 +44,7 @@ class CharacterServiceTest {
     @InjectMocks
     private CharacterService characterService;
 
+    private CharacterRequest characterRequest;
     private Anime testAnime;
     private Character testCharacter;
     private CharacterResponse testCharacterResponse;
@@ -61,6 +63,7 @@ class CharacterServiceTest {
                 .bowCount(0L)
                 .build();
 
+        characterRequest = new CharacterRequest(1L, "나루토", "죽다", 4L, "그냥");
         // Setup test character
         testCharacter = Character.builder()
                 .characterId(1L)
@@ -214,33 +217,22 @@ class CharacterServiceTest {
     @DisplayName("create should save character")
     void create_ShouldSaveCharacter() {
         // Arrange
+
         when(characterMapper.toCharacter(
-                eq(testAnime),
-                eq("Test Character"),
-                eq("Test Content"),
-                eq("Test Death Reason"),
-                eq(100L),
-                eq("http://test.com/image.jpg")
+                eq(characterRequest),
+                eq(testAnime)
         )).thenReturn(testCharacter);
 
         // Act
         characterService.create(
-                testAnime,
-                "Test Character",
-                "Test Content",
-                "Test Death Reason",
-                100L,
-                "http://test.com/image.jpg"
+                eq(characterRequest),
+                testAnime
         );
 
         // Assert
         verify(characterMapper, times(1)).toCharacter(
-                eq(testAnime),
-                eq("Test Character"),
-                eq("Test Content"),
-                eq("Test Death Reason"),
-                eq(100L),
-                eq("http://test.com/image.jpg")
+                eq(characterRequest),
+                eq(testAnime)
         );
         verify(characterRepository, times(1)).save(testCharacter);
     }

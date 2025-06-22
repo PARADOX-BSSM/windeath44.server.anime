@@ -131,13 +131,13 @@ class AnimeServiceTest {
     @DisplayName("delete should delete anime when anime exists")
     void delete_ShouldDeleteAnime_WhenAnimeExists() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(1L)).thenReturn(Optional.of(testAnime));
+        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
 
         // Act
         animeService.delete(1L);
 
         // Assert
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(1L);
+        verify(animeRepository, times(1)).findById(1L);
         verify(animeRepository, times(1)).delete(testAnime);
     }
 
@@ -145,11 +145,11 @@ class AnimeServiceTest {
     @DisplayName("delete should throw NotFoundAnimeException when anime does not exist")
     void delete_ShouldThrowException_WhenAnimeDoesNotExist() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(999L)).thenReturn(Optional.empty());
+        when(animeRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(NotFoundAnimeException.class, () -> animeService.delete(999L));
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(999L);
+        verify(animeRepository, times(1)).findById(999L);
         verify(animeRepository, never()).delete(any(Anime.class));
     }
 
@@ -157,7 +157,7 @@ class AnimeServiceTest {
     @DisplayName("getAnime should return anime when anime exists")
     void getAnime_ShouldReturnAnime_WhenAnimeExists() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(1L)).thenReturn(Optional.of(testAnime));
+        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
 
         // Act
         Anime result = animeService.getAnime(1L);
@@ -166,25 +166,25 @@ class AnimeServiceTest {
         assertNotNull(result);
         assertEquals(testAnime.getAnimeId(), result.getAnimeId());
         assertEquals(testAnime.getName(), result.getName());
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(1L);
+        verify(animeRepository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("getAnime should throw NotFoundAnimeException when anime does not exist")
     void getAnime_ShouldThrowException_WhenAnimeDoesNotExist() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(999L)).thenReturn(Optional.empty());
+        when(animeRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(NotFoundAnimeException.class, () -> animeService.getAnime(999L));
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(999L);
+        verify(animeRepository, times(1)).findById(999L);
     }
 
     @Test
     @DisplayName("findAndRenewAnimeById should return anime and renew bow count when anime exists")
     void findAndRenewAnimeById_ShouldReturnAnimeAndRenewBowCount_WhenAnimeExists() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(1L)).thenReturn(Optional.of(testAnime));
+        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
 
         // Act
         Anime result = animeService.findAndRenewAnimeById(1L);
@@ -193,33 +193,14 @@ class AnimeServiceTest {
         assertNotNull(result);
         assertEquals(testAnime.getAnimeId(), result.getAnimeId());
         assertEquals(testAnime.getName(), result.getName());
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(1L);
-    }
-
-    @Test
-    @DisplayName("findAll should return list of anime list responses")
-    void findAll_ShouldReturnAnimeListResponses() {
-        // Arrange
-        List<Anime> animeList = Arrays.asList(testAnime);
-        when(animeRepository.findAllWithTagsAndCharacterList()).thenReturn(animeList);
-        when(animeMapper.toAnimeListResponse(testAnime)).thenReturn(testAnimeListResponse);
-
-        // Act
-        List<AnimeListResponse> result = animeService.findAll();
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(testAnimeListResponse.animeId(), result.get(0).animeId());
-        verify(animeRepository, times(1)).findAllWithTagsAndCharacterList();
-        verify(animeMapper, times(1)).toAnimeListResponse(testAnime);
+        verify(animeRepository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("findById should return anime response when anime exists")
     void findById_ShouldReturnAnimeResponse_WhenAnimeExists() {
         // Arrange
-        when(animeRepository.findByIdWithTagsAAndCharacterList(1L)).thenReturn(Optional.of(testAnime));
+        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
         when(characterService.findAllByAnime(testAnime)).thenReturn(testCharacterList);
         when(animeMapper.toAnimeResponse(testAnime, testCharacterList)).thenReturn(testAnimeResponse);
 
@@ -230,7 +211,7 @@ class AnimeServiceTest {
         assertNotNull(result);
         assertEquals(testAnimeResponse.name(), result.name());
         assertEquals(testAnimeResponse.description(), result.description());
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(1L);
+        verify(animeRepository, times(1)).findById(1L);
         verify(characterService, times(1)).findAllByAnime(testAnime);
         verify(animeMapper, times(1)).toAnimeResponse(testAnime, testCharacterList);
     }
@@ -245,13 +226,13 @@ class AnimeServiceTest {
         LocalDate endYear = LocalDate.of(2023, 1, 1);
         List<String> tags = Arrays.asList("Drama", "Fantasy");
 
-        when(animeRepository.findByIdWithTagsAAndCharacterList(1L)).thenReturn(Optional.of(testAnime));
+        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
 
         // Act
         animeService.update(1L, name, description, startYear, endYear, tags);
 
         // Assert
-        verify(animeRepository, times(1)).findByIdWithTagsAAndCharacterList(1L);
+        verify(animeRepository, times(1)).findById(1L);
     }
 
     @Test

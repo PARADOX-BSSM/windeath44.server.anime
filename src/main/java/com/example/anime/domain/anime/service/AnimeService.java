@@ -10,6 +10,7 @@ import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.dto.CursorPage;
+import com.example.anime.global.storage.FileStorage;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +31,7 @@ public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
   private final CharacterService characterService;
+  private final FileStorage fileStorage;
 
   @Transactional
   public void create(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
@@ -62,22 +65,9 @@ public class AnimeService {
     }
 
     private Anime findAnime(Long animeId) {
-    Anime anime = animeRepository.findByIdWithTagsAAndCharacterList(animeId)
+    Anime anime = animeRepository.findById(animeId)
             .orElseThrow(NotFoundAnimeException::getInstance);
     return anime;
-  }
-
-  @Transactional
-  public List<AnimeListResponse> findAll() {
-    List<AnimeListResponse> animeList = animeRepository.findAllWithTagsAndCharacterList()
-            .stream()
-            .map( anime -> {
-                anime.renewalBowCount();
-                AnimeListResponse animeListResponse = animeMapper.toAnimeListResponse(anime);
-                return animeListResponse;
-            } )
-            .toList();
-    return animeList;
   }
 
   public AnimeResponse findById(Long animeId) {
@@ -105,4 +95,15 @@ public class AnimeService {
     return new CursorPage<>(animeList, animeSlice.hasNext());
   }
 
+  @Transactional
+  public void upload(Long animeId, MultipartFile image) {
+    Anime anime = findAnime(animeId);
+    String imageUrl = null;
+    try {
+      imageUrl = fileStorage.upload(animeId.toString(), image);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    anime.upload(imageUrl);
+  }
 }

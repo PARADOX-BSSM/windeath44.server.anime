@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,6 +29,15 @@ public class AnimeController {
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("create anime", null);
     return ResponseEntity
             .status(HttpStatus.CREATED)
+            .body(responseDto);
+  }
+
+  @PatchMapping("/upload/image/{anime-id}")
+  public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("anime-id") Long animeId, @RequestParam("image") MultipartFile image) {
+    animeService.upload(animeId, image);
+    ResponseDto<Void> responseDto = responseMapper.toResponseDto("upload image anime", null);
+    return ResponseEntity
+            .status(HttpStatus.ACCEPTED)
             .body(responseDto);
   }
 

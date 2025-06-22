@@ -55,4 +55,8 @@ public class Anime {
     this.airDates.update(startYear, endYear);
     this.tags = tags;
   }
+
+  public void upload(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 }

@@ -11,11 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnimeRepository extends JpaRepository<Anime, Long> {
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList where a.animeId = :id")
-  Optional<Anime> findByIdWithTagsAAndCharacterList(@Param("id") Long animeId);
-
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList")
-  List<Anime> findAllWithTagsAndCharacterList();
 
   @Query("select a from Anime a where a.animeId < :cursorId order by a.animeId desc")
   Slice<Anime> findPageByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
