@@ -34,9 +34,10 @@ public class AnimeService {
   private final FileStorage fileStorage;
 
   @Transactional
-  public void create(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
+  public Long create(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
     Anime anime = createAnime(name, description, start_year, end_year, tags);
-    animeRepository.save(anime);
+    Anime savedAnime = animeRepository.save(anime);
+    return savedAnime.getAnimeId();
   }
 
   private Anime createAnime(String name, String description, LocalDate start_year, LocalDate end_year, List<String> tags) {
