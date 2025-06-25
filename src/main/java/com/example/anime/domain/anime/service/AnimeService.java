@@ -87,7 +87,6 @@ public class AnimeService {
   public CursorPage<AnimeListResponse> findAllByCursorId(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size + 1);
 
-    // null일 경우 첫 페이지 조회하는거임
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findPage(pageable)
             : animeRepository.findPageByCursorId(cursorId, pageable);
