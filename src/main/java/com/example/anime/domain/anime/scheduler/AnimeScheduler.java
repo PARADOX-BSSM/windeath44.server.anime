@@ -36,7 +36,14 @@ public class AnimeScheduler {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public boolean loadingAnime() {
     LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, OFFSET);
-    animeService.save(animeResponse);
-    return animeResponse.next() == "null";
+
+    try {
+      animeService.save(animeResponse);
+    } catch (Exception e) {
+      log.error("failed to save anime", e);
+      return false;
+    }
+
+    return "null".equals(animeResponse.next());
   }
 }
