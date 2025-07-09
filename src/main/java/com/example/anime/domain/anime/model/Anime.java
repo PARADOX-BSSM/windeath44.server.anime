@@ -22,7 +22,7 @@ public class Anime {
 
   @ElementCollection
   @Fetch(FetchMode.SUBSELECT)
-  private List<String> tags;
+  private List<String> genres;
 
   private String imageUrl;
 }

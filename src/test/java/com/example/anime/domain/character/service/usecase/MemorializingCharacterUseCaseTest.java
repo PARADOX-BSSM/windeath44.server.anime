@@ -2,7 +2,7 @@ package com.example.anime.domain.character.service.usecase;
 
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.global.kafka.KafkaProducer;
+import com.example.anime.global.infrastructure.KafkaProducer;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import org.junit.jupiter.api.BeforeEach;
