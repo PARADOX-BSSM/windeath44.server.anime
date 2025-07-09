@@ -1,9 +1,7 @@
 package com.example.anime.domain.character.controller;
 
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
-import com.example.anime.domain.character.exception.UploadFileFailException;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
@@ -93,7 +91,7 @@ public class CharacterController {
   }
 
   @PatchMapping("/{character-id}")
-  public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @Valid CharacterUpdateRequest characterUpdateRequest) {
+  public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @RequestBody @Valid CharacterRequest characterUpdateRequest) {
     updateCharacterUseCase.execute(characterUpdateRequest, characterId);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("update character by id", null);
     return ResponseEntity.ok(responseDto);

@@ -9,6 +9,8 @@ import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class CharacterMapper {
 
@@ -16,12 +18,16 @@ public class CharacterMapper {
     String name = characterRequest.name();
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
+    Integer age = characterRequest.age();
+    LocalDateTime death_of_day = characterRequest.death_of_day();
 
     return Character.builder()
             .anime(anime)
             .name(name)
+            .age(age)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
+            .death_of_day(death_of_day)
             .build();
   }
 

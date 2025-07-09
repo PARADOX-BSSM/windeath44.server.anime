@@ -2,7 +2,6 @@ package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;

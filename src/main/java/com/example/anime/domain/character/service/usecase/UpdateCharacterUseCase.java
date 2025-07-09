@@ -1,6 +1,5 @@
 package com.example.anime.domain.character.service.usecase;
 
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.exception.UploadFileFailException;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.storage.FileStorage;

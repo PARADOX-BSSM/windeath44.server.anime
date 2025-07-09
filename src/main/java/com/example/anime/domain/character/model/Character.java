@@ -2,12 +2,13 @@ package com.example.anime.domain.character.model;
 
 
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -24,12 +25,14 @@ public class Character {
   @JoinColumn(name="anime_id")
   private Anime anime;
   private String name;
+  private Integer age;
   private Long lifeTime;
   private String deathReason;
   private String imageUrl;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
   private Long bowCount;
+  private LocalDateTime death_of_day;
 
   @PrePersist
   public void init() {

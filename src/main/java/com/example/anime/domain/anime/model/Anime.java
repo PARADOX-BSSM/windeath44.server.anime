@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import com.example.anime.domain.character.model.Character;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

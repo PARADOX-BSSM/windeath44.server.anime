@@ -46,4 +46,9 @@ public class AnimeService {
             .orElseThrow(NotFoundAnimeException::getInstance);
     return anime;
   }
+
+  public Anime getAnime(Long animeId) {
+    Anime anime = findAnime(animeId);
+    return anime;
+  }
 }
