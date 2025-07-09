@@ -15,12 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CharacterService {
   private final CharacterRepository characterRepository;
   private final CharacterMapper characterMapper;
@@ -44,7 +46,9 @@ public class CharacterService {
   public CursorPage<CharacterResponse> findAll(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
 
-    Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageable(pageable) :  characterRepository.findAllByCursorId(cursorId, pageable);
+    Slice<Character> characterSlice = cursorId == null
+            ? characterRepository.findAllPageable(pageable)
+            :  characterRepository.findAllByCursorId(cursorId, pageable);
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
@@ -53,19 +57,6 @@ public class CharacterService {
     Character character = findCharacterById(characterId);
     CharacterResponse characterResponse = characterMapper.toCharacterResponse(character);
     return characterResponse;
-  }
-
-  @Transactional
-  public Long create(CharacterRequest characterRequest, Anime anime) {
-    Character character = characterMapper.toCharacter(characterRequest, anime);
-    Character savedCharacter = characterRepository.save(character);
-    return savedCharacter.getCharacterId();
-  }
-  @Transactional
-  public void memorializing(Long characterId) {
-    Character character = characterRepository.findById(characterId)
-            .orElseThrow(NotFoundCharacterException::getInstance);
-    character.memorializing();
   }
 
   public List<Long> findIdsByAnime(Long animeId) {
@@ -85,6 +76,7 @@ public class CharacterService {
     return characterAvroSchema;
   }
 
+
   public List<CharacterResponse> findByCharacterIds(List<Long> characterIds) {
     List<CharacterResponse> characterList = characterRepository.findAllByIds(characterIds)
             .stream()
@@ -93,32 +85,43 @@ public class CharacterService {
     return characterList;
   }
 
-  @Transactional
+  public CursorPage<CharacterResponse> findAllByName(String name, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+    Slice<Character> characterSlice = cursorId == null
+            ? characterRepository.findAllPageableByName(name, pageable)
+            : characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
+
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
+
+  @Transactional(readOnly = false)
+  public Long create(CharacterRequest characterRequest, Anime anime) {
+    Character character = characterMapper.toCharacter(characterRequest, anime);
+    Character savedCharacter = characterRepository.save(character);
+    return savedCharacter.getCharacterId();
+  }
+
+  @Transactional(readOnly = false)
+  public void memorializing(Long characterId) {
+    Character character = characterRepository.findById(characterId)
+            .orElseThrow(NotFoundCharacterException::getInstance);
+    character.memorializing();
+  }
+
+  @Transactional(readOnly = false)
   public void deleteById(Long characterId) {
     Character character = findCharacterById(characterId);
     characterRepository.delete(character);
   }
 
-  @Transactional
+  @Transactional(readOnly = false)
   public void update(CharacterRequest characterUpdateRequest, Long characterId, String imageUrl) {
     Character character = findCharacterById(characterId);
     character.update(characterUpdateRequest, imageUrl);
   }
 
-  @Transactional(readOnly = true)
-  public CursorPage<CharacterResponse> findAllByName(String name, Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size);
-    Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageableByName(name, pageable) :  characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
-
-    List<CharacterResponse> characterList = characterSlice.getContent()
-            .stream()
-            .map(characterMapper::toCharacterResponse)
-            .toList();
-
-    return new CursorPage<>(characterList, characterSlice.hasNext());
-  }
-
-  @Transactional
+  @Transactional(readOnly = false)
   public void updateImage(Long characterId, String imageUrl) {
     Character character = findCharacterById(characterId);
     character.updateImage(imageUrl);
