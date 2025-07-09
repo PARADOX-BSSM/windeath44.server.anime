@@ -21,7 +21,7 @@ public class CharacterMapper {
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
-    LocalDateTime death_of_day = characterRequest.death_of_day();
+    LocalDateTime deathOfDay = characterRequest.deathOfDay();
 
     return Character.builder()
             .anime(anime)
@@ -29,7 +29,7 @@ public class CharacterMapper {
             .age(age)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
-            .death_of_day(death_of_day)
+            .deathOfDay(deathOfDay)
             .build();
   }
 
@@ -37,11 +37,20 @@ public class CharacterMapper {
     Long characterId = character.getCharacterId();
     String name = character.getName();
     Long lifeTime = character.getLifeTime();
-    String death_reason = character.getDeathReason();
+    String deathReason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
+    LocalDateTime deathOfDay = character.getDeathOfDay();
 
-    return new CharacterResponse(characterId, name, lifeTime, death_reason, imageUrl, bow_count);
+    return CharacterResponse.builder()
+            .characterId(characterId)
+            .name(name)
+            .lifeTime(lifeTime)
+            .deathReason(deathReason)
+            .imageUrl(imageUrl)
+            .bow_count(bow_count)
+            .death_of_day(deathOfDay)
+            .build();
   }
 
   public GetCharacterResponse toGetCharacterResponse(Character character) {

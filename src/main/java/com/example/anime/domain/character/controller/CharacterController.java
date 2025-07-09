@@ -54,15 +54,15 @@ public class CharacterController {
   }
 
   @GetMapping("/search/anime")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId) {
-    List<Long> characterIds = characterService.findIdsByAnime(animeId);
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+    List<Long> characterIds = characterService.findIdsByAnime(animeId, size, cursorId);
     ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by anime id", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason) {
-    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason, cursorId, size);
     ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);
     return ResponseEntity.ok(responseDto);
   }

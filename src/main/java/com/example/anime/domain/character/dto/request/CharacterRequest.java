@@ -17,7 +17,7 @@ public record CharacterRequest (
         @NotNull(message="deathReason is null")
         String deathReason,
         @JsonFormat(pattern = "yy-mm-dd", timezone = "Asia/Seoul", shape = JsonFormat.Shape.STRING)
-        LocalDateTime death_of_day
+        LocalDateTime deathOfDay
 ) {
 
 }

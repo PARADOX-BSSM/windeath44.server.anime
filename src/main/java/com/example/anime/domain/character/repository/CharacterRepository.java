@@ -30,12 +30,17 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   @Query("select c from Character c order by c.characterId desc")
   Slice<Character> findAllPageable(Pageable pageable);
 
+  @Query("select c.characterId from Character c where c.anime.animeId = :animeId order by c.characterId desc")
+  List<Long> findIdsByAnimeId(Long animeId, Pageable pageable);
 
-  @Query("select c.characterId from Character c where c.anime.animeId = :animeId")
-  List<Long> findIdsByAnimeId(Long animeId);
+  @Query("select c.characterId from Character c where c.anime.animeId = :animeId and c.characterId <= :cursorId order by c.characterId desc")
+  List<Long> findIdsByAnimeIdAndCursorId(Long animeId, Long cursorId, Pageable pageable);
 
-  @Query("select c.characterId from Character c where c.deathReason = :deathReason")
-  List<Long> findIdsByDeathReason(String deathReason);
+  @Query("select c.characterId from Character c where c.deathReason = :deathReason order by c.characterId desc")
+  List<Long> findIdsByDeathReason(String deathReason, Pageable pageable);
+
+  @Query("select c.characterId from Character c where c.deathReason = :deathReason and c.characterId <= :cursorId order by c.characterId desc")
+  List<Long> findIdsByDeathReasonAndCursorId(String deathReason, Long cursorId, Pageable pageable);
 
   @Query("select c from Character c where c.characterId in :characterIds")
   List<Character> findAllByIds(List<Long> characterIds);
@@ -45,4 +50,6 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
 
   @Query("select c from Character c where c.name like %:name% and c.characterId < :cursorId order by c.characterId desc")
   Slice<Character> findAllByCursorIdAndName(String name, Long cursorId, Pageable pageable);
+
+
 }

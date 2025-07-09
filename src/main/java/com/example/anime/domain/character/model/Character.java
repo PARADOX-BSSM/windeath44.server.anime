@@ -33,7 +33,7 @@ public class Character {
   @Enumerated(EnumType.STRING)
   private CharacterState state;
   private Long bowCount;
-  private LocalDateTime death_of_day;
+  private LocalDateTime deathOfDay;
 
   @PrePersist
   public void init() {
@@ -45,19 +45,18 @@ public class Character {
     this.state = CharacterState.MEMORIALIZING;
   }
 
-  public void update(CharacterRequest characterUpdateRequest, String imageUrl) {
+  public void update(CharacterRequest characterUpdateRequest) {
     String name = characterUpdateRequest.name();
     String deathReason = characterUpdateRequest.deathReason();
     Long lifeTime = characterUpdateRequest.lifeTime();
     Integer age = characterUpdateRequest.age();
-    LocalDateTime death_of_day = characterUpdateRequest.death_of_day();
+    LocalDateTime deathOfDay = characterUpdateRequest.deathOfDay();
 
     this.name = name;
     this.age = age;
     this.deathReason = deathReason;
     this.lifeTime = lifeTime;
-    this.imageUrl = imageUrl;
-    this.death_of_day = death_of_day;
+    this.deathOfDay = deathOfDay;
   }
 
   public void updateImage(String imageUrl) {

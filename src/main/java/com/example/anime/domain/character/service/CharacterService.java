@@ -8,14 +8,11 @@ import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.repository.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
-import com.example.avro.CharacterAvroSchema;
-import com.example.avro.MemorialAvroSchema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -59,23 +56,23 @@ public class CharacterService {
     return characterResponse;
   }
 
-  public List<Long> findIdsByAnime(Long animeId) {
-    List<Long> characterIds = characterRepository.findIdsByAnimeId(animeId);
+  public List<Long> findIdsByAnime(Long animeId, int size, Long cursorId) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    List<Long> characterIds = cursorId == null
+            ? characterRepository.findIdsByAnimeId(animeId, pageable)
+            :  characterRepository.findIdsByAnimeIdAndCursorId(animeId, cursorId, pageable);
     return characterIds;
   }
 
-  public List<Long> findIdsByDeathReason(String deathReason) {
-   List<Long> characterIds = characterRepository.findIdsByDeathReason(deathReason);
-   return characterIds;
+  public List<Long> findIdsByDeathReason(String deathReason, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    List<Long> characterIds = cursorId == null
+            ? characterRepository.findIdsByDeathReason(deathReason, pageable)
+            :  characterRepository.findIdsByDeathReasonAndCursorId(deathReason, cursorId, pageable);
+    return characterIds;
   }
-
-  public CharacterAvroSchema transformSchema(MemorialAvroSchema memorialAvroSchema) {
-    Character character = findCharacterById(memorialAvroSchema.getCharacterId());
-
-    CharacterAvroSchema characterAvroSchema = characterMapper.toCharacterAvroSchema(character, memorialAvroSchema);
-    return characterAvroSchema;
-  }
-
 
   public List<CharacterResponse> findByCharacterIds(List<Long> characterIds) {
     List<CharacterResponse> characterList = characterRepository.findAllByIds(characterIds)
@@ -91,7 +88,6 @@ public class CharacterService {
             ? characterRepository.findAllPageableByName(name, pageable)
             : characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
-
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 
@@ -116,9 +112,9 @@ public class CharacterService {
   }
 
   @Transactional(readOnly = false)
-  public void update(CharacterRequest characterUpdateRequest, Long characterId, String imageUrl) {
+  public void update(CharacterRequest characterUpdateRequest, Long characterId) {
     Character character = findCharacterById(characterId);
-    character.update(characterUpdateRequest, imageUrl);
+    character.update(characterUpdateRequest);
   }
 
   @Transactional(readOnly = false)
