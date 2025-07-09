@@ -8,21 +8,18 @@ import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class CharacterMapper {
 
   public Character toCharacter(CharacterRequest characterRequest, Anime anime) {
     String name = characterRequest.name();
-    String content = characterRequest.content();
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
 
     return Character.builder()
             .anime(anime)
             .name(name)
-            .content(content)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
             .build();
@@ -31,13 +28,12 @@ public class CharacterMapper {
   public CharacterResponse toCharacterResponse(Character character) {
     Long characterId = character.getCharacterId();
     String name = character.getName();
-    String content = character.getContent();
     Long lifeTime = character.getLifeTime();
     String death_reason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
 
-    return new CharacterResponse(characterId, name, content, lifeTime, death_reason, imageUrl, bow_count);
+    return new CharacterResponse(characterId, name, lifeTime, death_reason, imageUrl, bow_count);
   }
 
   public GetCharacterResponse toGetCharacterResponse(Character character) {
@@ -46,14 +42,12 @@ public class CharacterMapper {
     String animeName = anime.getName();
 
     String name = character.getName();
-    String content = character.getContent();
     String state = character.getState().toString();
 
     GetCharacterResponse response = GetCharacterResponse.newBuilder()
             .setAnimeId(animeId)
             .setAnimeName(animeName)
             .setName(name)
-            .setContent(content)
             .setState(state)
             .build();
     return response;
@@ -63,7 +57,7 @@ public class CharacterMapper {
   public CharacterAvroSchema toCharacterAvroSchema(Character character, MemorialAvroSchema memorialAvroSchema) {
     Long characterId = character.getCharacterId();
     String name = character.getName();
-    String content = character.getContent();
+    String content = "";
     String deathReason = character.getDeathReason();
     String state = character.getState().toString();
     String applicantId = memorialAvroSchema.getWriterId();

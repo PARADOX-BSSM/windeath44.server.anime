@@ -7,7 +7,6 @@ import java.io.File;
 public record CharacterRequest (
         Long animeId,
         String name,
-        String content,
         Long lifeTime,
         String deathReason
 ) {

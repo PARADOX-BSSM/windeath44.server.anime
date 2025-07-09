@@ -21,14 +21,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value="/characters")
+@RequestMapping("/animes/characters")
 public class CharacterController {
   private final CharacterService characterService;
   private final ResponseMapper responseMapper;
   private final CreateCharacterUseCase createCharacterUseCase;
   private final UpdateCharacterUseCase updateCharacterUseCase;
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
-
 
   @PostMapping
   public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid CharacterRequest characterRequest) {
@@ -37,7 +36,7 @@ public class CharacterController {
     return ResponseEntity.ok(responseDto);
   }
 
-  @PatchMapping("/upload/image/{character-id}")
+  @PatchMapping("/image/{character-id}")
   public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
     characterImageUploadUseCase.upload(characterId, image);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("upload image", null);

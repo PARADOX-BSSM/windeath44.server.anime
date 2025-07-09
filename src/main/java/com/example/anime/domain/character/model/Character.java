@@ -24,7 +24,6 @@ public class Character {
   @JoinColumn(name="anime_id")
   private Anime anime;
   private String name;
-  private String content;
   private Long lifeTime;
   private String deathReason;
   private String imageUrl;
@@ -49,7 +48,6 @@ public class Character {
     Long lifeTime = characterUpdateRequest.lifeTime();
 
     this.name = name;
-    this.content = content;
     this.deathReason = deathReason;
     this.lifeTime = lifeTime;
     this.imageUrl = imageUrl;

@@ -1,11 +1,9 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.dto.response.AnimeListResponse;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.domain.anime.mapper.AnimeMapper;
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.anime.model.AnimeAirDates;
 import com.example.anime.domain.anime.repository.AnimeRepository;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.service.CharacterService;
@@ -48,7 +46,7 @@ class AnimeServiceTest {
 
     private Anime testAnime;
     private AnimeAirDates testAnimeAirDates;
-    private AnimeListResponse testAnimeListResponse;
+    private AnimeResponse testAnimeListResponse;
     private AnimeResponse testAnimeResponse;
     private List<Character> testCharacterList;
 
@@ -71,7 +69,7 @@ class AnimeServiceTest {
                 .build();
 
         // Setup test anime list response
-        testAnimeListResponse = new AnimeListResponse(
+        testAnimeListResponse = new AnimeResponse(
                 1L,
                 "Test Anime",
                 "Test Description",
@@ -243,18 +241,18 @@ class AnimeServiceTest {
         List<Anime> animeList = Arrays.asList(testAnime);
         SliceImpl<Anime> animeSlice = new SliceImpl<>(animeList, pageable, false);
 
-        when(animeRepository.findPage(any(Pageable.class))).thenReturn(animeSlice);
+        when(animeRepository.findRecentAnimes(any(Pageable.class))).thenReturn(animeSlice);
         when(animeMapper.toAnimePageListResponse(animeSlice)).thenReturn(Arrays.asList(testAnimeListResponse));
 
         // Act
-        CursorPage<AnimeListResponse> result = animeService.findAllByCursorId(null, 10);
+        CursorPage<AnimeResponse> result = animeService.findAllByCursorId(null, 10);
 
         // Assert
         assertNotNull(result);
         assertEquals(1, result.values().size());
         assertEquals(testAnimeListResponse.name(), result.values().get(0).name());
         assertFalse(result.hasNext());
-        verify(animeRepository, times(1)).findPage(any(Pageable.class));
+        verify(animeRepository, times(1)).findRecentAnimes(any(Pageable.class));
         verify(animeMapper, times(1)).toAnimePageListResponse(animeSlice);
     }
 
@@ -266,18 +264,18 @@ class AnimeServiceTest {
         List<Anime> animeList = Arrays.asList(testAnime);
         SliceImpl<Anime> animeSlice = new SliceImpl<>(animeList, pageable, true);
 
-        when(animeRepository.findPageByCursorId(eq(5L), any(Pageable.class))).thenReturn(animeSlice);
+        when(animeRepository.findRecentAnimesByCursorId(eq(5L), any(Pageable.class))).thenReturn(animeSlice);
         when(animeMapper.toAnimePageListResponse(animeSlice)).thenReturn(Arrays.asList(testAnimeListResponse));
 
         // Act
-        CursorPage<AnimeListResponse> result = animeService.findAllByCursorId(5L, 10);
+        CursorPage<AnimeResponse> result = animeService.findAllByCursorId(5L, 10);
 
         // Assert
         assertNotNull(result);
         assertEquals(1, result.values().size());
         assertEquals(testAnimeListResponse.name(), result.values().get(0).name());
         assertTrue(result.hasNext());
-        verify(animeRepository, times(1)).findPageByCursorId(eq(5L), any(Pageable.class));
+        verify(animeRepository, times(1)).findRecentAnimesByCursorId(eq(5L), any(Pageable.class));
         verify(animeMapper, times(1)).toAnimePageListResponse(animeSlice);
     }
 }
