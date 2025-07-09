@@ -45,12 +45,7 @@ public class CharacterService {
     Pageable pageable = PageRequest.of(0, size);
 
     Slice<Character> characterSlice = cursorId == null ? characterRepository.findAllPageable(pageable) :  characterRepository.findAllByCursorId(cursorId, pageable);
-
-    List<CharacterResponse> characterList = characterSlice.getContent()
-            .stream()
-            .map(characterMapper::toCharacterResponse)
-            .toList();
-
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 

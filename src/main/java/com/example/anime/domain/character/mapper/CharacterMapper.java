@@ -7,9 +7,11 @@ import com.example.anime.domain.character.model.Character;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class CharacterMapper {
@@ -77,5 +79,12 @@ public class CharacterMapper {
             .setApplicantId(applicantId)
             .build();
     return characterAvroSchema;
+  }
+
+  public List<CharacterResponse> toCharacterListResponse(Slice<Character> characterSlice) {
+    return characterSlice.getContent()
+            .stream()
+            .map(this::toCharacterResponse)
+            .toList();
   }
 }
