@@ -5,7 +5,6 @@ import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
-import com.example.anime.domain.character.service.usecase.UpdateCharacterUseCase;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
@@ -24,7 +23,6 @@ public class CharacterController {
   private final CharacterService characterService;
   private final ResponseMapper responseMapper;
   private final CreateCharacterUseCase createCharacterUseCase;
-  private final UpdateCharacterUseCase updateCharacterUseCase;
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
 
   @PostMapping
@@ -92,7 +90,7 @@ public class CharacterController {
 
   @PatchMapping("/{character-id}")
   public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @RequestBody @Valid CharacterRequest characterUpdateRequest) {
-    updateCharacterUseCase.execute(characterUpdateRequest, characterId);
+    characterService.update(characterUpdateRequest, characterId);
     ResponseDto<Void> responseDto = responseMapper.toResponseDto("update character by id", null);
     return ResponseEntity.ok(responseDto);
   }

@@ -105,7 +105,7 @@ public class CharacterService {
   }
 
   @Transactional
-  public void update(CharacterUpdateRequest characterUpdateRequest, Long characterId, String imageUrl) {
+  public void update(CharacterRequest characterUpdateRequest, Long characterId, String imageUrl) {
     Character character = findCharacterById(characterId);
     character.update(characterUpdateRequest, imageUrl);
   }
