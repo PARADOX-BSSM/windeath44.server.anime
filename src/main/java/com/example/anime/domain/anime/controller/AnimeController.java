@@ -1,6 +1,7 @@
 package com.example.anime.domain.anime.controller;
 
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
+import com.example.anime.domain.anime.scheduler.AnimeScheduler;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.CursorPage;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class AnimeController {
   private final AnimeService animeService;
   private final ResponseMapper responseMapper;
+  private final AnimeScheduler animeScheduler;
 
   @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<AnimeResponse>>> findAllByCursorId(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
@@ -31,5 +33,10 @@ public class AnimeController {
     return ResponseEntity
             .status(HttpStatus.ACCEPTED)
             .body(responseDto);
+  }
+
+  @PostMapping("/test")
+  public void test() {
+    animeScheduler.recursiveLoadingAnime();
   }
 }

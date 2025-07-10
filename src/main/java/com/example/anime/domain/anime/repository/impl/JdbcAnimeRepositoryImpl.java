@@ -1,12 +1,10 @@
 package com.example.anime.domain.anime.repository.impl;
-
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.repository.JdbcAnimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class AnimeRepository implements JdbcAnimeRepository {
+public class JdbcAnimeRepositoryImpl implements JdbcAnimeRepository {
   private final JdbcTemplate jdbcTemplate;
 
   public void bulkInsert(List<Anime> animeList) {
@@ -73,5 +71,4 @@ public class AnimeRepository implements JdbcAnimeRepository {
     public String getGenre() {
       return genre;
     }
-  }
-}
+  

@@ -1,6 +1,5 @@
 package com.example.anime.global.infrastructure;
 
-import com.example.anime.domain.anime.dto.response.RestAnimeResponse;
 import com.example.anime.global.dto.LaftelResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,5 @@
 package com.example.anime.domain.anime.scheduler;
 
-import com.example.anime.domain.anime.dto.response.AnimeResponse;
-import com.example.anime.domain.anime.dto.response.RestAnimeResponse;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.dto.LaftelResultResponse;
 import com.example.anime.global.infrastructure.RestHttpClient;
@@ -22,28 +20,27 @@ public class AnimeScheduler {
   private final static String SORT = "recent";
   private final static int SIZE = 10;
   private final static int OFFSET = 0;
+  private final static String NULL = "null";
 
   @Scheduled(cron="0 0 6 * * *")
   @Transactional
-  public void recursiveLoadingAnime() {
+  public void recursiveLoadingAnime()  {
+    int count = 0;
     while(loadingAnime()) {
-      log.info("load anime success");
-      return;
+      log.info("load anime success, count : {}", count++);
     }
-    log.error("load anime fail");
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public boolean loadingAnime() {
-    LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, OFFSET);
-
+  public boolean loadingAnime()  {
     try {
+      Thread.sleep(1000);
+      LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, OFFSET);
       animeService.save(animeResponse);
-    } catch (Exception e) {
-      log.error("failed to save anime", e);
+      return NULL.equals(animeResponse.next());
+    } catch (InterruptedException e) {
+      log.error(e.getMessage());
       return false;
     }
-
-    return "null".equals(animeResponse.next());
   }
 }

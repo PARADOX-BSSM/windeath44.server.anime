@@ -45,7 +45,6 @@ class AnimeServiceTest {
     private AnimeService animeService;
 
     private Anime testAnime;
-    private AnimeAirDates testAnimeAirDates;
     private AnimeResponse testAnimeListResponse;
     private AnimeResponse testAnimeResponse;
     private List<Character> testCharacterList;
@@ -53,33 +52,15 @@ class AnimeServiceTest {
     @BeforeEach
     void setUp() {
         // Setup test anime air dates
-        testAnimeAirDates = new AnimeAirDates(
-                LocalDate.of(2020, 1, 1),
-                LocalDate.of(2021, 1, 1)
-        );
 
         // Setup test anime
         testAnime = Anime.builder()
                 .animeId(1L)
                 .name("Test Anime")
-                .description("Test Description")
-                .airDates(testAnimeAirDates)
-                .tags(Arrays.asList("Action", "Adventure"))
-                .bowCount(0L)
+                .genres(Arrays.asList("Action", "Adventure"))
+                .imageUrl("asdjk")
                 .build();
 
-        // Setup test anime list response
-        testAnimeListResponse = new AnimeResponse(
-                1L,
-                "Test Anime",
-                "Test Description",
-                LocalDate.of(2020, 1, 1),
-                LocalDate.of(2021, 1, 1),
-                0L,
-                Arrays.asList("Action", "Adventure"),
-                0L,
-                "http://test.com/image.jpg"
-        );
 
         // Setup test character list
         testCharacterList = Arrays.asList(
@@ -92,37 +73,11 @@ class AnimeServiceTest {
 
         // Setup test anime response
         testAnimeResponse = new AnimeResponse(
-                "Test Anime",
-                "Test Description",
-                LocalDate.of(2020, 1, 1),
-                LocalDate.of(2021, 1, 1),
-                0L,
-                Arrays.asList("Action", "Adventure"),
-                0L,
-                Arrays.asList(),
+                1L,
+                "test",
+                List.of("tag", "tag"),
                 "http://test.com/image.jpg"
         );
-    }
-
-    @Test
-    @DisplayName("create should save anime")
-    void create_ShouldSaveAnime() {
-        // Arrange
-        String name = "Test Anime";
-        String description = "Test Description";
-        LocalDate startYear = LocalDate.of(2020, 1, 1);
-        LocalDate endYear = LocalDate.of(2021, 1, 1);
-        List<String> tags = Arrays.asList("Action", "Adventure");
-
-        when(animeMapper.toAnime(eq(name), eq(description), any(AnimeAirDates.class), eq(tags)))
-                .thenReturn(testAnime);
-
-        // Act
-        animeService.create(name, description, startYear, endYear, tags);
-
-        // Assert
-        verify(animeMapper, times(1)).toAnime(eq(name), eq(description), any(AnimeAirDates.class), eq(tags));
-        verify(animeRepository, times(1)).save(testAnime);
     }
 
     @Test
@@ -176,61 +131,6 @@ class AnimeServiceTest {
         // Act & Assert
         assertThrows(NotFoundAnimeException.class, () -> animeService.getAnime(999L));
         verify(animeRepository, times(1)).findById(999L);
-    }
-
-    @Test
-    @DisplayName("findAndRenewAnimeById should return anime and renew bow count when anime exists")
-    void findAndRenewAnimeById_ShouldReturnAnimeAndRenewBowCount_WhenAnimeExists() {
-        // Arrange
-        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
-
-        // Act
-        Anime result = animeService.findAndRenewAnimeById(1L);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(testAnime.getAnimeId(), result.getAnimeId());
-        assertEquals(testAnime.getName(), result.getName());
-        verify(animeRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    @DisplayName("findById should return anime response when anime exists")
-    void findById_ShouldReturnAnimeResponse_WhenAnimeExists() {
-        // Arrange
-        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
-        when(characterService.findAllByAnime(testAnime)).thenReturn(testCharacterList);
-        when(animeMapper.toAnimeResponse(testAnime, testCharacterList)).thenReturn(testAnimeResponse);
-
-        // Act
-        AnimeResponse result = animeService.findById(1L);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(testAnimeResponse.name(), result.name());
-        assertEquals(testAnimeResponse.description(), result.description());
-        verify(animeRepository, times(1)).findById(1L);
-        verify(characterService, times(1)).findAllByAnime(testAnime);
-        verify(animeMapper, times(1)).toAnimeResponse(testAnime, testCharacterList);
-    }
-
-    @Test
-    @DisplayName("update should update anime when anime exists")
-    void update_ShouldUpdateAnime_WhenAnimeExists() {
-        // Arrange
-        String name = "Updated Anime";
-        String description = "Updated Description";
-        LocalDate startYear = LocalDate.of(2022, 1, 1);
-        LocalDate endYear = LocalDate.of(2023, 1, 1);
-        List<String> tags = Arrays.asList("Drama", "Fantasy");
-
-        when(animeRepository.findById(1L)).thenReturn(Optional.of(testAnime));
-
-        // Act
-        animeService.update(1L, name, description, startYear, endYear, tags);
-
-        // Assert
-        verify(animeRepository, times(1)).findById(1L);
     }
 
     @Test
