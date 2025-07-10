@@ -10,9 +10,8 @@ import org.springframework.web.client.RestClient;
 public class RestHttpClient {
   private final RestClient restClient;
 
-
   public LaftelResultResponse loadAnime(String sort, int size, int offset) {
-    String path = "/search/v1/discover";
+    String path = "/search/v1/discover/";
 
     LaftelResultResponse laftelResultResponseResponse = restClient.get()
             .uri(uriBuilder -> uriBuilder

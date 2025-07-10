@@ -32,7 +32,8 @@ public class JdbcAnimeRepositoryImpl implements JdbcAnimeRepository {
                 return animeList.size();
               }
             });
-    String sql2 = "INSERT INTO anime_genres (anime_id, genres) VALUES (?, ?)";
+
+    String sql2 = "INSERT INTO anime_genres (anime_anime_id, genres) VALUES (?, ?)";
     List<AnimeGenreParam> genreParams = new ArrayList<>();
 
     for (Anime anime : animeList) {
@@ -71,4 +72,5 @@ public class JdbcAnimeRepositoryImpl implements JdbcAnimeRepository {
     public String getGenre() {
       return genre;
     }
-  
+  }
+}

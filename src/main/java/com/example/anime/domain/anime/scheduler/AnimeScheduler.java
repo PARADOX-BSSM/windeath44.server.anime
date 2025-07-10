@@ -1,5 +1,6 @@
 package com.example.anime.domain.anime.scheduler;
 
+import com.example.anime.domain.anime.exception.AlreadyCachedAnimeException;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.dto.LaftelResultResponse;
 import com.example.anime.global.infrastructure.RestHttpClient;
@@ -18,26 +19,38 @@ public class AnimeScheduler {
   private final RestHttpClient restHttpClient;
 
   private final static String SORT = "recent";
-  private final static int SIZE = 10;
-  private final static int OFFSET = 0;
-  private final static String NULL = "null";
+  private final static int SIZE = 100;
+  private static int offset = 0;
+  private static Long cachedId = null;
 
   @Scheduled(cron="0 0 6 * * *")
-  @Transactional
   public void recursiveLoadingAnime()  {
     int count = 0;
-    while(loadingAnime()) {
-      log.info("load anime success, count : {}", count++);
+    try {
+      while (loadingAnime()) {
+        log.info("load anime success, count : {}", ++count);
+      }
+    } catch (AlreadyCachedAnimeException e) {
+      log.error(e.getMessage());
     }
+
   }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public boolean loadingAnime()  {
     try {
       Thread.sleep(1000);
-      LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, OFFSET);
+      LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, offset);
+
+      if (offset == 0) cachedId = animeResponse.getFirstId();
+      boolean isCachedEnd = animeResponse.containsCachedId(cachedId);
+      if (isCachedEnd) {
+        throw AlreadyCachedAnimeException.getInstance();
+      }
+
       animeService.save(animeResponse);
-      return NULL.equals(animeResponse.next());
+      offset += SIZE;
+      return !animeResponse.isEnd();
     } catch (InterruptedException e) {
       log.error(e.getMessage());
       return false;

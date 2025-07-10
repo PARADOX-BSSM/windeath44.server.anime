@@ -9,4 +9,17 @@ public record LaftelResultResponse (
         List<RestAnimeResponse> results,
         String next
 ) {
+  public Long getFirstId() {
+    return this.results.get(0).id();
+  }
+
+  public boolean isEnd() {
+    return this.next == null;
+  }
+
+  public boolean containsCachedId(Long cachedId) {
+    return this.results()
+            .stream()
+            .anyMatch(anime -> cachedId.equals(anime.id()));
+  }
 }
