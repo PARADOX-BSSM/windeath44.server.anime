@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
@@ -27,33 +26,31 @@ public class AnimeScheduler {
   public void recursiveLoadingAnime()  {
     int count = 0;
     try {
-      while (loadingAnime()) {
+      while(loadingAnime()) {
         log.info("load anime success, count : {}", ++count);
       }
-    } catch (AlreadyCachedAnimeException e) {
+    } catch(InterruptedException | AlreadyCachedAnimeException e) {
       log.error(e.getMessage());
     }
 
   }
 
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public boolean loadingAnime()  {
-    try {
+  @Transactional
+  public boolean loadingAnime() throws InterruptedException {
       Thread.sleep(1000);
       LaftelResultResponse animeResponse = restHttpClient.loadAnime(SORT, SIZE, offset);
-
-      if (offset == 0) cachedId = animeResponse.getFirstId();
-      boolean isCachedEnd = animeResponse.containsCachedId(cachedId);
-      if (isCachedEnd) {
-        throw AlreadyCachedAnimeException.getInstance();
-      }
-
+      // 캐시되어있는지 확인(이미 로드한적이 있는지 확인)
+      checkCacheAnime(animeResponse);
       animeService.save(animeResponse);
       offset += SIZE;
       return !animeResponse.isEnd();
-    } catch (InterruptedException e) {
-      log.error(e.getMessage());
-      return false;
+  }
+
+  private void checkCacheAnime(LaftelResultResponse animeResponse) {
+    if (offset == 0) cachedId = animeResponse.getFirstId();
+    boolean isCachedEnd = animeResponse.containsCachedId(cachedId);
+    if (isCachedEnd) {
+      throw AlreadyCachedAnimeException.getInstance();
     }
   }
 }

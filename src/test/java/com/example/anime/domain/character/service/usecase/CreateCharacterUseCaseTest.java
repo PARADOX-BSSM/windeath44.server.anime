@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,14 +47,11 @@ class CreateCharacterUseCaseTest {
     @BeforeEach
     void setUp() {
         // Setup test anime
-        characterRequest = new CharacterRequest(1L, "나루토", "죽다", 4L, "그냥");
+        characterRequest = new CharacterRequest(1L, "나루토", 14, 4L, "그냥", LocalDateTime.of(2021, 1, 1, 0, 0));
         testAnime = Anime.builder()
                 .animeId(1L)
                 .name("Test Anime")
-                .description("Test Description")
-                .airDates(new AnimeAirDates(LocalDate.of(2020, 1, 1), LocalDate.of(2021, 1, 1)))
-                .tags(Arrays.asList("Action", "Adventure"))
-                .bowCount(0L)
+                .genres(Arrays.asList("Action", "Adventure"))
                 .build();
 
         // Setup test image

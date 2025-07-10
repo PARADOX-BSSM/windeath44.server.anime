@@ -34,9 +34,4 @@ public class AnimeController {
             .status(HttpStatus.ACCEPTED)
             .body(responseDto);
   }
-
-  @PostMapping("/test")
-  public void test() {
-    animeScheduler.recursiveLoadingAnime();
-  }
 }

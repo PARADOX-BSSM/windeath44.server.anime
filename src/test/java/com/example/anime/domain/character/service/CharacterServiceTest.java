@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -49,30 +50,32 @@ class CharacterServiceTest {
     private CharacterResponse testCharacterResponse;
     private MemorialAvroSchema testMemorialAvroSchema;
     private CharacterAvroSchema testCharacterAvroSchema;
+    private Pageable pageable;
 
     @BeforeEach
     void setUp() {
         // Setup test anime
+        pageable = PageRequest.of(0, 11);
+
         testAnime = Anime.builder()
                 .animeId(1L)
                 .name("Test Anime")
-                .description("Test Description")
-                .airDates(new AnimeAirDates(LocalDate.of(2020, 1, 1), LocalDate.of(2021, 1, 1)))
-                .tags(Arrays.asList("Action", "Adventure"))
-                .bowCount(0L)
+                .genres(Arrays.asList("Action", "Adventure"))
+                .imageUrl("asdjk")
                 .build();
 
-        characterRequest = new CharacterRequest(1L, "나루토", "죽다", 4L, "그냥");
+        LocalDateTime death_of_day = LocalDateTime.of(2021, 1, 1, 0, 0);
+        characterRequest = new CharacterRequest(1L, "나루토", 14, 4L, "그냥", death_of_day);
         // Setup test character
         testCharacter = Character.builder()
                 .characterId(1L)
                 .anime(testAnime)
                 .name("Test Character")
-                .content("Test Content")
                 .lifeTime(100L)
                 .deathReason("Test Death Reason")
                 .imageUrl("http://test.com/image.jpg")
                 .state(CharacterState.NOT_MEMORIALIZING)
+                .deathOfDay(death_of_day)
                 .bowCount(0L)
                 .build();
 
@@ -80,11 +83,13 @@ class CharacterServiceTest {
         testCharacterResponse = new CharacterResponse(
                 1L,
                 "Test Character",
-                "Test Content",
+                14,
                 100L,
                 "Test Death Reason",
                 "http://test.com/image.jpg",
-                0L
+                death_of_day,
+                4L
+
         );
 
         // Setup test memorial avro schema
@@ -255,54 +260,15 @@ class CharacterServiceTest {
     void findIdsByAnime_ShouldReturnCharacterIdList() {
         // Arrange
         List<Long> characterIds = Arrays.asList(1L, 2L, 3L);
-        when(characterRepository.findIdsByAnimeId(1L)).thenReturn(characterIds);
+        when(characterRepository.findIdsByAnimeId(1L, pageable)).thenReturn(characterIds);
 
         // Act
-        List<Long> result = characterService.findIdsByAnime(1L);
+        List<Long> result = characterService.findIdsByAnime(1L, 10, 2L);
 
         // Assert
         assertNotNull(result);
         assertEquals(3, result.size());
         assertEquals(characterIds, result);
-        verify(characterRepository, times(1)).findIdsByAnimeId(1L);
-    }
-
-    @Test
-    @DisplayName("findIdsByDeathReason should return list of character ids for given death reason")
-    void findIdsByDeathReason_ShouldReturnCharacterIdList() {
-        // Arrange
-        List<Long> characterIds = Arrays.asList(1L, 2L, 3L);
-        when(characterRepository.findIdsByDeathReason("Test Death Reason")).thenReturn(characterIds);
-
-        // Act
-        List<Long> result = characterService.findIdsByDeathReason("Test Death Reason");
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(3, result.size());
-        assertEquals(characterIds, result);
-        verify(characterRepository, times(1)).findIdsByDeathReason("Test Death Reason");
-    }
-
-    @Test
-    @DisplayName("transformSchema should transform MemorialAvroSchema to CharacterAvroSchema")
-    void transformSchema_ShouldTransformMemorialAvroSchemaToCharacterAvroSchema() {
-        // Arrange
-        when(characterRepository.findById(1L)).thenReturn(Optional.of(testCharacter));
-        when(characterMapper.toCharacterAvroSchema(testCharacter, testMemorialAvroSchema)).thenReturn(testCharacterAvroSchema);
-
-        // Act
-        CharacterAvroSchema result = characterService.transformSchema(testMemorialAvroSchema);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(testCharacterAvroSchema.getCharacterId(), result.getCharacterId());
-        assertEquals(testCharacterAvroSchema.getName(), result.getName());
-        assertEquals(testCharacterAvroSchema.getContent(), result.getContent());
-        assertEquals(testCharacterAvroSchema.getDeathReason(), result.getDeathReason());
-        assertEquals(testCharacterAvroSchema.getState(), result.getState());
-        assertEquals(testCharacterAvroSchema.getApplicantId(), result.getApplicantId());
-        verify(characterRepository, times(1)).findById(1L);
-        verify(characterMapper, times(1)).toCharacterAvroSchema(testCharacter, testMemorialAvroSchema);
+        verify(characterRepository, times(1)).findIdsByAnimeId(1L, pageable);
     }
 }
