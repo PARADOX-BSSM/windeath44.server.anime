@@ -21,11 +21,14 @@ public class LoggingAspect {
     @Pointcut("execution(* com.example.anime.domain.character.service..*.*(..))")
     public void characterServiceMethodLog() {}
 
-    @Around("animeServiceMethodLog() && characterServiceMethodLog()")
+    @Pointcut("execution(* com.example.anime.domain.anime.scheduler.*.*(..))")
+    public void animeSchedulerLogging() {}
+
+    @Around("animeServiceMethodLog() || characterServiceMethodLog() || animeSchedulerLogging()")
     public Object serviceMethodLooging(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.trace("Entering {} by {}", joinPoint.getSignature().getName(), count.get());
+        log.info("Entering {} by {}", joinPoint.getSignature().getName(), count.get());
         Object result = joinPoint.proceed();
-        log.trace("Exiting {} by {}", joinPoint.getSignature().getName(), count.getAndIncrement());
+        log.info("Exiting {} by {}", joinPoint.getSignature().getName(), count.getAndIncrement());
         return result;
     }
 }

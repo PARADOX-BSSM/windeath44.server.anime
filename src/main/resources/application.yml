@@ -16,6 +16,10 @@ server:
   port:
     ${SERVER_PORT}
 
+logging:
+  level:
+    root: trace
+
 grpc:
   server:
     address: ${GRPC_SERVER_ADDRESS}

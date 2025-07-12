@@ -9,9 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface AnimeRepository extends JpaRepository<Anime, Long>, JdbcAnimeRepository {
 
-  @Query("select a from Anime a where a.animeId < :cursorId order by a.animeId desc")
+  @Query("select a from Anime a join fetch a.genres where a.animeId < :cursorId order by a.animeId desc")
   Slice<Anime> findRecentAnimesByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
 
-  @Query("select a from Anime a order by a.animeId desc")
+  @Query("select a from Anime a join fetch a.genres order by a.animeId desc")
   Slice<Anime> findRecentAnimes(Pageable pageable);
 }

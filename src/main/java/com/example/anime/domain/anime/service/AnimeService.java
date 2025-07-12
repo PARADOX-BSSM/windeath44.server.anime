@@ -22,14 +22,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
 
   public CursorPage<AnimeResponse> findAllByCursorId(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size + 1);
-
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findRecentAnimes(pageable)
             : animeRepository.findRecentAnimesByCursorId(cursorId, pageable);

@@ -32,7 +32,6 @@ public class AnimeScheduler {
     } catch(InterruptedException | AlreadyCachedAnimeException e) {
       log.error(e.getMessage());
     }
-
   }
 
   @Transactional
@@ -47,10 +46,21 @@ public class AnimeScheduler {
   }
 
   private void checkCacheAnime(LaftelResultResponse animeResponse) {
-    if (offset == 0) cachedId = animeResponse.getFirstId();
-    boolean isCachedEnd = animeResponse.containsCachedId(cachedId);
+
+    if (offset == 0) {
+      cachedId = animeResponse.getFirstId();
+    }
+    else {
+      boolean isCachedEnd = animeResponse.containsCachedId(cachedId);
+      throwIfAlreadyCached(isCachedEnd);
+    }
+  }
+
+  private void throwIfAlreadyCached(boolean isCachedEnd) {
     if (isCachedEnd) {
       throw AlreadyCachedAnimeException.getInstance();
     }
   }
+
+
 }

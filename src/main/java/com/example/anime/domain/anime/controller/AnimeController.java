@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AnimeController {
   private final AnimeService animeService;
 
+
   @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<AnimeResponse>>> findAllByCursorId(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
     CursorPage<AnimeResponse> animeList = animeService.findAllByCursorId(cursorId, size);

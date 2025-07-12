@@ -17,4 +17,9 @@ public class AlreadyCachedAnimeException extends GlobalException {
     return Holder.INSTANCE;
   }
 
+  @Override
+  public String getMessage() {
+    return "Already Cached";
+  }
+
 }
