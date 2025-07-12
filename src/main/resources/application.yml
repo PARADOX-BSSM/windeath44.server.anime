@@ -18,8 +18,7 @@ server:
 
 logging:
   level:
-    root: trace
-
+    com.example.anime : trace
 grpc:
   server:
     address: ${GRPC_SERVER_ADDRESS}

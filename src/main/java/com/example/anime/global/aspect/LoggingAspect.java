@@ -26,9 +26,9 @@ public class LoggingAspect {
 
     @Around("animeServiceMethodLog() || characterServiceMethodLog() || animeSchedulerLogging()")
     public Object serviceMethodLooging(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("Entering {} by {}", joinPoint.getSignature().getName(), count.get());
+        log.debug("Entering {} by {}", joinPoint.getSignature().getName(), count.get());
         Object result = joinPoint.proceed();
-        log.info("Exiting {} by {}", joinPoint.getSignature().getName(), count.getAndIncrement());
+        log.debug("Exiting {} by {}", joinPoint.getSignature().getName(), count.getAndIncrement());
         return result;
     }
 }

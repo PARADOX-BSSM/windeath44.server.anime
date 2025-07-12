@@ -15,10 +15,10 @@ public interface AnimeRepository extends JpaRepository<Anime, Long>, JdbcAnimeRe
   @Query("select a from Anime a join fetch a.genres order by a.animeId desc")
   Slice<Anime> findRecentAnimes(Pageable pageable);
 
-  @Query("select a from Anime a join fetch a.genres where a.name like :name order by a.animeId desc")
+  @Query("select a from Anime a join fetch a.genres where a.name like %:name% order by a.animeId desc")
   Slice<Anime> findRecentAnimesByName(Pageable pageable, @Param("name") String animeName);
 
-  @Query("select a from Anime a join fetch a.genres where a.name like :name and a.animeId < :cursorId order by a.animeId desc")
+  @Query("select a from Anime a join fetch a.genres where a.name like %:name% and a.animeId < :cursorId order by a.animeId desc")
   Slice<Anime> findRecentAnimesByCursorIdAndName(Long cursorId, Pageable pageable, String animeName);
 
 }
