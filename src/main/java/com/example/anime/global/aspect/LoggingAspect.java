@@ -7,10 +7,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 @Aspect
 @Component
 @Slf4j
 public class LoggingAspect {
+    private static AtomicLong count = new AtomicLong(0);
 
     @Pointcut("execution(* com.example.anime.domain.anime.service.*.*(..))")
     public void animeServiceMethodLog() {}
@@ -20,9 +23,9 @@ public class LoggingAspect {
 
     @Around("animeServiceMethodLog() && characterServiceMethodLog()")
     public Object serviceMethodLooging(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.trace("Entering {}", joinPoint.getSignature().getName());
+        log.trace("Entering {} by {}", joinPoint.getSignature().getName(), count.get());
         Object result = joinPoint.proceed();
-        log.trace("Exiting {}", joinPoint.getSignature().getName());
+        log.trace("Exiting {} by {}", joinPoint.getSignature().getName(), count.getAndIncrement());
         return result;
     }
 }
