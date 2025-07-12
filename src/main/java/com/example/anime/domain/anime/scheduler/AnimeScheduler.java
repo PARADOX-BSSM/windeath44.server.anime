@@ -47,8 +47,15 @@ public class AnimeScheduler {
       LaftelResultResponse animeResponse = fetchData();
       // 캐시되어있는지 확인(이미 로드한적이 있는지 확인)
       checkCacheAnime(animeResponse);
-      animeService.save(animeResponse);
-      return !animeResponse.isEnd();
+      LaftelResultResponse filterAnimeResponse = filter(animeResponse);
+      animeService.save(filterAnimeResponse);
+      return !filterAnimeResponse.isEnd();
+  }
+
+  private LaftelResultResponse filter(LaftelResultResponse animeResponse) {
+    LaftelResultResponse filteredLaftelResultResponse = cachedTitleSet.filter(animeResponse);
+    cachedTitleSet.addTitleAnimes(filteredLaftelResultResponse);
+    return filteredLaftelResultResponse;
   }
 
   private LaftelResultResponse fetchData() {
@@ -64,9 +71,6 @@ public class AnimeScheduler {
       boolean isCachedId = animeResponse.containsCachedId(cachedId);
       throwIfAlreadyCached(isCachedId);
     }
-
-    LaftelResultResponse filteredLaftelResultResponse = cachedTitleSet.filter(animeResponse);
-    cachedTitleSet.addTitleAnimes(filteredLaftelResultResponse);
   }
 
   private void throwIfAlreadyCached(Boolean isCachedId) {
