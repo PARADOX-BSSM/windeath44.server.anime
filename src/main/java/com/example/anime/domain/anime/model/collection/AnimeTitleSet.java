@@ -5,13 +5,14 @@ import com.example.anime.global.dto.LaftelResultResponse;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AnimeTitleSet {
     private Set<String> cachedTitleSet = new HashSet<>();
-    private static final Pattern pattern = Pattern.compile("\\\\d+기.*$");
+    private static final Pattern pattern = Pattern.compile("\\d+기.*$");
 
     public void addTitleAnimes(LaftelResultResponse animes) {
         animes.results().forEach(anime -> {
@@ -33,10 +34,19 @@ public class AnimeTitleSet {
 
     private List<RestAnimeResponse> filterAnimes(LaftelResultResponse animes) {
         return animes.results().stream()
-                .filter(anime -> {
-                    String title = normalizeTitle(anime.name());
-                    return !cachedTitleSet.contains(title);
+                .map(anime -> {
+                    String normTitle = normalizeTitle(anime.name());
+                    if (cachedTitleSet.contains(normTitle)) {
+                        return null;
+                    }
+                    return new RestAnimeResponse(
+                            anime.id(),
+                            normTitle,
+                            anime.genres(),
+                            anime.img()
+                    );
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 
