@@ -48,13 +48,13 @@ public class AnimeScheduler {
       // 캐시되어있는지 확인(이미 로드한적이 있는지 확인)
       checkCacheAnime(animeResponse);
       LaftelResultResponse filterAnimeResponse = filter(animeResponse);
+      cachedTitleSet.addTitleAnimes(filterAnimeResponse);
       animeService.save(filterAnimeResponse);
       return !filterAnimeResponse.isEnd();
   }
 
   private LaftelResultResponse filter(LaftelResultResponse animeResponse) {
     LaftelResultResponse filteredLaftelResultResponse = cachedTitleSet.filter(animeResponse);
-    cachedTitleSet.addTitleAnimes(filteredLaftelResultResponse);
     return filteredLaftelResultResponse;
   }
 
