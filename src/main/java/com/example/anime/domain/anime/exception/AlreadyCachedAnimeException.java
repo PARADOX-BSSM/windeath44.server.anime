@@ -19,7 +19,7 @@ public class AlreadyCachedAnimeException extends GlobalException {
 
   @Override
   public String getMessage() {
-    return "Already Cached";
+    return this.getErrorCode().getMessage();
   }
 
 }
