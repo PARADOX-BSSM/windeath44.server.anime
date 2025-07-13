@@ -27,7 +27,7 @@ public class AnimeService {
   private final AnimeMapper animeMapper;
 
   public CursorPage<AnimeResponse> findAllByCursorId(Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size + 1);
+    Pageable pageable = PageRequest.of(0, size);
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findRecentAnimes(pageable)
             : animeRepository.findRecentAnimesByCursorId(cursorId, pageable);
@@ -37,7 +37,7 @@ public class AnimeService {
   }
 
   public CursorPage<AnimeResponse> findAllByName(String animeName, Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size + 1);
+    Pageable pageable = PageRequest.of(0, size);
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findRecentAnimesByName(pageable, animeName)
             : animeRepository.findRecentAnimesByCursorIdAndName(cursorId, pageable, animeName);
