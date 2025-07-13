@@ -137,23 +137,6 @@ class CharacterServiceTest {
     }
 
     @Test
-    @DisplayName("findAllByAnime should return list of characters for given anime")
-    void findAllByAnime_ShouldReturnCharacterList() {
-        // Arrange
-        List<Character> characterList = Arrays.asList(testCharacter);
-        when(characterRepository.findAllByAnime(testAnime)).thenReturn(characterList);
-
-        // Act
-        List<Character> result = characterService.findAllByAnime(testAnime);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(testCharacter.getCharacterId(), result.get(0).getCharacterId());
-        verify(characterRepository, times(1)).findAllByAnime(testAnime);
-    }
-
-    @Test
     @DisplayName("findAll should return cursor page of character responses")
     void findAll_ShouldReturnCursorPage() {
         // Arrange

@@ -35,10 +35,7 @@ public class CharacterService {
     return character;
   }
 
-  public List<Character> findAllByAnime(Anime anime) {
-    List<Character> characterList = characterRepository.findAllByAnime(anime);
-     return characterList;
-  }
+
 
   public CursorPage<CharacterResponse> findAll(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
