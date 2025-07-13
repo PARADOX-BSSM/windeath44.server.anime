@@ -7,37 +7,50 @@ import com.example.anime.domain.character.model.Character;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class CharacterMapper {
 
   public Character toCharacter(CharacterRequest characterRequest, Anime anime) {
     String name = characterRequest.name();
-    String content = characterRequest.content();
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
+    Integer age = characterRequest.age();
+    LocalDateTime deathOfDay = characterRequest.deathOfDay();
 
     return Character.builder()
             .anime(anime)
             .name(name)
-            .content(content)
+            .age(age)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
+            .deathOfDay(deathOfDay)
             .build();
   }
 
   public CharacterResponse toCharacterResponse(Character character) {
     Long characterId = character.getCharacterId();
     String name = character.getName();
-    String content = character.getContent();
     Long lifeTime = character.getLifeTime();
-    String death_reason = character.getDeathReason();
+    String deathReason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
+    LocalDateTime deathOfDay = character.getDeathOfDay();
 
-    return new CharacterResponse(characterId, name, content, lifeTime, death_reason, imageUrl, bow_count);
+    return CharacterResponse.builder()
+            .characterId(characterId)
+            .name(name)
+            .lifeTime(lifeTime)
+            .deathReason(deathReason)
+            .imageUrl(imageUrl)
+            .bow_count(bow_count)
+            .death_of_day(deathOfDay)
+            .build();
   }
 
   public GetCharacterResponse toGetCharacterResponse(Character character) {
@@ -46,14 +59,12 @@ public class CharacterMapper {
     String animeName = anime.getName();
 
     String name = character.getName();
-    String content = character.getContent();
     String state = character.getState().toString();
 
     GetCharacterResponse response = GetCharacterResponse.newBuilder()
             .setAnimeId(animeId)
             .setAnimeName(animeName)
             .setName(name)
-            .setContent(content)
             .setState(state)
             .build();
     return response;
@@ -63,7 +74,7 @@ public class CharacterMapper {
   public CharacterAvroSchema toCharacterAvroSchema(Character character, MemorialAvroSchema memorialAvroSchema) {
     Long characterId = character.getCharacterId();
     String name = character.getName();
-    String content = character.getContent();
+    String content = "";
     String deathReason = character.getDeathReason();
     String state = character.getState().toString();
     String applicantId = memorialAvroSchema.getWriterId();
@@ -77,5 +88,12 @@ public class CharacterMapper {
             .setApplicantId(applicantId)
             .build();
     return characterAvroSchema;
+  }
+
+  public List<CharacterResponse> toCharacterListResponse(Slice<Character> characterSlice) {
+    return characterSlice.getContent()
+            .stream()
+            .map(this::toCharacterResponse)
+            .toList();
   }
 }

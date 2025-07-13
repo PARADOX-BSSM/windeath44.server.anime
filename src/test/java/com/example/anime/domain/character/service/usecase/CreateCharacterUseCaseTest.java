@@ -1,7 +1,6 @@
 package com.example.anime.domain.character.service.usecase;
 
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.anime.model.AnimeAirDates;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.exception.UploadFileFailException;
@@ -19,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,17 +42,16 @@ class CreateCharacterUseCaseTest {
     private Anime testAnime;
     private CharacterRequest testCharacterRequest;
     private MultipartFile testImage;
+    private CharacterRequest characterRequest;
 
     @BeforeEach
     void setUp() {
         // Setup test anime
+        characterRequest = new CharacterRequest(1L, "나루토", 14, 4L, "그냥", LocalDateTime.of(2021, 1, 1, 0, 0));
         testAnime = Anime.builder()
                 .animeId(1L)
                 .name("Test Anime")
-                .description("Test Description")
-                .airDates(new AnimeAirDates(LocalDate.of(2020, 1, 1), LocalDate.of(2021, 1, 1)))
-                .tags(Arrays.asList("Action", "Adventure"))
-                .bowCount(0L)
+                .genres(Arrays.asList("Action", "Adventure"))
                 .build();
 
         // Setup test image
@@ -63,37 +62,24 @@ class CreateCharacterUseCaseTest {
                 "test image content".getBytes()
         );
 
-        // Setup test character request
-        testCharacterRequest = new CharacterRequest(
-                1L,
-                "Test Character",
-                "Test Content",
-                100L,
-                "Test Death Reason",
-                testImage
-        );
     }
 
     @Test
     @DisplayName("execute should create character when all inputs are valid")
     void execute_ShouldCreateCharacter_WhenAllInputsAreValid() throws IOException {
         // Arrange
-        when(fileStorage.upload(testImage)).thenReturn("http://test.com/image.jpg");
+        when(fileStorage.upload("1", testImage)).thenReturn("http://test.com/image.jpg");
         when(animeService.getAnime(1L)).thenReturn(testAnime);
 
         // Act
         createCharacterUseCase.execute(testCharacterRequest);
 
         // Assert
-        verify(fileStorage, times(1)).upload(testImage);
+        verify(fileStorage, times(1)).upload("1", testImage);
         verify(animeService, times(1)).getAnime(1L);
         verify(characterService, times(1)).create(
-                testAnime,
-                "Test Character",
-                "Test Content",
-                "Test Death Reason",
-                100L,
-                "http://test.com/image.jpg"
+                characterRequest,
+                testAnime
         );
     }
 
@@ -101,12 +87,12 @@ class CreateCharacterUseCaseTest {
     @DisplayName("execute should throw UploadFileFailException when file upload fails")
     void execute_ShouldThrowException_WhenFileUploadFails() throws IOException {
         // Arrange
-        when(fileStorage.upload(testImage)).thenThrow(new IOException("Upload failed"));
+        when(fileStorage.upload("1", testImage)).thenThrow(new IOException("Upload failed"));
 
         // Act & Assert
         assertThrows(UploadFileFailException.class, () -> createCharacterUseCase.execute(testCharacterRequest));
-        verify(fileStorage, times(1)).upload(testImage);
+        verify(fileStorage, times(1)).upload("1", testImage);
         verify(animeService, never()).getAnime(anyLong());
-        verify(characterService, never()).create(any(), anyString(), anyString(), anyString(), anyLong(), anyString());
+        verify(characterService, never()).create(any(), any());
     }
 }

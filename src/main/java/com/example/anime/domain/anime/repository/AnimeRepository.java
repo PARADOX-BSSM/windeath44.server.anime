@@ -7,19 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.Optional;
+public interface AnimeRepository extends JpaRepository<Anime, Long>, JdbcAnimeRepository {
 
-public interface AnimeRepository extends JpaRepository<Anime, Long> {
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList where a.animeId = :id")
-  Optional<Anime> findByIdWithTagsAAndCharacterList(@Param("id") Long animeId);
+  @Query("select a from Anime a join fetch a.genres where a.animeId < :cursorId order by a.animeId desc")
+  Slice<Anime> findRecentAnimesByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
 
-  @Query("select a from Anime a join fetch a.tags join fetch a.characterList")
-  List<Anime> findAllWithTagsAndCharacterList();
+  @Query("select a from Anime a join fetch a.genres order by a.animeId desc")
+  Slice<Anime> findRecentAnimes(Pageable pageable);
 
-  @Query("select a from Anime a where a.animeId < :cursorId order by a.animeId desc")
-  Slice<Anime> findPageByCursorId(@Param("cursorId") Long cursorId, Pageable pageable);
+  @Query("select a from Anime a join fetch a.genres where a.name like %:name% order by a.animeId desc")
+  Slice<Anime> findRecentAnimesByName(Pageable pageable, @Param("name") String animeName);
 
-  @Query("select a from Anime a order by a.animeId desc")
-  Slice<Anime> findPage(Pageable pageable);
+  @Query("select a from Anime a join fetch a.genres where a.name like %:name% and a.animeId < :cursorId order by a.animeId desc")
+  Slice<Anime> findRecentAnimesByCursorIdAndName(Long cursorId, Pageable pageable, String animeName);
+
 }

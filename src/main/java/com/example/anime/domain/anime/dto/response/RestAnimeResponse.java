@@ -2,10 +2,10 @@ package com.example.anime.domain.anime.dto.response;
 
 import java.util.List;
 
-public record AnimeResponse(
-        Long animeId,
+public record RestAnimeResponse (
+        Long id,
         String name,
         List<String> genres,
-        String iamge_url
+        String img
 ) {
 }

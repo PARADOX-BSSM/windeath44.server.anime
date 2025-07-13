@@ -1,4 +1,4 @@
-package com.example.anime.global.kafka;
+package com.example.anime.global.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.avro.specific.SpecificRecord;

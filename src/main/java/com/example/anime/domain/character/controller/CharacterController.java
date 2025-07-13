@@ -1,16 +1,13 @@
 package com.example.anime.domain.character.controller;
 
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
-import com.example.anime.domain.character.exception.UploadFileFailException;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
-import com.example.anime.domain.character.service.usecase.UpdateCharacterUseCase;
 import com.example.anime.global.dto.CursorPage;
-import com.example.anime.global.mapper.ResponseMapper;
 import com.example.anime.global.dto.ResponseDto;
+import com.example.anime.global.util.HttpUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,82 +18,79 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value="/characters")
+@RequestMapping("/animes/characters")
 public class CharacterController {
   private final CharacterService characterService;
-  private final ResponseMapper responseMapper;
   private final CreateCharacterUseCase createCharacterUseCase;
-  private final UpdateCharacterUseCase updateCharacterUseCase;
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
-
 
   @PostMapping
   public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid CharacterRequest characterRequest) {
     Long characterId = createCharacterUseCase.execute(characterRequest);
-    ResponseDto<Long> responseDto = responseMapper.toResponseDto("create character", characterId);
+    ResponseDto<Long> responseDto = HttpUtil.success("create character", characterId);
     return ResponseEntity.ok(responseDto);
   }
 
-  @PatchMapping("/upload/image/{character-id}")
+  @PatchMapping("/image/{character-id}")
   public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
     characterImageUploadUseCase.upload(characterId, image);
-    ResponseDto<Void> responseDto = responseMapper.toResponseDto("upload image", null);
+    ResponseDto<Void> responseDto = HttpUtil.success("upload image");
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findAll(@RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     CursorPage<CharacterResponse> characterResponses = characterService.findAll(cursorId, size);
-    ResponseDto<CursorPage<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/{character-id}")
   public ResponseEntity<ResponseDto<CharacterResponse>> findById(@PathVariable("character-id") Long characterId) {
     CharacterResponse characterResponse = characterService.find(characterId);
-    ResponseDto<CharacterResponse> responseDto = responseMapper.toResponseDto("find character", characterResponse);
+    ResponseDto<CharacterResponse> responseDto = HttpUtil.success("find character", characterResponse);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/anime")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId) {
-    List<Long> characterIds = characterService.findIdsByAnime(animeId);
-    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by anime id", characterIds);
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+    List<Long> characterIds = characterService.findIdsByAnime(animeId, size, cursorId);
+    ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by anime id", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason) {
-    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason);
-    ResponseDto<List<Long>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterIds);
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason, cursorId, size);
+    ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by death reason", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/characterIds")
   public ResponseEntity<ResponseDto<List<CharacterResponse>>> findCharacterResponsesByCharacterIds(@RequestParam List<Long> characterIds) {
     List<CharacterResponse> characterResponseList = characterService.findByCharacterIds(characterIds);
-    ResponseDto<List<CharacterResponse>> responseDto = responseMapper.toResponseDto("find character ids by death reason", characterResponseList);
+    ResponseDto<List<CharacterResponse>> responseDto = HttpUtil.success("find characters by character ids", characterResponseList);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/name")
   public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findCharacterResponsesByCharacterName(@RequestParam("name") String name, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     CursorPage<CharacterResponse> characterResponses = characterService.findAllByName(name, cursorId, size);
-    ResponseDto<CursorPage<CharacterResponse>> responseDto = responseMapper.toResponseDto("find characters", characterResponses);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 
   @DeleteMapping("/{character-id}")
   public ResponseEntity<ResponseDto<Void>> delete(@PathVariable("character-id") Long characterId) {
     characterService.deleteById(characterId);
-    ResponseDto<Void> responseDto = responseMapper.toResponseDto("delete character by id", null);
+    ResponseDto<Void> responseDto = HttpUtil.success("delete character by id");
     return ResponseEntity.ok(responseDto);
   }
 
   @PatchMapping("/{character-id}")
-  public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @Valid CharacterUpdateRequest characterUpdateRequest) {
-    updateCharacterUseCase.execute(characterUpdateRequest, characterId);
-    ResponseDto<Void> responseDto = responseMapper.toResponseDto("update character by id", null);
+  public ResponseEntity<ResponseDto<Void>> update(@PathVariable("character-id") Long characterId, @RequestBody @Valid CharacterRequest characterUpdateRequest) {
+    characterService.update(characterUpdateRequest, characterId);
+    ResponseDto<Void> responseDto = HttpUtil.success("update character by id");
     return ResponseEntity.ok(responseDto);
   }
 

@@ -2,12 +2,14 @@ package com.example.anime.domain.character.model;
 
 
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.character.dto.request.CharacterUpdateRequest;
+import com.example.anime.domain.character.dto.request.CharacterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -24,13 +26,14 @@ public class Character {
   @JoinColumn(name="anime_id")
   private Anime anime;
   private String name;
-  private String content;
+  private Integer age;
   private Long lifeTime;
   private String deathReason;
   private String imageUrl;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
   private Long bowCount;
+  private LocalDateTime deathOfDay;
 
   @PrePersist
   public void init() {
@@ -42,17 +45,18 @@ public class Character {
     this.state = CharacterState.MEMORIALIZING;
   }
 
-  public void update(CharacterUpdateRequest characterUpdateRequest, String imageUrl) {
+  public void update(CharacterRequest characterUpdateRequest) {
     String name = characterUpdateRequest.name();
-    String content = characterUpdateRequest.content();
     String deathReason = characterUpdateRequest.deathReason();
     Long lifeTime = characterUpdateRequest.lifeTime();
+    Integer age = characterUpdateRequest.age();
+    LocalDateTime deathOfDay = characterUpdateRequest.deathOfDay();
 
     this.name = name;
-    this.content = content;
+    this.age = age;
     this.deathReason = deathReason;
     this.lifeTime = lifeTime;
-    this.imageUrl = imageUrl;
+    this.deathOfDay = deathOfDay;
   }
 
   public void updateImage(String imageUrl) {
