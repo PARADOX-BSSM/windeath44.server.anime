@@ -16,7 +16,7 @@ public record CharacterRequest (
         Long lifeTime,
         @NotNull(message="deathReason is null")
         String deathReason,
-        @JsonFormat(pattern = "yy-mm-dd", timezone = "Asia/Seoul", shape = JsonFormat.Shape.STRING)
+        @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul", shape = JsonFormat.Shape.STRING)
         LocalDateTime deathOfDay
 ) {
 
