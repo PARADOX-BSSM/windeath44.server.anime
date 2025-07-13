@@ -1,6 +1,7 @@
 package com.example.anime.domain.anime.controller;
 
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
+import com.example.anime.domain.anime.service.AnimeDocumentService;
 import com.example.anime.domain.anime.service.AnimeService;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.dto.ResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AnimeController {
   private final AnimeService animeService;
+  private final AnimeDocumentService animeDocumentService;
 
   @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<AnimeResponse>>> findAll(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
@@ -25,7 +27,7 @@ public class AnimeController {
 
   @GetMapping("/search")
   public ResponseEntity<ResponseDto<CursorPage<AnimeResponse>>> findAllByAnimeName(@RequestParam("anime") String animeName, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
-    CursorPage<AnimeResponse> animeList = animeService.findAllByName(animeName, cursorId, size);
+    CursorPage<AnimeResponse> animeList = animeDocumentService.findAllByName(animeName, cursorId, size);
     ResponseDto<CursorPage<AnimeResponse>> responseDto = HttpUtil.success("find animes with name", animeList);
     return ResponseEntity.ok(responseDto);
   }
