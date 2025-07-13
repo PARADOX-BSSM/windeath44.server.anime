@@ -69,7 +69,7 @@ public class CharacterController {
   @GetMapping("/search/characterIds")
   public ResponseEntity<ResponseDto<List<CharacterResponse>>> findCharacterResponsesByCharacterIds(@RequestParam List<Long> characterIds) {
     List<CharacterResponse> characterResponseList = characterService.findByCharacterIds(characterIds);
-    ResponseDto<List<CharacterResponse>> responseDto = HttpUtil.success("find character ids by death reason", characterResponseList);
+    ResponseDto<List<CharacterResponse>> responseDto = HttpUtil.success("find characters by character ids", characterResponseList);
     return ResponseEntity.ok(responseDto);
   }
 
