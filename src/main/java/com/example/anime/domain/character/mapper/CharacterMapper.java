@@ -47,6 +47,7 @@ public class CharacterMapper {
     CharacterState state = character.getState();
     Long animeId = character.getAnimeId();
     Integer age = character.getAge();
+    String saying = character.getSaying();
 
     return CharacterResponse.builder()
             .characterId(characterId)
@@ -59,6 +60,7 @@ public class CharacterMapper {
             .deathOfDay(deathOfDay)
             .state(state.toString())
             .age(age)
+            .saying(saying)
             .build();
   }
 

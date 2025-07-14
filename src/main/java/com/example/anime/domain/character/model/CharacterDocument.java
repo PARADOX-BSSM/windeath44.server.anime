@@ -20,6 +20,7 @@ public class CharacterDocument {
     private String name;
     private Integer age;
     private Long lifeTime;
+    private String saying;
     @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")
     private String deathReason;
     private String imageUrl;

@@ -15,7 +15,8 @@ public record CharacterResponse (
         String imageUrl,
         LocalDateTime deathOfDay,
         Long bowCount,
-        String state
+        String state,
+        String saying
 ) {
 
 }
