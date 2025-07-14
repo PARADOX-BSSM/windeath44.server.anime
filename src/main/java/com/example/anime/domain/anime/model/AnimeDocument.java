@@ -1,6 +1,7 @@
 package com.example.anime.domain.anime.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.ElementCollection;
 import lombok.Getter;
 import org.hibernate.annotations.Fetch;
@@ -21,5 +22,7 @@ public class AnimeDocument {
     @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")
     private String name;
     private List<String> genres;
+    @Field(name = "image_url", type = FieldType.Keyword)
+    @JsonProperty("image_url")
     private String imageUrl;
 }

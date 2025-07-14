@@ -6,6 +6,6 @@ public record AnimeResponse(
         Long animeId,
         String name,
         List<String> genres,
-        String iamge_url
+        String imageUrl
 ) {
 }
