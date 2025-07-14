@@ -2,6 +2,7 @@ package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
@@ -87,10 +88,11 @@ public class CharacterService {
   }
 
   @Transactional(readOnly = false)
-  public Long create(CharacterRequest characterRequest, Anime anime) {
+  public CharacterIdResponse create(CharacterRequest characterRequest, Anime anime) {
     Character character = characterMapper.toCharacter(characterRequest, anime);
     Character savedCharacter = characterRepository.save(character);
-    return savedCharacter.getCharacterId();
+    CharacterIdResponse characterIdsResponse = characterMapper.toCharacterIdResponse(savedCharacter);
+    return characterIdsResponse;
   }
 
   @Transactional(readOnly = false)

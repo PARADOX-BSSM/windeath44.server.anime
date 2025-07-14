@@ -1,5 +1,6 @@
 package com.example.anime.domain.character.controller;
 
+import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.service.CharacterDocumentService;
@@ -27,9 +28,9 @@ public class CharacterController {
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
 
   @PostMapping
-  public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid CharacterRequest characterRequest) {
-    Long characterId = createCharacterUseCase.execute(characterRequest);
-    ResponseDto<Long> responseDto = HttpUtil.success("create character", characterId);
+  public ResponseEntity<ResponseDto<CharacterIdResponse>> create(@RequestBody @Valid CharacterRequest characterRequest) {
+    CharacterIdResponse characterId = createCharacterUseCase.execute(characterRequest);
+    ResponseDto<CharacterIdResponse> responseDto = HttpUtil.success("create character", characterId);
     return ResponseEntity.ok(responseDto);
   }
 

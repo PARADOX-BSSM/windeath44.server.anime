@@ -23,13 +23,17 @@ import java.util.List;
 public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
+  private final AnimeDocumentService animeDocumentService;
 
-  public CursorPage<AnimeResponse> findAllByCursorId(Long cursorId, int size) {
+  public CursorPage<AnimeResponse> findAll(Long cursorId, int size, String animeName) {
+    return animeName != null ? animeDocumentService.findAllByName(animeName, cursorId, size) : findAllByName(cursorId, size);
+  }
+
+  private CursorPage<AnimeResponse> findAllByName(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findRecentAnimes(pageable)
             : animeRepository.findRecentAnimesByCursorId(cursorId, pageable);
-
     List<AnimeResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
     return new CursorPage<>(animeList, animeSlice.hasNext());
   }
