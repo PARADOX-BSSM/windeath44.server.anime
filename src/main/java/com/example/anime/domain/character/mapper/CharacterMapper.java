@@ -23,11 +23,13 @@ public class CharacterMapper {
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
     LocalDateTime deathOfDay = characterRequest.deathOfDay();
+    String saying =  characterRequest.saying();
 
     return Character.builder()
             .anime(anime)
             .name(name)
             .age(age)
+            .saying(saying)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
             .deathOfDay(deathOfDay)

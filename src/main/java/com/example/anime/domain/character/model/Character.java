@@ -30,6 +30,7 @@ public class Character {
   private Long lifeTime;
   private String deathReason;
   private String imageUrl;
+  private String saying;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
   private Long bowCount;
