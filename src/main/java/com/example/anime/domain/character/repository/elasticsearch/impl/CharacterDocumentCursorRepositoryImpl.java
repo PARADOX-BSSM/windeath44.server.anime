@@ -54,7 +54,7 @@ public class CharacterDocumentCursorRepositoryImpl implements CharacterDocumentC
     }
 
 
-    public DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName, String field) throws IOException {
+    private DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName, String field) throws IOException {
         int fetchSize = size + 1;
 
         SearchRequest.Builder builder = searchRequest("character", fetchSize, "character_id", field, characterName);
