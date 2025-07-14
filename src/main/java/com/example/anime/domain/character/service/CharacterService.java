@@ -5,7 +5,7 @@ import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
-import com.example.anime.domain.character.repository.CharacterRepository;
+import com.example.anime.domain.character.repository.jpa.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
 import lombok.RequiredArgsConstructor;

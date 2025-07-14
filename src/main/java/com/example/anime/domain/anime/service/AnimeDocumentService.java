@@ -20,7 +20,6 @@ public class AnimeDocumentService {
     private final AnimeDocumentMapper animeDocumentMapper;
 
     public CursorPage<AnimeResponse> findAllByName(String animeName, Long cursorId, int size) {
-        Pageable pageable = PageRequest.of(0, size);
 
         DocumentSlice<AnimeDocument> animeDocumentSlice = cursorId == null
                 ? animeDocumentRepository.findAnimesByName(size, animeName)

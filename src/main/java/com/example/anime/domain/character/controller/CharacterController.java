@@ -62,9 +62,9 @@ public class CharacterController {
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
-    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason, cursorId, size);
-    ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by death reason", characterIds);
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponses = characterDocumentService.findAllByDeathReason(deathReason, cursorId, size);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids by death reason", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 

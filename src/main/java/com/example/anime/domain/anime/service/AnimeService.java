@@ -34,16 +34,6 @@ public class AnimeService {
     return new CursorPage<>(animeList, animeSlice.hasNext());
   }
 
-  public CursorPage<AnimeResponse> findAllByName(String animeName, Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size);
-    Slice<Anime> animeSlice = cursorId == null
-            ? animeRepository.findRecentAnimesByName(pageable, animeName)
-            : animeRepository.findRecentAnimesByCursorIdAndName(cursorId, pageable, animeName);
-
-    List<AnimeResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
-    return new CursorPage<>(animeList, animeSlice.hasNext());
-  }
-
   private Anime findAnime(Long animeId) {
     Anime anime = animeRepository.findById(animeId)
             .orElseThrow(NotFoundAnimeException::getInstance);

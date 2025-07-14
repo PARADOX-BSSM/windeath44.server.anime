@@ -1,4 +1,4 @@
-package com.example.anime.domain.character.repository;
+package com.example.anime.domain.character.repository.elasticsearch;
 
 import com.example.anime.domain.character.model.CharacterDocument;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

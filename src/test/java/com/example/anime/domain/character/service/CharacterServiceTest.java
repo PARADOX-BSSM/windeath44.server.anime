@@ -7,7 +7,7 @@ import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.model.CharacterState;
-import com.example.anime.domain.character.repository.CharacterRepository;
+import com.example.anime.domain.character.repository.jpa.CharacterRepository;
 import com.example.anime.global.dto.CursorPage;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.anime.domain.character.repository;
+package com.example.anime.domain.character.repository.jpa;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.model.Character;
@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Long> {

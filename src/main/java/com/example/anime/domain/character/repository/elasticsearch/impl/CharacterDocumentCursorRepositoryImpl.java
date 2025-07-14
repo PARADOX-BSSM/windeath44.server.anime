@@ -1,4 +1,4 @@
-package com.example.anime.domain.character.repository.impl;
+package com.example.anime.domain.character.repository.elasticsearch.impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldValue;
@@ -7,9 +7,8 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.anime.domain.anime.exception.NotFoundAnimeDocumentException;
-import com.example.anime.domain.anime.model.AnimeDocument;
 import com.example.anime.domain.character.model.CharacterDocument;
-import com.example.anime.domain.character.repository.CharacterDocumentCursorRepository;
+import com.example.anime.domain.character.repository.elasticsearch.CharacterDocumentCursorRepository;
 import com.example.anime.global.dto.DocumentSlice;
 
 import java.io.IOException;
@@ -31,19 +30,34 @@ public class CharacterDocumentCursorRepositoryImpl implements CharacterDocumentC
 
     @Override
     public DocumentSlice<CharacterDocument> findCharactersByCursorIdAndName(Long cursorId, int size, String characterName) {
+        return getCharacterDocuments(cursorId, size, characterName, "name");
+    }
+
+    @Override
+    public DocumentSlice<CharacterDocument> findCharactersByDeathReason(int size, String deathReason) {
+        return findCharactersByCursorIdAndDeathReason(null, size, deathReason);
+    }
+
+    @Override
+    public DocumentSlice<CharacterDocument> findCharactersByCursorIdAndDeathReason(Long cursorId, int size, String deathReason) {
+        return getCharacterDocuments(cursorId, size, deathReason, "death_reason");
+    }
+
+    private DocumentSlice<CharacterDocument> getCharacterDocuments(Long cursorId, int size, String characterName, String field) {
         try {
             Long[] lastSortValues = cursorId == null ? null : new Long[] {cursorId};
-            return searchAfter(lastSortValues, size, characterName);
+            return searchAfter(lastSortValues, size, characterName, field);
         } catch (IOException e) {
             e.printStackTrace();
             throw NotFoundAnimeDocumentException.getInstance();
         }
     }
 
-    public DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName) throws IOException {
+
+    public DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName, String field) throws IOException {
         int fetchSize = size + 1;
 
-        SearchRequest.Builder builder = searchRequest("character", fetchSize, "character_id", "name", characterName);
+        SearchRequest.Builder builder = searchRequest("character", fetchSize, "character_id", field, characterName);
         searchAfter(lastSortValues, builder);
         SearchResponse<CharacterDocument> response = elasticsearchClient.search(builder.build(), CharacterDocument.class);
 
