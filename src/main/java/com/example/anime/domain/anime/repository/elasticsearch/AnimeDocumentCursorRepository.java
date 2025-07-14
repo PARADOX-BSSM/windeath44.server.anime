@@ -1,10 +1,7 @@
-package com.example.anime.domain.anime.repository;
+package com.example.anime.domain.anime.repository.elasticsearch;
 
-import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.model.AnimeDocument;
-import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.dto.DocumentSlice;
-import org.springframework.data.domain.Slice;
 
 public interface AnimeDocumentCursorRepository {
     DocumentSlice<AnimeDocument> findAnimesByName(int size, String animeName);

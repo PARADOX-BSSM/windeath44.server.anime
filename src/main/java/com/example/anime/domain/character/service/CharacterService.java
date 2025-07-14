@@ -35,8 +35,6 @@ public class CharacterService {
     return character;
   }
 
-
-
   public CursorPage<CharacterResponse> findAll(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
 

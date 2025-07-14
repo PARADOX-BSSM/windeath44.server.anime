@@ -11,9 +11,13 @@ spring:
     hibernate:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.MySQL8Dialect
-  elasticsearch:
-    uris: http://localhost:9200
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
 
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URI:http://localhost:9200}
 server:
   port:
     ${SERVER_PORT}

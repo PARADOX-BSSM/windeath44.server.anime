@@ -1,16 +1,14 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.dto.response.RestAnimeResponse;
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.mapper.AnimeMapper;
-import com.example.anime.domain.anime.repository.AnimeRepository;
+import com.example.anime.domain.anime.repository.jpa.AnimeRepository;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.dto.LaftelResultResponse;
 import lombok.RequiredArgsConstructor;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

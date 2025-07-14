@@ -62,4 +62,8 @@ public class Character {
   public void updateImage(String imageUrl) {
     this.imageUrl = imageUrl;
   }
+
+  public Long getAnimeId() {
+    return this.anime.getAnimeId();
+  }
 }

@@ -1,4 +1,4 @@
-package com.example.anime.domain.anime.repository.impl;
+package com.example.anime.domain.character.repository.impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldValue;
@@ -8,7 +8,8 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.anime.domain.anime.exception.NotFoundAnimeDocumentException;
 import com.example.anime.domain.anime.model.AnimeDocument;
-import com.example.anime.domain.anime.repository.AnimeDocumentCursorRepository;
+import com.example.anime.domain.character.model.CharacterDocument;
+import com.example.anime.domain.character.repository.CharacterDocumentCursorRepository;
 import com.example.anime.global.dto.DocumentSlice;
 
 import java.io.IOException;
@@ -16,40 +17,40 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AnimeDocumentCursorRepositoryImpl implements AnimeDocumentCursorRepository {
+public class CharacterDocumentCursorRepositoryImpl implements CharacterDocumentCursorRepository {
     private final ElasticsearchClient elasticsearchClient;
 
-    public AnimeDocumentCursorRepositoryImpl(ElasticsearchClient elasticsearchClient) {
+    public CharacterDocumentCursorRepositoryImpl(ElasticsearchClient elasticsearchClient) {
         this.elasticsearchClient = elasticsearchClient;
     }
 
     @Override
-    public DocumentSlice<AnimeDocument> findAnimesByName(int size, String animeName) {
-        return findAnimesByCursorIdAndName(null, size, animeName);
+    public DocumentSlice<CharacterDocument> findCharactersByName(int size, String characterName) {
+        return findCharactersByCursorIdAndName(null, size, characterName);
     }
 
     @Override
-    public DocumentSlice<AnimeDocument> findAnimesByCursorIdAndName(Long cursorId, int size, String animeName) {
+    public DocumentSlice<CharacterDocument> findCharactersByCursorIdAndName(Long cursorId, int size, String characterName) {
         try {
             Long[] lastSortValues = cursorId == null ? null : new Long[] {cursorId};
-            return searchAfter(lastSortValues, size, animeName);
+            return searchAfter(lastSortValues, size, characterName);
         } catch (IOException e) {
             e.printStackTrace();
             throw NotFoundAnimeDocumentException.getInstance();
         }
     }
 
-    public DocumentSlice<AnimeDocument> searchAfter(Long[] lastSortValues, int size, String animeName) throws IOException {
+    public DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName) throws IOException {
         int fetchSize = size + 1;
 
-        SearchRequest.Builder builder = searchRequest("anime", fetchSize, "id", "name", animeName);
+        SearchRequest.Builder builder = searchRequest("character", fetchSize, "character_id", "name", characterName);
         searchAfter(lastSortValues, builder);
-        SearchResponse<AnimeDocument> response = elasticsearchClient.search(builder.build(), AnimeDocument.class);
+        SearchResponse<CharacterDocument> response = elasticsearchClient.search(builder.build(), CharacterDocument.class);
 
-        List<Hit<AnimeDocument>> hits = response.hits().hits();
+        List<Hit<CharacterDocument>> hits = response.hits().hits();
         boolean hasNext = hits.size() == fetchSize;
 
-        List<AnimeDocument> results = hits.stream()
+        List<CharacterDocument> results = hits.stream()
                 .limit(size)
                 .map(Hit::source)
                 .collect(Collectors.toList());
@@ -78,5 +79,4 @@ public class AnimeDocumentCursorRepositoryImpl implements AnimeDocumentCursorRep
                         )
                 );
     }
-
 }

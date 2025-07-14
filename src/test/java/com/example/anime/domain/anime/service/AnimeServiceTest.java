@@ -4,7 +4,7 @@ import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.domain.anime.mapper.AnimeMapper;
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.anime.repository.AnimeRepository;
+import com.example.anime.domain.anime.repository.jpa.AnimeRepository;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.global.dto.CursorPage;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

@@ -7,13 +7,15 @@ import java.time.LocalDateTime;
 @Builder
 public record CharacterResponse (
         Long characterId,
+        Long animeId,
         String name,
         Integer age,
         Long lifeTime,
         String deathReason,
         String imageUrl,
-        LocalDateTime death_of_day,
-        Long bow_count
+        LocalDateTime deathOfDay,
+        Long bowCount,
+        String state
 ) {
 
 }

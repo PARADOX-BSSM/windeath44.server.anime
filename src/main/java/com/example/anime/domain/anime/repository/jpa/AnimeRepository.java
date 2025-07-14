@@ -1,6 +1,7 @@
-package com.example.anime.domain.anime.repository;
+package com.example.anime.domain.anime.repository.jpa;
 
 import com.example.anime.domain.anime.model.Anime;
+import com.example.anime.domain.anime.repository.jdbc.JdbcAnimeRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

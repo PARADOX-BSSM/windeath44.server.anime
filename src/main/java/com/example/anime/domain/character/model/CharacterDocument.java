@@ -1,25 +1,29 @@
-package com.example.anime.domain.anime.model;
+package com.example.anime.domain.character.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.ElementCollection;
 import lombok.Getter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-@Getter
-@Document(indexName = "anime")
+@Document(indexName="character")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnimeDocument {
+@Getter
+public class CharacterDocument {
     @Id
-    private Long id;
+    private Long characterId;
+    private Long animeId;
     @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")
     private String name;
-    private List<String> genres;
+    private Integer age;
+    private Long lifeTime;
+    @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")
+    private String deathReason;
     private String imageUrl;
+    private CharacterState state;
+    private Long bowCount;
+    private LocalDateTime deathOfDay;
 }

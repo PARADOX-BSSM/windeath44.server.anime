@@ -4,6 +4,7 @@ import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.Character;
+import com.example.anime.domain.character.model.CharacterState;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
@@ -41,15 +42,21 @@ public class CharacterMapper {
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
     LocalDateTime deathOfDay = character.getDeathOfDay();
+    CharacterState state = character.getState();
+    Long animeId = character.getAnimeId();
+    Integer age = character.getAge();
 
     return CharacterResponse.builder()
             .characterId(characterId)
+            .animeId(animeId)
             .name(name)
             .lifeTime(lifeTime)
             .deathReason(deathReason)
             .imageUrl(imageUrl)
-            .bow_count(bow_count)
-            .death_of_day(deathOfDay)
+            .bowCount(bow_count)
+            .deathOfDay(deathOfDay)
+            .state(state.toString())
+            .age(age)
             .build();
   }
 

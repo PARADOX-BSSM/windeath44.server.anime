@@ -2,10 +2,8 @@ package com.example.anime.domain.anime.service;
 
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.mapper.AnimeDocumentMapper;
-import com.example.anime.domain.anime.mapper.AnimeMapper;
-import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.model.AnimeDocument;
-import com.example.anime.domain.anime.repository.AnimeDocumentRepository;
+import com.example.anime.domain.anime.repository.elasticsearch.AnimeDocumentRepository;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.dto.DocumentSlice;
 import lombok.RequiredArgsConstructor;

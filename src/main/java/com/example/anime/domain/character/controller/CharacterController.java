@@ -2,6 +2,7 @@ package com.example.anime.domain.character.controller;
 
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.service.CharacterDocumentService;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
@@ -22,6 +23,7 @@ import java.util.List;
 public class CharacterController {
   private final CharacterService characterService;
   private final CreateCharacterUseCase createCharacterUseCase;
+  private final CharacterDocumentService characterDocumentService;
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
 
   @PostMapping
@@ -75,7 +77,7 @@ public class CharacterController {
 
   @GetMapping("/search/name")
   public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findCharacterResponsesByCharacterName(@RequestParam("name") String name, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-    CursorPage<CharacterResponse> characterResponses = characterService.findAllByName(name, cursorId, size);
+    CursorPage<CharacterResponse> characterResponses = characterDocumentService.findAllByName(name, cursorId, size);
     ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
