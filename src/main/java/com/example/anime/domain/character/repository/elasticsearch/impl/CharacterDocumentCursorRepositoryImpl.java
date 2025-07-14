@@ -1,21 +1,25 @@
 package com.example.anime.domain.character.repository.elasticsearch.impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.example.anime.domain.anime.exception.NotFoundAnimeDocumentException;
+import com.example.anime.domain.character.exception.CharacterDocumentElasticsearchException;
 import com.example.anime.domain.character.model.CharacterDocument;
 import com.example.anime.domain.character.repository.elasticsearch.CharacterDocumentCursorRepository;
 import com.example.anime.global.dto.DocumentSlice;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class CharacterDocumentCursorRepositoryImpl implements CharacterDocumentCursorRepository {
     private final ElasticsearchClient elasticsearchClient;
 
@@ -48,11 +52,10 @@ public class CharacterDocumentCursorRepositoryImpl implements CharacterDocumentC
             Long[] lastSortValues = cursorId == null ? null : new Long[] {cursorId};
             return searchAfter(lastSortValues, size, characterName, field);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw NotFoundAnimeDocumentException.getInstance();
+            log.error("Elasticsearch search failed for character name: {}", characterName, e);
+            throw CharacterDocumentElasticsearchException.getInstance();
         }
     }
-
 
     private DocumentSlice<CharacterDocument> searchAfter(Long[] lastSortValues, int size, String characterName, String field) throws IOException {
         int fetchSize = size + 1;

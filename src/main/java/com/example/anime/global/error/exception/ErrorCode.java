@@ -12,7 +12,7 @@ public enum ErrorCode {
   CHARACTER_NOT_FOUND(404, "Character not found"),
   FILE_UPLOAD_FAILED(500, "File upload failed"),
   ANIME_DOCUMENT_NOT_FOUND(404, "Anime document not found" ),
-  ;
+  CHARACTER_DOCUMENT_ELASTICSEARCH_ERROR(500, "Elastic search error with character document"),;
   private int status;
   private String message;
 }
