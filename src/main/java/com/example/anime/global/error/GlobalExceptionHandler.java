@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
   }
 
   private void errorLogging(ErrorCode errorCode, GlobalException e) {
-    log.error("error meesage : {} || error status : {}", errorCode.getMessage(), errorCode.getStatus());
+    log.error("error message : {} || error status : {}", errorCode.getMessage(), errorCode.getStatus());
     log.error(e.getStackTrace().toString());
   }
 
