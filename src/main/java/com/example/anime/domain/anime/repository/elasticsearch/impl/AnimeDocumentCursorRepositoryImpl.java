@@ -6,17 +6,19 @@ import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.example.anime.domain.anime.exception.NotFoundAnimeDocumentException;
+import com.example.anime.domain.anime.exception.AnimeDocumentElasticsearchException;
 import com.example.anime.domain.anime.model.AnimeDocument;
 import com.example.anime.domain.anime.repository.elasticsearch.AnimeDocumentCursorRepository;
+import com.example.anime.domain.character.exception.CharacterDocumentElasticsearchException;
 import com.example.anime.global.dto.DocumentSlice;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 public class AnimeDocumentCursorRepositoryImpl implements AnimeDocumentCursorRepository {
     private final ElasticsearchClient elasticsearchClient;
 
@@ -35,8 +37,8 @@ public class AnimeDocumentCursorRepositoryImpl implements AnimeDocumentCursorRep
             Long[] lastSortValues = cursorId == null ? null : new Long[] {cursorId};
             return searchAfter(lastSortValues, size, animeName);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw NotFoundAnimeDocumentException.getInstance();
+            log.error("Elasticsearch search failed for anime name: {}", animeName, e);
+            throw AnimeDocumentElasticsearchException.getInstance();
         }
     }
 
