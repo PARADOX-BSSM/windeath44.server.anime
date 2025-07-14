@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Document(indexName="character")
@@ -26,5 +27,5 @@ public class CharacterDocument {
     private String imageUrl;
     private CharacterState state;
     private Long bowCount;
-    private LocalDateTime deathOfDay;
+    private LocalDate deathOfDay;
 }

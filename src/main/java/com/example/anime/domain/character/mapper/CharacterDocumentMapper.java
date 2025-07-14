@@ -6,6 +6,7 @@ import com.example.anime.domain.character.model.CharacterState;
 import com.example.anime.global.dto.DocumentSlice;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class CharacterDocumentMapper {
         String imageUrl =  characterDocument.getImageUrl();
         CharacterState state =  characterDocument.getState();
         Long bowCount = characterDocument.getBowCount();
-        LocalDateTime deathOfDay = characterDocument.getDeathOfDay();
+        LocalDate deathOfDay = characterDocument.getDeathOfDay();
 
         return CharacterResponse.builder()
                 .characterId(characterId)

@@ -12,6 +12,7 @@ import com.example.grpc.GetCharacterResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class CharacterMapper {
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
-    LocalDateTime deathOfDay = characterRequest.deathOfDay();
+    LocalDate deathOfDay = characterRequest.deathOfDay();
     String saying =  characterRequest.saying();
 
     return Character.builder()
@@ -44,7 +45,7 @@ public class CharacterMapper {
     String deathReason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
-    LocalDateTime deathOfDay = character.getDeathOfDay();
+    LocalDate deathOfDay = character.getDeathOfDay();
     CharacterState state = character.getState();
     Long animeId = character.getAnimeId();
     Integer age = character.getAge();
