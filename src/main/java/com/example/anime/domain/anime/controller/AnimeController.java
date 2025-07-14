@@ -21,7 +21,7 @@ public class AnimeController {
   @GetMapping
   public ResponseEntity<ResponseDto<CursorPage<AnimeResponse>>> findAll(@RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam("size") int size) {
     CursorPage<AnimeResponse> animeList = animeService.findAllByCursorId(cursorId, size);
-    ResponseDto<CursorPage<AnimeResponse>> responseDto = HttpUtil.success("find animes with cursorId", animeList);
+    ResponseDto<CursorPage<AnimeResponse>> responseDto = HttpUtil.success("find animes", animeList);
     return ResponseEntity.ok(responseDto);
   }
 

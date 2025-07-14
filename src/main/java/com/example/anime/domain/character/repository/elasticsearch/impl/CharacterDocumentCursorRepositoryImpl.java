@@ -7,13 +7,11 @@ import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.example.anime.domain.anime.exception.NotFoundAnimeDocumentException;
 import com.example.anime.domain.character.exception.CharacterDocumentElasticsearchException;
 import com.example.anime.domain.character.model.CharacterDocument;
 import com.example.anime.domain.character.repository.elasticsearch.CharacterDocumentCursorRepository;
 import com.example.anime.global.dto.DocumentSlice;
 import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
