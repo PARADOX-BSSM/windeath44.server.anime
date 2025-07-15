@@ -2,12 +2,11 @@ package com.example.anime.domain.character.mapper;
 
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.CharacterDocument;
-import com.example.anime.domain.character.model.CharacterState;
+import com.example.anime.domain.character.model.type.CharacterState;
 import com.example.anime.global.dto.DocumentSlice;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component

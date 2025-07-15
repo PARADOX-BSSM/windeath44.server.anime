@@ -1,5 +1,6 @@
 package com.example.anime.domain.character.model;
 
+import com.example.anime.domain.character.model.type.CharacterState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -8,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Document(indexName="character")
 @JsonIgnoreProperties(ignoreUnknown = true)

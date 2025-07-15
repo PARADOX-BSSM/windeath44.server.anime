@@ -3,6 +3,8 @@ package com.example.anime.domain.character.model;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.model.type.CauseOfDeath;
+import com.example.anime.domain.character.model.type.CharacterState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +29,8 @@ public class Character {
   private String name;
   private Integer age;
   private Long lifeTime;
-  private String deathReason;
+  @Enumerated(EnumType.STRING)
+  private CauseOfDeath deathReason;
   private String imageUrl;
   private String saying;
   @Enumerated(EnumType.STRING)
@@ -41,13 +44,17 @@ public class Character {
     this.state = CharacterState.NOT_MEMORIALIZING;
   }
 
+  public String getDeathReason() {
+    return deathReason.getDeathReason();
+  }
+
   public void memorializing() {
     this.state = CharacterState.MEMORIALIZING;
   }
 
   public void update(CharacterRequest characterUpdateRequest) {
     String name = characterUpdateRequest.name();
-    String deathReason = characterUpdateRequest.deathReason();
+    CauseOfDeath deathReason = CauseOfDeath.valueOf(characterUpdateRequest.deathReason());
     Long lifeTime = characterUpdateRequest.lifeTime();
     Integer age = characterUpdateRequest.age();
     LocalDate deathOfDay = characterUpdateRequest.deathOfDay();
