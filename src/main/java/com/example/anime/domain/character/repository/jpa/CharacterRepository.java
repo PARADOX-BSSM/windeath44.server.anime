@@ -2,6 +2,7 @@ package com.example.anime.domain.character.repository.jpa;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.model.Character;
+import com.example.anime.domain.character.model.type.CauseOfDeath;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,5 +50,9 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   @Query("select c from Character c where c.name like %:name% and c.characterId < :cursorId order by c.characterId desc")
   Slice<Character> findAllByCursorIdAndName(String name, Long cursorId, Pageable pageable);
 
+  @Query("select c from Character c where c.deathReason = :deathReason")
+  Slice<Character> findAllPageableByDeathReason(CauseOfDeath deathReason, Pageable pageable);
 
+  @Query("select c from Character c where c.characterId <= :cursorId and c.deathReason = :deathReason order by c.characterId desc")
+  Slice<Character> findAllByCursorIdAndDeathReason(CauseOfDeath deathReason, Long cursorId, Pageable pageable);
 }

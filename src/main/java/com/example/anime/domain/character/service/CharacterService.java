@@ -6,6 +6,7 @@ import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
+import com.example.anime.domain.character.model.type.CauseOfDeath;
 import com.example.anime.domain.character.repository.jpa.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
@@ -83,6 +84,18 @@ public class CharacterService {
     Slice<Character> characterSlice = cursorId == null
             ? characterRepository.findAllPageableByName(name, pageable)
             : characterRepository.findAllByCursorIdAndName(name, cursorId, pageable);
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
+
+  public CursorPage<CharacterResponse> findAllByDeathReason(String deathReason, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
+
+    Slice<Character> characterSlice = cursorId == null
+            ? characterRepository.findAllPageableByDeathReason(causeOfDeath, pageable)
+            : characterRepository.findAllByCursorIdAndDeathReason(causeOfDeath, cursorId, pageable);
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
