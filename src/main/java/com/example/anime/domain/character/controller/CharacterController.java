@@ -56,14 +56,14 @@ public class CharacterController {
   }
 
   @GetMapping("/search/anime")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("animeId") Long animeId, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     List<Long> characterIds = characterService.findIdsByAnime(animeId, size, cursorId);
     ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by anime id", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsByDeathReason(@RequestParam("deathReason") String deathReason, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     CursorPage<CharacterResponse> characterResponses = characterDocumentService.findAllByDeathReason(deathReason, cursorId, size);
     ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids by death reason", characterResponses);
     return ResponseEntity.ok(responseDto);
