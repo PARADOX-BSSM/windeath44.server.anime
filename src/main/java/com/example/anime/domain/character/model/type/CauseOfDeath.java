@@ -19,7 +19,7 @@ public enum CauseOfDeath {
     Homicide("타살"), // 타살
     SuddenDeath("돌연사") // 돌연사
     ;
-    String deathReason;
+    private final String deathReason;
     private final static Map<String, CauseOfDeath> deathReasonMap = Arrays.stream(values())
                     .collect(Collectors.toMap(CauseOfDeath::getDeathReason, Function.identity()));
 

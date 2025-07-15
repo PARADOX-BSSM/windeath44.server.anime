@@ -1,5 +1,6 @@
 package com.example.anime.domain.character.model;
 
+import com.example.anime.domain.character.model.type.CauseOfDeath;
 import com.example.anime.domain.character.model.type.CharacterState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -23,9 +24,13 @@ public class CharacterDocument {
     private Long lifeTime;
     private String saying;
     @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")
-    private String deathReason;
+    private CauseOfDeath deathReason;
     private String imageUrl;
     private CharacterState state;
     private Long bowCount;
     private LocalDate deathOfDay;
+
+    public String getDeathReason() {
+        return this.deathReason.getDeathReason();
+    }
 }
