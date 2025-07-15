@@ -63,7 +63,6 @@ public class AnimeScheduler {
   }
 
   private void checkCacheAnime(LaftelResultResponse animeResponse) {
-
     if (offset == 0) {
       cachedId = animeResponse.getFirstId();
     }
