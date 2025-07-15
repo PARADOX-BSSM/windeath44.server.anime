@@ -1,19 +1,17 @@
 package com.example.anime.domain.character.mapper;
-
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
 import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.Character;
-import com.example.anime.domain.character.model.CharacterState;
+import com.example.anime.domain.character.model.type.CauseOfDeath;
+import com.example.anime.domain.character.model.type.CharacterState;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -21,7 +19,7 @@ public class CharacterMapper {
 
   public Character toCharacter(CharacterRequest characterRequest, Anime anime) {
     String name = characterRequest.name();
-    String deathReason = characterRequest.deathReason();
+    CauseOfDeath deathReason = CauseOfDeath.valueOfDeathReason(characterRequest.deathReason());
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
     LocalDate deathOfDay = characterRequest.deathOfDay();

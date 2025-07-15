@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 
 public class AnimeTitleSet {
     private Set<String> cachedTitleSet = new HashSet<>();
-    private static final Pattern pattern = Pattern.compile("\\d+기.*$");
+    private static final Pattern pattern = Pattern.compile(
+            "^\\((?=.*무삭제)?(?=.*(자막|더빙))?.*?\\)\\s*|\\d+기.*$"
+    );
 
     public void addTitleAnimes(LaftelResultResponse animes) {
         animes.results().forEach(anime -> {
