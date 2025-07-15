@@ -1,6 +1,5 @@
 package com.example.anime.global.dto;
 
-import com.example.anime.domain.anime.model.AnimeDocument;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

@@ -10,9 +10,8 @@ public enum ErrorCode {
   ANIME_NOT_FOUND(404, "Anime not found"),
   ANIME_ALREADY_CACHED(500, "Anime already cached"),
   CHARACTER_NOT_FOUND(404, "Character not found"),
-  FILE_UPLOAD_FAILED(500, "File upload failed"),
-  ANIME_DOCUMENT_ELASTICSEARCH_ERROR(500, "Elastic search error with character document" ),
-  CHARACTER_DOCUMENT_ELASTICSEARCH_ERROR(500, "Elastic search error with character document"),;
+  FILE_UPLOAD_FAILED(500, "File upload failed")
+  ;
   private int status;
   private String message;
 }

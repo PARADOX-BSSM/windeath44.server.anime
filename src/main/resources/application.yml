@@ -16,8 +16,6 @@ spring:
       repositories:
         enabled: true
 
-  elasticsearch:
-    uris: ${ELASTICSEARCH_URI:http://localhost:9200}
 server:
   port:
     ${SERVER_PORT}

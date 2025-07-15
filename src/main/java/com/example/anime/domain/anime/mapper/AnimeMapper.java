@@ -3,8 +3,6 @@ package com.example.anime.domain.anime.mapper;
 import com.example.anime.domain.anime.dto.response.RestAnimeResponse;
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
-import com.example.anime.domain.anime.model.AnimeDocument;
-import com.example.anime.global.dto.DocumentSlice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
