@@ -1,6 +1,6 @@
-package com.example.anime.domain.anime.repository.impl;
+package com.example.anime.domain.anime.repository.jdbc.impl;
 import com.example.anime.domain.anime.model.Anime;
-import com.example.anime.domain.anime.repository.JdbcAnimeRepository;
+import com.example.anime.domain.anime.repository.jdbc.JdbcAnimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;

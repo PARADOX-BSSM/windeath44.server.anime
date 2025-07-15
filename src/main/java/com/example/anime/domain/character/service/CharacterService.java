@@ -2,10 +2,11 @@ package com.example.anime.domain.character.service;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
-import com.example.anime.domain.character.repository.CharacterRepository;
+import com.example.anime.domain.character.repository.jpa.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,6 @@ public class CharacterService {
     Character character = characterRepository.findById(characterId)
             .orElseThrow(NotFoundCharacterException::getInstance);
     return character;
-  }
-
-  public List<Character> findAllByAnime(Anime anime) {
-    List<Character> characterList = characterRepository.findAllByAnime(anime);
-     return characterList;
   }
 
   public CursorPage<CharacterResponse> findAll(Long cursorId, int size) {
@@ -92,10 +88,11 @@ public class CharacterService {
   }
 
   @Transactional(readOnly = false)
-  public Long create(CharacterRequest characterRequest, Anime anime) {
+  public CharacterIdResponse create(CharacterRequest characterRequest, Anime anime) {
     Character character = characterMapper.toCharacter(characterRequest, anime);
     Character savedCharacter = characterRepository.save(character);
-    return savedCharacter.getCharacterId();
+    CharacterIdResponse characterIdsResponse = characterMapper.toCharacterIdResponse(savedCharacter);
+    return characterIdsResponse;
   }
 
   @Transactional(readOnly = false)

@@ -1,5 +1,6 @@
 package com.example.anime.domain.anime.model;
 
+import com.example.anime.domain.character.model.Character;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +26,8 @@ public class Anime {
   private List<String> genres;
 
   private String imageUrl;
+
+  @OneToMany(mappedBy="anime", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<Character> characterList;
+
 }

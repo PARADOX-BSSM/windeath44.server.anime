@@ -8,8 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -30,10 +29,11 @@ public class Character {
   private Long lifeTime;
   private String deathReason;
   private String imageUrl;
+  private String saying;
   @Enumerated(EnumType.STRING)
   private CharacterState state;
   private Long bowCount;
-  private LocalDateTime deathOfDay;
+  private LocalDate deathOfDay;
 
   @PrePersist
   public void init() {
@@ -50,7 +50,7 @@ public class Character {
     String deathReason = characterUpdateRequest.deathReason();
     Long lifeTime = characterUpdateRequest.lifeTime();
     Integer age = characterUpdateRequest.age();
-    LocalDateTime deathOfDay = characterUpdateRequest.deathOfDay();
+    LocalDate deathOfDay = characterUpdateRequest.deathOfDay();
 
     this.name = name;
     this.age = age;
@@ -61,5 +61,9 @@ public class Character {
 
   public void updateImage(String imageUrl) {
     this.imageUrl = imageUrl;
+  }
+
+  public Long getAnimeId() {
+    return this.anime.getAnimeId();
   }
 }

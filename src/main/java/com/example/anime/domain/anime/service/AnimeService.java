@@ -1,16 +1,14 @@
 package com.example.anime.domain.anime.service;
 
-import com.example.anime.domain.anime.dto.response.RestAnimeResponse;
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.anime.mapper.AnimeMapper;
-import com.example.anime.domain.anime.repository.AnimeRepository;
+import com.example.anime.domain.anime.repository.jpa.AnimeRepository;
 import com.example.anime.domain.anime.dto.response.AnimeResponse;
 import com.example.anime.domain.anime.exception.NotFoundAnimeException;
 import com.example.anime.global.dto.CursorPage;
 import com.example.anime.global.dto.LaftelResultResponse;
 import lombok.RequiredArgsConstructor;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -25,23 +23,17 @@ import java.util.List;
 public class AnimeService {
   private final AnimeRepository animeRepository;
   private final AnimeMapper animeMapper;
+  private final AnimeDocumentService animeDocumentService;
 
-  public CursorPage<AnimeResponse> findAllByCursorId(Long cursorId, int size) {
+  public CursorPage<AnimeResponse> findAll(Long cursorId, int size, String animeName) {
+    return animeName != null ? animeDocumentService.findAllByName(animeName, cursorId, size) : findAllByName(cursorId, size);
+  }
+
+  private CursorPage<AnimeResponse> findAllByName(Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
     Slice<Anime> animeSlice = cursorId == null
             ? animeRepository.findRecentAnimes(pageable)
             : animeRepository.findRecentAnimesByCursorId(cursorId, pageable);
-
-    List<AnimeResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
-    return new CursorPage<>(animeList, animeSlice.hasNext());
-  }
-
-  public CursorPage<AnimeResponse> findAllByName(String animeName, Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size);
-    Slice<Anime> animeSlice = cursorId == null
-            ? animeRepository.findRecentAnimesByName(pageable, animeName)
-            : animeRepository.findRecentAnimesByCursorIdAndName(cursorId, pageable, animeName);
-
     List<AnimeResponse> animeList = animeMapper.toAnimePageListResponse(animeSlice);
     return new CursorPage<>(animeList, animeSlice.hasNext());
   }

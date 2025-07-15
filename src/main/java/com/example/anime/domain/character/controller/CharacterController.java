@@ -1,7 +1,9 @@
 package com.example.anime.domain.character.controller;
 
+import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.service.CharacterDocumentService;
 import com.example.anime.domain.character.service.CharacterService;
 import com.example.anime.domain.character.service.usecase.CharacterImageUploadUseCase;
 import com.example.anime.domain.character.service.usecase.CreateCharacterUseCase;
@@ -22,12 +24,13 @@ import java.util.List;
 public class CharacterController {
   private final CharacterService characterService;
   private final CreateCharacterUseCase createCharacterUseCase;
+  private final CharacterDocumentService characterDocumentService;
   private final CharacterImageUploadUseCase characterImageUploadUseCase;
 
   @PostMapping
-  public ResponseEntity<ResponseDto<Long>> create(@RequestBody @Valid CharacterRequest characterRequest) {
-    Long characterId = createCharacterUseCase.execute(characterRequest);
-    ResponseDto<Long> responseDto = HttpUtil.success("create character", characterId);
+  public ResponseEntity<ResponseDto<CharacterIdResponse>> create(@RequestBody @Valid CharacterRequest characterRequest) {
+    CharacterIdResponse characterId = createCharacterUseCase.execute(characterRequest);
+    ResponseDto<CharacterIdResponse> responseDto = HttpUtil.success("create character", characterId);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -53,16 +56,16 @@ public class CharacterController {
   }
 
   @GetMapping("/search/anime")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("anime-id") Long animeId, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
+  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("animeId") Long animeId, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     List<Long> characterIds = characterService.findIdsByAnime(animeId, size, cursorId);
     ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by anime id", characterIds);
     return ResponseEntity.ok(responseDto);
   }
 
   @GetMapping("/search/death-reason")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByDeathReason(@RequestParam("death-reason") String deathReason, @RequestParam(value = "cursor-id", required = false) Long cursorId, @RequestParam int size) {
-    List<Long> characterIds = characterService.findIdsByDeathReason(deathReason, cursorId, size);
-    ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by death reason", characterIds);
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsByDeathReason(@RequestParam("deathReason") String deathReason, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponses = characterDocumentService.findAllByDeathReason(deathReason, cursorId, size);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids by death reason", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -75,7 +78,7 @@ public class CharacterController {
 
   @GetMapping("/search/name")
   public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findCharacterResponsesByCharacterName(@RequestParam("name") String name, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-    CursorPage<CharacterResponse> characterResponses = characterService.findAllByName(name, cursorId, size);
+    CursorPage<CharacterResponse> characterResponses = characterDocumentService.findAllByName(name, cursorId, size);
     ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find characters", characterResponses);
     return ResponseEntity.ok(responseDto);
   }

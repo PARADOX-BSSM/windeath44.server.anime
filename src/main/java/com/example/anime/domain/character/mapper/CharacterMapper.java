@@ -2,14 +2,17 @@ package com.example.anime.domain.character.mapper;
 
 import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.dto.request.CharacterRequest;
+import com.example.anime.domain.character.dto.response.CharacterIdResponse;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.model.Character;
+import com.example.anime.domain.character.model.CharacterState;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,12 +24,14 @@ public class CharacterMapper {
     String deathReason = characterRequest.deathReason();
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
-    LocalDateTime deathOfDay = characterRequest.deathOfDay();
+    LocalDate deathOfDay = characterRequest.deathOfDay();
+    String saying =  characterRequest.saying();
 
     return Character.builder()
             .anime(anime)
             .name(name)
             .age(age)
+            .saying(saying)
             .deathReason(deathReason)
             .lifeTime(lifeTime)
             .deathOfDay(deathOfDay)
@@ -40,16 +45,24 @@ public class CharacterMapper {
     String deathReason = character.getDeathReason();
     String imageUrl = character.getImageUrl();
     Long bow_count = character.getBowCount();
-    LocalDateTime deathOfDay = character.getDeathOfDay();
+    LocalDate deathOfDay = character.getDeathOfDay();
+    CharacterState state = character.getState();
+    Long animeId = character.getAnimeId();
+    Integer age = character.getAge();
+    String saying = character.getSaying();
 
     return CharacterResponse.builder()
             .characterId(characterId)
+            .animeId(animeId)
             .name(name)
             .lifeTime(lifeTime)
             .deathReason(deathReason)
             .imageUrl(imageUrl)
-            .bow_count(bow_count)
-            .death_of_day(deathOfDay)
+            .bowCount(bow_count)
+            .deathOfDay(deathOfDay)
+            .state(state.toString())
+            .age(age)
+            .saying(saying)
             .build();
   }
 
@@ -95,5 +108,9 @@ public class CharacterMapper {
             .stream()
             .map(this::toCharacterResponse)
             .toList();
+  }
+
+  public CharacterIdResponse toCharacterIdResponse(Character savedCharacter) {
+    return new CharacterIdResponse(savedCharacter.getCharacterId());
   }
 }
