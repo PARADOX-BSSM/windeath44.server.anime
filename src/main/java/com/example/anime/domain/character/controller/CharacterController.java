@@ -54,9 +54,9 @@ public class CharacterController {
   }
 
   @GetMapping("/search/anime")
-  public ResponseEntity<ResponseDto<List<Long>>> findIdsByAnimeId(@RequestParam("animeId") Long animeId, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-    List<Long> characterIds = characterService.findIdsByAnime(animeId, size, cursorId);
-    ResponseDto<List<Long>> responseDto = HttpUtil.success("find character ids by anime id", characterIds);
+  public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsByAnimeId(@RequestParam("animeId") List<Long> animeId, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
+    CursorPage<CharacterResponse> characterResponse = characterService.findByAnime(animeId, size, cursorId);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character by anime id", characterResponse);
     return ResponseEntity.ok(responseDto);
   }
 
