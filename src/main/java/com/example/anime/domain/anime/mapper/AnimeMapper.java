@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnimeMapper {
 
-  private AnimeResponse toAnimeResponse(Anime anime) {
+  public AnimeResponse toAnimeResponse(Anime anime) {
     Long animeId = anime.getAnimeId();
     String name = anime.getName();
     List<String> tags = anime.getGenres();

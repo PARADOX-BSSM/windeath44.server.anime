@@ -9,6 +9,7 @@ import com.example.anime.domain.character.model.type.CharacterState;
 import com.example.avro.CharacterAvroSchema;
 import com.example.avro.MemorialAvroSchema;
 import com.example.grpc.GetCharacterResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class CharacterMapper {
     Long lifeTime = characterRequest.lifeTime();
     Integer age = characterRequest.age();
     LocalDate deathOfDay = characterRequest.deathOfDay();
+
     String saying =  characterRequest.saying();
 
     return Character.builder()

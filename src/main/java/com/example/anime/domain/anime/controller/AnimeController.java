@@ -22,6 +22,13 @@ public class AnimeController {
     return ResponseEntity.ok(responseDto);
   }
 
+  @GetMapping("/{anime-id}")
+  public ResponseEntity<ResponseDto<AnimeResponse>> findById(@PathVariable("anime-id") Long animeId) {
+    AnimeResponse anime = animeService.findById(animeId);
+    ResponseDto<AnimeResponse> responseDto = HttpUtil.success("find anime", anime);
+    return ResponseEntity.ok(responseDto);
+  }
+
   @DeleteMapping("/{anime-id}")
   public ResponseEntity<ResponseDto<Void>> delete(@PathVariable("anime-id") Long animeId) {
     animeService.delete(animeId);

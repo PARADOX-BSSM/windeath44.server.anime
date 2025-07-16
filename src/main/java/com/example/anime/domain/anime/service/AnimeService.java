@@ -71,4 +71,10 @@ public class AnimeService {
             .toList();
     animeRepository.bulkInsert(animeList);
   }
+
+  public AnimeResponse findById(Long animeId) {
+    Anime anime = findAnime(animeId);
+    AnimeResponse animeResponse = animeMapper.toAnimeResponse(anime);
+    return animeResponse;
+  }
 }
