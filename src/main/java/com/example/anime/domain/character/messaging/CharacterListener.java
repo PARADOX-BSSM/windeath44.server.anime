@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class CharacterListener {
   private final MemorializingCharacterUseCase memorializingCharacterUseCase;
 
-  @KafkaListener(topics = "character-memorializing", groupId = "memorial")
+  @KafkaListener(topics = "character-memorializing-request", groupId = "memorial")
   public void memorializingCharacter(MemorialAvroSchema message) {
     memorializingCharacterUseCase.memorializing(message);
   }

@@ -3,7 +3,7 @@
   "name": "MemorialAvroSchema",
   "namespace": "com.example.avro",
   "fields": [
-    {"name": "memorialId", "type": "string"},
+    {"name": "memorialId", "type": "long"},
     {"name": "writerId", "type": "string"},
     {"name": "content", "type": "string"},
     {"name": "characterId", "type": "long"}
