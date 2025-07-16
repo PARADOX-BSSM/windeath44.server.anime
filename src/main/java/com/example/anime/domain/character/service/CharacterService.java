@@ -53,13 +53,14 @@ public class CharacterService {
     return characterResponse;
   }
 
-  public List<Long> findIdsByAnime(Long animeId, int size, Long cursorId) {
+  public CursorPage<CharacterResponse> findByAnime(List<Long> animeId, int size, Long cursorId) {
     Pageable pageable = PageRequest.of(0, size);
 
-    List<Long> characterIds = cursorId == null
-            ? characterRepository.findIdsByAnimeId(animeId, pageable)
-            :  characterRepository.findIdsByAnimeIdAndCursorId(animeId, cursorId, pageable);
-    return characterIds;
+    Slice<Character> characterList = cursorId == null
+            ? characterRepository.findByAnimeId(animeId, pageable)
+            :  characterRepository.findByAnimeIdAndCursorId(animeId, cursorId, pageable);
+    List<CharacterResponse> characterResponseList = characterMapper.toCharacterListResponse(characterList);
+    return new CursorPage<>(characterResponseList, characterList.hasNext());
   }
 
   public List<Long> findIdsByDeathReason(String deathReason, Long cursorId, int size) {

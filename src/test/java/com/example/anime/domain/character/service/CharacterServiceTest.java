@@ -238,19 +238,19 @@ class CharacterServiceTest {
     }
 
     @Test
-    @DisplayName("findIdsByAnime should return list of character ids for given anime id")
+    @DisplayName("findByAnime should return list of character ids for given anime id")
     void findIdsByAnime_ShouldReturnCharacterIdList() {
         // Arrange
         List<Long> characterIds = Arrays.asList(1L, 2L, 3L);
-        when(characterRepository.findIdsByAnimeId(1L, pageable)).thenReturn(characterIds);
+        when(characterRepository.findByAnimeId(1L, pageable)).thenReturn(characterIds);
 
         // Act
-        List<Long> result = characterService.findIdsByAnime(1L, 10, 2L);
+        List<Long> result = characterService.findByAnime(1L, 10, 2L);
 
         // Assert
         assertNotNull(result);
         assertEquals(3, result.size());
         assertEquals(characterIds, result);
-        verify(characterRepository, times(1)).findIdsByAnimeId(1L, pageable);
+        verify(characterRepository, times(1)).findByAnimeId(1L, pageable);
     }
 }
