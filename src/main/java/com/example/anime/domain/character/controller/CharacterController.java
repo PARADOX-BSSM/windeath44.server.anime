@@ -11,6 +11,7 @@ import com.example.anime.global.dto.ResponseDto;
 import com.example.anime.global.util.HttpUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class CharacterController {
     return ResponseEntity.ok(responseDto);
   }
 
-  @PatchMapping("/image/{character-id}")
+  @PatchMapping(value="/image/{character-id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<ResponseDto<Void>> uploadImage(@PathVariable("character-id") Long characterId, @RequestParam("image") MultipartFile image) {
     characterImageUploadUseCase.upload(characterId, image);
     ResponseDto<Void> responseDto = HttpUtil.success("upload image");
