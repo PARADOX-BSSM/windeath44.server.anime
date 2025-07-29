@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -17,17 +16,16 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> customGlobalExceptionHandler(GlobalException e) {
     ErrorCode errorCode = e.getErrorCode();
     int status = errorCode.getStatus();
-    errorLogging(e);
+    errorLogging(errorCode, e);
     return new ResponseEntity<>(
             new ErrorResponse(errorCode),
             HttpStatus.valueOf(status)
     );
   }
 
-  private void errorLogging(RuntimeException e) {
-    log.error(e.getMessage());
+  private void errorLogging(ErrorCode errorCode, GlobalException e) {
+    log.error("error message : {} || error status : {}", errorCode.getMessage(), errorCode.getStatus());
     log.error(e.getStackTrace().toString());
   }
-
 
 }

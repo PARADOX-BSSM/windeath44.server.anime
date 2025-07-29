@@ -1,5 +1,4 @@
 package com.example.anime.global.error;
-
 import com.example.anime.global.error.exception.ErrorCode;
 
 public record ErrorResponse (

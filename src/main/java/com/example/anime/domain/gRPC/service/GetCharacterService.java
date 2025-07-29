@@ -1,12 +1,9 @@
 package com.example.anime.domain.gRPC.service;
 
-import com.example.anime.domain.anime.domain.Anime;
-import com.example.anime.domain.anime.service.AnimeService;
-import com.example.anime.domain.character.domain.Character;
-import com.example.anime.domain.character.domain.mapper.CharacterMapper;
-import com.example.anime.domain.character.domain.repository.CharacterRepository;
+import com.example.anime.domain.character.model.Character;
+import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.service.CharacterService;
-import com.example.anime.domain.character.service.exception.NotFoundCharacterException;
+import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.grpc.GetCharacterRequest;
 import com.example.grpc.GetCharacterResponse;
 import com.example.grpc.GetCharacterServiceGrpc;
