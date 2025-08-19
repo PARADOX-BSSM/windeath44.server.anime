@@ -47,6 +47,7 @@ public class CharacterService {
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 
+
   public CharacterResponse find(Long characterId) {
     Character character = findCharacterById(characterId);
     CharacterResponse characterResponse = characterMapper.toCharacterResponse(character);
@@ -132,5 +133,44 @@ public class CharacterService {
   public void updateImage(Long characterId, String imageUrl) {
     Character character = findCharacterById(characterId);
     character.updateImage(imageUrl);
+  }
+
+  public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+    Slice<Character> characterSlice = null;
+    if (name != null && animeId != null && deathReason != null) {
+      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
+      characterSlice = cursorId == null
+              ? characterRepository.findAllPageableIntegrated(name, animeId, causeOfDeath, pageable)
+              : characterRepository.findAllPageableIntegratedCursorId(name, animeId, causeOfDeath, cursorId,pageable);
+    }
+    else if (name != null && animeId != null) {
+      characterSlice = cursorId == null
+              ? characterRepository.findAllPageableByNameAndAnimeId(name, animeId, pageable)
+              : characterRepository.findAllPageableByNameAndAnimeIdCursor(name, animeId, cursorId,pageable);
+    }
+    else if (name != null && deathReason != null) {
+      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
+      characterSlice = cursorId == null
+              ? characterRepository.findAllPageableByNameAndDeathReason(name, causeOfDeath, pageable)
+              : characterRepository.findAllPageableByNameAndDeathReasonCursor(name, causeOfDeath, cursorId,pageable);
+    }
+    else if (animeId != null && deathReason != null) {
+      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
+      characterSlice = cursorId == null
+              ? characterRepository.findAllPageableByDeathReasonAndAnimeId(animeId, causeOfDeath, pageable)
+              : characterRepository.findAllPageableByDeathReasonAndAnimeIdCursor(animeId, causeOfDeath, cursorId,pageable);
+    }
+    else if (name != null) {
+      return findAllByName(name, cursorId, size);
+    }
+    else if (animeId != null) {
+      return findByAnime(animeId, size, cursorId);
+    }
+    else if (deathReason != null) {
+      return findAllByDeathReason(deathReason, cursorId, size);
+    }
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
+    return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 }
