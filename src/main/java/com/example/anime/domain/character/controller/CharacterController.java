@@ -63,7 +63,7 @@ public class CharacterController {
   @GetMapping("/search/integrated")
   public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsIntegrated(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "animeId", required = false) List<Long> animeId, @RequestParam(value = "deathReason", required = false) String deathReason, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
     CursorPage<CharacterResponse> characterResponses = characterService.findAllIntegrated(name, animeId, deathReason, cursorId, size);
-    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids by death reason", characterResponses);
+    ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids integrated", characterResponses);
     return ResponseEntity.ok(responseDto);
   }
 

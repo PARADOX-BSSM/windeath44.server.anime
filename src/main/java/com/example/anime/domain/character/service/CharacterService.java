@@ -170,6 +170,10 @@ public class CharacterService {
     else if (deathReason != null) {
       return findAllByDeathReason(deathReason, cursorId, size);
     }
+    else {
+      return findAll(cursorId, size);
+    }
+    System.out.println(characterSlice.toString());
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
