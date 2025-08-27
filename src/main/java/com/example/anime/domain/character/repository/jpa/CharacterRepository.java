@@ -1,10 +1,11 @@
 package com.example.anime.domain.character.repository.jpa;
 
-import com.example.anime.domain.anime.model.Anime;
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.model.type.CauseOfDeath;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,27 +49,12 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   @Query("select c from Character c where c.characterId <= :cursorId and c.deathReason = :deathReason order by c.characterId desc")
   Slice<Character> findAllByCursorIdAndDeathReason(CauseOfDeath deathReason, Long cursorId, Pageable pageable);
 
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.deathReason = :deathReason and c.anime.animeId in :animeId")
-  Slice<Character> findAllPageableIntegrated(String name, List<Long> animeId, CauseOfDeath deathReason, Pageable pageable);
-
-  @Query("select c from Character c where c.deathReason = :deathReason and c.anime.animeId in :animeId")
-  Slice<Character> findAllPageableByDeathReasonAndAnimeId(List<Long> animeId, CauseOfDeath deathReason, Pageable pageable);
-
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.deathReason = :deathReason")
-  Slice<Character> findAllPageableByNameAndDeathReason(String name, CauseOfDeath deathReason, Pageable pageable);
-
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.anime.animeId in :animeId")
-  Slice<Character> findAllPageableByNameAndAnimeId(String name, List<Long> animeId, Pageable pageable);
-
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.deathReason = :deathReason and c.anime.animeId in :animeId and c.characterId < :cursorId order by c.characterId desc")
-  Slice<Character> findAllPageableIntegratedCursorId(String name, List<Long> animeId, CauseOfDeath deathReason, Long cursorId, Pageable pageable);
-
-  @Query("select c from Character c where c.deathReason = :deathReason and c.anime.animeId in :animeId and c.characterId < :cursorId order by c.characterId desc")
-  Slice<Character> findAllPageableByDeathReasonAndAnimeIdCursor(List<Long> animeId, CauseOfDeath deathReason, Long cursorId, Pageable pageable);
-
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.deathReason = :deathReason and c.characterId < :cursorId order by c.characterId desc")
-  Slice<Character> findAllPageableByNameAndDeathReasonCursor(String name, CauseOfDeath deathReason, Long cursorId, Pageable pageable);
-
-  @Query("select c from Character c where c.name like concat('%', :name, '%') and c.anime.animeId in :animeId and c.characterId < :cursorId order by c.characterId desc")
-  Slice<Character> findAllPageableByNameAndAnimeIdCursor(String name, List<Long> animeId, Long cursorId, Pageable pageable);
+  @Query("SELECT c FROM Character c WHERE  (:cursorId IS NULL OR c.characterId > :cursorId)  AND (:name IS NULL OR c.name like %:name%) AND (:animeId IS NULL OR c.anime.animeId in (:animeId)) AND (:deathReason IS NULL OR c.deathReason = :deathReason)")
+  Page<Character> findAllWithCursor(
+          @Param("name") String name,
+          @Param("animeId") List<Long> animeId,
+          @Param("deathReason") CauseOfDeath deathReason,
+          @Param("cursorId") Long cursorId,
+          Pageable pageable
+  );
 }

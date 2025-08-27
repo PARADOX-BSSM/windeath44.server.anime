@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,62 +139,14 @@ public class CharacterService {
   public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
 
-    Slice<Character> characterSlice = null;
+    // 변환
+    boolean isNotNullDeathOfReason = deathReason != null;
+    CauseOfDeath causeOfDeath = isNotNullDeathOfReason ? CauseOfDeath.valueOfDeathReason(deathReason) : null;
 
+    List<Long> animeIds = (animeId == null || animeId.isEmpty()) ? null : animeId;
 
-    // name, anime id, death reason, cursor id에 따라 조회 결과가 달라짐
-    // 각각 flag를 두고, flag에 따라 분기
+    Slice<Character> characterSlice = characterRepository.findAllWithCursor(name, animeIds, causeOfDeath, cursorId, pageable);
 
-    boolean isNotNullName = name != null;
-    boolean isNotNullAnimeId = animeId != null;
-    boolean isNotNullDeathReason = deathReason != null;
-
-
-
-
-
-
-
-
-
-
-    if (name != null && animeId != null && deathReason != null) { // 셋 다 될 경우
-      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
-      characterSlice = cursorId == null
-              ? characterRepository.findAllPageableIntegrated(name, animeId, causeOfDeath, pageable)
-              : characterRepository.findAllPageableIntegratedCursorId(name, animeId, causeOfDeath, cursorId, pageable);
-    }
-
-    else if (name != null && animeId != null) { // deathReason만 포함되지 않을 경우
-      characterSlice = cursorId == null
-              ? characterRepository.findAllPageableByNameAndAnimeId(name, animeId, pageable)
-              : characterRepository.findAllPageableByNameAndAnimeIdCursor(name, animeId, cursorId,pageable);
-    }
-    else if (name != null && deathReason != null) { // animeId만 포함되지 않을 경우
-      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
-      characterSlice = cursorId == null
-              ? characterRepository.findAllPageableByNameAndDeathReason(name, causeOfDeath, pageable)
-              : characterRepository.findAllPageableByNameAndDeathReasonCursor(name, causeOfDeath, cursorId,pageable);
-    }
-    else if (animeId != null && deathReason != null) { // name만 포함되지 않았을 경우
-      CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
-      characterSlice = cursorId == null
-              ? characterRepository.findAllPageableByDeathReasonAndAnimeId(animeId, causeOfDeath, pageable)
-              : characterRepository.findAllPageableByDeathReasonAndAnimeIdCursor(animeId, causeOfDeath, cursorId,pageable);
-    }
-
-    else if (name != null) { // name만 있는 경우
-      return findAllByName(name, cursorId, size);
-    }
-    else if (animeId != null) { // animeId만 있는 경우
-      return findByAnime(animeId, size, cursorId);
-    }
-    else if (deathReason != null) { // deathReason만 있는 경우
-      return findAllByDeathReason(deathReason, cursorId, size);
-    }
-    else { // 전부 포함되지 않았을 경우
-      return findAll(cursorId, size);
-    }
     System.out.println(characterSlice.toString());
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
