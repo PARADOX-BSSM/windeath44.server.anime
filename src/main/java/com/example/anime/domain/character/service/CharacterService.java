@@ -137,7 +137,12 @@ public class CharacterService {
 
   public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, Long cursorId, int size) {
     Pageable pageable = PageRequest.of(0, size);
+
     Slice<Character> characterSlice = null;
+
+
+    // name, anime id, death reason, cursor id에 따라 조회 결과가 달라짐
+
     if (name != null && animeId != null && deathReason != null) {
       CauseOfDeath causeOfDeath = CauseOfDeath.valueOfDeathReason(deathReason);
       characterSlice = cursorId == null

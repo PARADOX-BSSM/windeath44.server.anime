@@ -14,14 +14,6 @@ import java.util.List;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Long> {
-  List<Character> findAllByAnime(Anime anime);
-
-  @Query("select c from Character c ")
-  List<Character> findAllByAnimeName(String name);
-  List<Character> findAllByName(String name);
-
-  @Query("select count(c) from Character c where c.anime.animeId = :animeId")
-  Long countBowCountByAnime(@Param("animeId") Long animeId);
 
   @Query("select c from Character c where c.characterId < :cursorId order by c.characterId desc")
   Slice<Character> findAllByCursorId(Long cursorId, Pageable pageable);
