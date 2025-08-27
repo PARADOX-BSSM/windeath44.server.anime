@@ -103,6 +103,21 @@ public class CharacterService {
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 
+  public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    // 변환
+    boolean isNotNullDeathOfReason = deathReason != null;
+    CauseOfDeath causeOfDeath = isNotNullDeathOfReason ? CauseOfDeath.valueOfDeathReason(deathReason) : null;
+
+    List<Long> animeIds = (animeId == null || animeId.isEmpty()) ? null : animeId;
+    Slice<Character> characterSlice = characterRepository.findAllWithCursor(name, animeIds, causeOfDeath, cursorId, pageable);
+
+    System.out.println(characterSlice.toString());
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
+
   @Transactional(readOnly = false)
   public CharacterIdResponse create(CharacterRequest characterRequest, Anime anime) {
     Character character = characterMapper.toCharacter(characterRequest, anime);
@@ -134,21 +149,5 @@ public class CharacterService {
   public void updateImage(Long characterId, String imageUrl) {
     Character character = findCharacterById(characterId);
     character.updateImage(imageUrl);
-  }
-
-  public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, Long cursorId, int size) {
-    Pageable pageable = PageRequest.of(0, size);
-
-    // 변환
-    boolean isNotNullDeathOfReason = deathReason != null;
-    CauseOfDeath causeOfDeath = isNotNullDeathOfReason ? CauseOfDeath.valueOfDeathReason(deathReason) : null;
-
-    List<Long> animeIds = (animeId == null || animeId.isEmpty()) ? null : animeId;
-
-    Slice<Character> characterSlice = characterRepository.findAllWithCursor(name, animeIds, causeOfDeath, cursorId, pageable);
-
-    System.out.println(characterSlice.toString());
-    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
-    return new CursorPage<>(characterList, characterSlice.hasNext());
   }
 }
