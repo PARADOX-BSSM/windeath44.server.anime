@@ -2,6 +2,7 @@ package com.example.anime.domain.character.repository.jpa;
 
 import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.model.type.CauseOfDeath;
+import com.example.anime.domain.character.model.type.CharacterState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -49,11 +50,19 @@ public interface CharacterRepository extends JpaRepository<Character, Long> {
   @Query("select c from Character c where c.characterId <= :cursorId and c.deathReason = :deathReason order by c.characterId desc")
   Slice<Character> findAllByCursorIdAndDeathReason(CauseOfDeath deathReason, Long cursorId, Pageable pageable);
 
-  @Query("SELECT c FROM Character c WHERE  (:cursorId IS NULL OR c.characterId > :cursorId)  AND (:name IS NULL OR c.name like %:name%) AND (:animeId IS NULL OR c.anime.animeId in (:animeId)) AND (:deathReason IS NULL OR c.deathReason = :deathReason)")
+  @Query(
+          "SELECT c FROM Character c " +
+          "WHERE  (:cursorId IS NULL OR c.characterId > :cursorId)  " +
+          "AND (:name IS NULL OR c.name like %:name%) " +
+          "AND (:animeId IS NULL OR c.anime.animeId in (:animeId)) " +
+          "AND (:deathReason IS NULL OR c.deathReason = :deathReason) " +
+          "AND (:characterState IS NULL OR c.state = :characterState)"
+  )
   Page<Character> findAllWithCursor(
           @Param("name") String name,
           @Param("animeId") List<Long> animeId,
           @Param("deathReason") CauseOfDeath deathReason,
+          @Param("characterState") CharacterState characterState,
           @Param("cursorId") Long cursorId,
           Pageable pageable
   );

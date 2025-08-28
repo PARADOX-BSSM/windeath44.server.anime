@@ -38,8 +38,15 @@ public class CharacterQueryController {
     }
 
     @GetMapping("/search/integrated")
-    public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsIntegrated(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "animeId", required = false) List<Long> animeId, @RequestParam(value = "deathReason", required = false) String deathReason, @RequestParam(value = "cursorId", required = false) Long cursorId, @RequestParam int size) {
-        CursorPage<CharacterResponse> characterResponses = characterService.findAllIntegrated(name, animeId, deathReason, cursorId, size);
+    public ResponseEntity<ResponseDto<CursorPage<CharacterResponse>>> findIdsIntegrated(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "animeId", required = false) List<Long> animeId,
+            @RequestParam(value = "deathReason", required = false) String deathReason,
+            @RequestParam(value = "cursorId", required = false) Long cursorId,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "memorialState", required = false) String memorialState // NOT_MEMORIALIZING, MEMORIALIZING
+    ) {
+        CursorPage<CharacterResponse> characterResponses = characterService.findAllIntegrated(name, animeId, deathReason, memorialState, cursorId, size);
         ResponseDto<CursorPage<CharacterResponse>> responseDto = HttpUtil.success("find character ids integrated", characterResponses);
         return ResponseEntity.ok(responseDto);
     }
