@@ -7,6 +7,7 @@ import com.example.anime.domain.character.model.Character;
 import com.example.anime.domain.character.dto.response.CharacterResponse;
 import com.example.anime.domain.character.mapper.CharacterMapper;
 import com.example.anime.domain.character.model.type.CauseOfDeath;
+import com.example.anime.domain.character.model.type.CharacterState;
 import com.example.anime.domain.character.repository.jpa.CharacterRepository;
 import com.example.anime.domain.character.exception.NotFoundCharacterException;
 import com.example.anime.global.dto.CursorPage;
@@ -46,6 +47,7 @@ public class CharacterService {
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
+
 
   public CharacterResponse find(Long characterId) {
     Character character = findCharacterById(characterId);
@@ -97,6 +99,25 @@ public class CharacterService {
     Slice<Character> characterSlice = cursorId == null
             ? characterRepository.findAllPageableByDeathReason(causeOfDeath, pageable)
             : characterRepository.findAllByCursorIdAndDeathReason(causeOfDeath, cursorId, pageable);
+    List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
+    return new CursorPage<>(characterList, characterSlice.hasNext());
+  }
+
+  public CursorPage<CharacterResponse> findAllIntegrated(String name, List<Long> animeId, String deathReason, String memorialState, Long cursorId, int size) {
+    Pageable pageable = PageRequest.of(0, size);
+
+    // 사인 변환
+    boolean isNotNullDeathOfReason = deathReason != null;
+    CauseOfDeath causeOfDeath = isNotNullDeathOfReason ? CauseOfDeath.valueOfDeathReason(deathReason) : null;
+
+    // 캐릭터 추모 상태 변환
+    boolean isNotNullMemorialState = memorialState != null;
+    CharacterState characterState = isNotNullMemorialState ? CharacterState.valueOf(memorialState) : null;
+
+    List<Long> animeIds = (animeId == null || animeId.isEmpty()) ? null : animeId;
+    Slice<Character> characterSlice = characterRepository.findAllWithCursor(name, animeIds, causeOfDeath, characterState, cursorId, pageable);
+
+    System.out.println(characterSlice.toString());
     List<CharacterResponse> characterList = characterMapper.toCharacterListResponse(characterSlice);
     return new CursorPage<>(characterList, characterSlice.hasNext());
   }
